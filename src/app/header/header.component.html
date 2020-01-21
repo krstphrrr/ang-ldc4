@@ -1,0 +1,45 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a href="#" class="navbar-brand" style="padding-top: 4px;">
+        <img src="/assets/exports/ldc-logo-com-01.png" 
+             alt="" 
+             class="img-responsive" 
+             style="max-height:40px">
+      </a>
+    </div>
+    <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button> -->
+
+    <div class="navbar-default">
+      <ul class="nav navbar-nav">
+        <li class="nav-item"></li>
+        <li class="nav-item"><a href="#" (click)="onSelect('learn')" class="nav-link">Learn</a></li>
+        <li class="nav-item"><a href="#" (click)="onSelect('data')" class="nav-link">Data</a></li>
+        <li class="nav-item"><a href="#" (click)="onSelect('tools')" class="nav-link">Tools</a></li>
+        <li class="nav-item"><a href="#" (click)="onSelect('folder')" class="nav-link">
+          <img src="/assets/folder-logo.png" alt="" class="img-responsive" style="max-height:20px">
+          </a></li>
+        <li class="nav-item dropdown">
+          <a href="#" 
+             class="nav-link dropdown-toggle" 
+             id="dropdown-01" 
+             data-toggle="dropdown"
+             aria-haspopup="true" 
+             aria-expanded="false"
+             (click)="onSelect('user')">
+            <img src="/assets/usr-logo.png" alt="" class="img-responsive" style="max-height:20px"/>
+          </a>
+          <!-- <div 
+            class="dropdown-menu"
+            aria-labelledby="dropdown-01">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+          </div> -->
+        </li>
+          </ul>
+      </div>
+  </div>
+</nav>
