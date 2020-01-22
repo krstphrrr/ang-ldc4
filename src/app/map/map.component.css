@@ -1,31 +1,4 @@
-.map-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: 30px;
-}
-
-.map-frame {
-  border: 2px solid black;
-  height: 500px;
-}
 
 #map {
-  height: 100%;
-}
-
-.custom-item {
-  padding: 10px 10px;
-  background: #7ab51d;
-  color: #000;
-  font-size: 11px;
-  line-height: 11px;
-  width: 310px;
-  border-radius: 15px;
-  border-style: solid;
-  border-color: #3A8D45;
-  border-width: 1px;
-  opacity: 0.85;
+  height: 800px;
 }

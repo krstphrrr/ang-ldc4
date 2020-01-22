@@ -1,7 +1,7 @@
-<app-header (featureSelected)=onNavigate($event)></app-header>
+<app-header (featureSelected)=onNavigate($event) style="z-index:1000;"></app-header>
+<app-map *ngIf="loadedFeature === 'map'"></app-map>
 <div class="row">
-  <div class="col-xs-12">
-    <app-map *ngIf="loadedFeature === 'map'"></app-map>
+  <div class="col-xs-12" style="z-index:500">
     <app-learn *ngIf="loadedFeature === 'learn'"></app-learn>
     <app-data *ngIf="loadedFeature === 'data'"></app-data>
     <app-tools *ngIf="loadedFeature === 'tools'"></app-tools>

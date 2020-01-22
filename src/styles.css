@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+.mainMenu {
+  padding: 6px 8px;
+  /* font: Comic, sans-serif; */
+  background: white;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 5px;
+  width: 300px;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
