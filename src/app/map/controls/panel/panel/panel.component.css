@@ -1,0 +1,23 @@
+.main-card {
+  background: rgba(255,255,255,0.7);
+  width: 300px;
+}
+
+.main-accordion{
+  background: rgba(255,255,255,0.7);
+  width: 300px;
+}
+
+.main-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.main-full-width {
+  width: 100%;
+}
+
+.main-tr{
+  background: rgba(255,255,255,0.7);
+}

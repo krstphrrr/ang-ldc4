@@ -11,8 +11,10 @@ import { ToolsComponent } from './tools/tools.component';
 import { FolderComponent } from './folder/folder.component';
 import { UsersComponent } from './users/users.component';
 import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, 
-  MatSortModule, MatTableModule } from "@angular/material";
+  MatSortModule, MatTableModule, MatExpansionModule, MatCardModule, MatGridListModule, MatButtonModule } from "@angular/material";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MapOlComponent } from './map-ol/map-ol.component';
+import { PanelComponent } from './map/controls/panel/panel/panel.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     DataComponent,
     ToolsComponent,
     FolderComponent,
-    UsersComponent
+    UsersComponent,
+    MapOlComponent,
+    PanelComponent
     
   ],
   imports: [
@@ -34,7 +38,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatExpansionModule,
+    MatCardModule,
+    MatGridListModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
