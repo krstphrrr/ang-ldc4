@@ -21,7 +21,6 @@ export class MapComponent implements OnInit, AfterViewInit {
 
 
   ngAfterViewInit():void{
-   
     this.initMap()
   }
 

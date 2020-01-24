@@ -11,10 +11,11 @@ import { ToolsComponent } from './tools/tools.component';
 import { FolderComponent } from './folder/folder.component';
 import { UsersComponent } from './users/users.component';
 import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, 
-  MatSortModule, MatTableModule, MatExpansionModule, MatCardModule, MatGridListModule, MatButtonModule } from "@angular/material";
+  MatSortModule, MatTableModule, MatExpansionModule, MatCardModule, MatGridListModule, MatButtonModule, MatSelectModule } from "@angular/material";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MapOlComponent } from './map-ol/map-ol.component';
 import { PanelComponent } from './map/controls/panel/panel/panel.component';
+import { LoginComponent } from './header/login/login.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { PanelComponent } from './map/controls/panel/panel/panel.component';
     FolderComponent,
     UsersComponent,
     MapOlComponent,
-    PanelComponent
+    PanelComponent,
+    LoginComponent
     
   ],
   imports: [
@@ -42,7 +44,9 @@ import { PanelComponent } from './map/controls/panel/panel/panel.component';
     MatExpansionModule,
     MatCardModule,
     MatGridListModule,
-    MatButtonModule
+    MatButtonModule,
+    MatProgressSpinnerModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]
