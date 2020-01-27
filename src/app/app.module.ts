@@ -11,11 +11,47 @@ import { ToolsComponent } from './tools/tools.component';
 import { FolderComponent } from './folder/folder.component';
 import { UsersComponent } from './users/users.component';
 import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, 
-  MatSortModule, MatTableModule, MatExpansionModule, MatCardModule, MatGridListModule, MatButtonModule, MatSelectModule } from "@angular/material";
+  MatSortModule, MatTableModule, MatExpansionModule, MatCardModule, 
+  MatGridListModule, MatButtonModule, MatSelectModule, MatTabsModule,
+  MatListModule} from "@angular/material";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MapOlComponent } from './map-ol/map-ol.component';
 import { PanelComponent } from './map/controls/panel/panel/panel.component';
 import { LoginComponent } from './header/login/login.component';
+import { Routes, RouterModule } from '@angular/router'
+// import { AuthService } from './auth/auth.service'
+// import { AuthGuard } from './auth/auth.guard';
+import { CallbackComponent } from './callback/callback.component'
+
+import { ReactiveFormsModule } from '@angular/forms';
+import { PlotsComponent } from './map/plots/plots.component';
+import { PlotListComponent } from './map/plots/plot-list/plot-list.component';
+import { CdkTableModule } from '@angular/cdk/table'
+import { HttpClientModule } from '@angular/common/http';
+
+const appRoutes: Routes = [
+  { path: '', 
+    component: MapComponent },
+  { path: 'map', 
+    component: MapComponent },
+  { path: 'learn', 
+    component: LearnComponent },
+
+  { path: 'data', 
+    component: DataComponent },
+
+  { path: 'tools', 
+    component: ToolsComponent },
+
+  { path: 'files', 
+    component: FolderComponent },
+  { path: 'user', 
+    component: UsersComponent }
+    
+
+  // { path: , component: }
+]
+
 
 @NgModule({
   declarations: [
@@ -29,7 +65,10 @@ import { LoginComponent } from './header/login/login.component';
     UsersComponent,
     MapOlComponent,
     PanelComponent,
-    LoginComponent
+    LoginComponent,
+    CallbackComponent,
+    PlotsComponent,
+    PlotListComponent
     
   ],
   imports: [
@@ -46,7 +85,12 @@ import { LoginComponent } from './header/login/login.component';
     MatGridListModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTabsModule,
+    MatListModule,
+    RouterModule.forRoot(appRoutes),
+    CdkTableModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

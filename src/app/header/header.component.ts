@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { AuthService } from './auth.service'
 
 @Component({
   selector: 'app-header',
@@ -9,6 +10,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 export class HeaderComponent {
   @Output() featureSelected = new EventEmitter<string>()
   public isMenuCollapsed = false
+
   constructor() { }
 
   onSelect(feature:string){

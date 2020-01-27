@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Plot } from '../../../plots/plot.model'
 
 @Component({
   selector: 'app-panel',
@@ -7,10 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PanelComponent {
   public someString: string;
-  constructor() { }
+  pulledPlot: Plot[]=[]
+  constructor(private router:Router) { }
 
-  addMarker(){
-    
-  }
+  onLoadLink(){
+    //complex calculation
+    this.router.navigate(['../'])
+ }
 
 }

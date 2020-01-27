@@ -1,10 +1,10 @@
 .main-card {
-  background: rgba(255,255,255,0.7);
+  background: rgba(255,255,255);
   width: 300px;
 }
 
 .main-accordion{
-  background: rgba(255,255,255,0.7);
+  background: rgba(255,255,255);
   width: 300px;
 }
 
@@ -19,5 +19,5 @@
 }
 
 .main-tr{
-  background: rgba(255,255,255,0.7);
+  background: rgba(255,255,255);
 }

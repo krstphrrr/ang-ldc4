@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class Link {
+export class MapLogService {
   logStatusChange(status:string){
-    console.log('test service'+ status)
+    console.log('test service: '+ status)
   }
 
   constructor() { }

@@ -2,18 +2,12 @@
 
 </app-header>
 
-<app-map *ngIf="loadedFeature === 'map'">
-</app-map>
 
 
 
 <!-- <app-map-ol *ngIf="loadedFeature === 'map'"></app-map-ol> -->
 <div class="row">
   <div class="col-xs-12" style="z-index:500">
-    <app-learn *ngIf="loadedFeature === 'learn'"></app-learn>
-    <app-data *ngIf="loadedFeature === 'data'"></app-data>
-    <app-tools *ngIf="loadedFeature === 'tools'"></app-tools>
-    <app-folder *ngIf="loadedFeature === 'folder'"></app-folder>
-    <app-users *ngIf="loadedFeature === 'user'"></app-users>
-
+    <router-outlet>
+  </router-outlet>
 </div>

@@ -3,11 +3,20 @@
   padding: 6px 8px;
   /* font: Comic, sans-serif; */
   background: white;
-  background: rgba(255,255,255,0.8);
+  background: rgba(255,255,255);
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
   border-radius: 5px;
   width: 300px;
 }
 
-html, body { height: 100%; width: 100%; position: fixed; }
+html, body { 
+  height: 100%; 
+  width: 100%; 
+  /* position: fixed; */
+ }
+.mat-tab-group>.mat-tab-header .mat-tab-label{
+  min-width: 10px;
+}
+
+.mat-tab-labels { padding: 0 10px; }
 

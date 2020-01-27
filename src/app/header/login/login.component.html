@@ -1,8 +1,28 @@
 <!-- <mat-spinner></mat-spinner> -->
-<form>
-  <mat-form-field>
-    <input matInput type="text" formControlName="title" placeholder="name">
-    <input matInput type="text" formControlName="title" placeholder="password">
-    <!-- NECESITA TABSSSSS login /signup! -->
-  </mat-form-field>
+
+<form (ngSubmit)="submit()">
+  <mat-tab-group mat-stretch-tabs>
+    <mat-tab label="Login">
+    <mat-card>
+      <mat-card-content>
+        <p>
+        <mat-form-field>
+          <input type="email" matInput placeholder="Email">
+          <mat-error *ngIf></mat-error>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field>
+          <input type="password" matInput placeholder="Password" formControlName="password">
+        </mat-form-field>
+      </p>
+      <div class="button">
+        <button type="submit" mat-button>Login</button>
+      </div>
+      </mat-card-content>
+    </mat-card>
+    </mat-tab>
+    <mat-tab label= "Sign up">
+    </mat-tab>
+  </mat-tab-group>
 </form>
