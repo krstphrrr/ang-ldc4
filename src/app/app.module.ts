@@ -23,11 +23,12 @@ import { Routes, RouterModule } from '@angular/router'
 // import { AuthGuard } from './auth/auth.guard';
 import { CallbackComponent } from './callback/callback.component'
 
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { PlotsComponent } from './map/plots/plots.component';
 import { PlotListComponent } from './map/plots/plot-list/plot-list.component';
 import { CdkTableModule } from '@angular/cdk/table'
 import { HttpClientModule } from '@angular/common/http';
+import { LayersComponent } from './map/controls/layers/layers.component';
 
 const appRoutes: Routes = [
   { path: '', 
@@ -68,7 +69,8 @@ const appRoutes: Routes = [
     LoginComponent,
     CallbackComponent,
     PlotsComponent,
-    PlotListComponent
+    PlotListComponent,
+    LayersComponent
     
   ],
   imports: [
@@ -90,7 +92,8 @@ const appRoutes: Routes = [
     MatListModule,
     RouterModule.forRoot(appRoutes),
     CdkTableModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

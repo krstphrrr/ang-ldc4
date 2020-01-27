@@ -1,1 +1,10 @@
-<p>learn works!</p>
+<div style="margin-top: 1rem; margin-left: 1rem;">
+  <input type="text" 
+    matInput 
+    placeholder="write something"
+    [(ngModel)]="message">
+  <button 
+  class="btn mat-button"
+  (click)="sndMessage()">SEND</button>
+
+</div>

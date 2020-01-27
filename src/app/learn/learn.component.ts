@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { socketTest } from '../learn/socketTest.service'
+
 
 @Component({
   selector: 'app-learn',
@@ -6,10 +8,24 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./learn.component.css']
 })
 export class LearnComponent implements OnInit {
+  message:string
 
-  constructor() { }
+  constructor(private socket:socketTest) { }
 
-  ngOnInit() {
+  ngOnInit(){
+    //connect to socket, listen to event
+    this.socket.listen('test event').subscribe((data)=>{
+      console.log(data)
+    })
+
   }
+
+
+  sndMessage(){
+    
+    this.socket.emit('test2',this.message)
+    this.message=''
+  }
+
 
 }
