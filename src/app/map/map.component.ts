@@ -17,6 +17,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public lyrGrp;
   
   
+  
 
 
   constructor(
@@ -85,7 +86,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       y = this.markers.markers[i].long;
       
       m = L.circleMarker([x,y],{
-        radius:5,
+        radius:15,
         fillColor:"magenta",
         color:"yellow",
         weight:2,
