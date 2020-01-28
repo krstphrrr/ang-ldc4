@@ -6,10 +6,10 @@ import { Observable } from 'rxjs'
 
 export class socketTest {
   socket: any
-  readonly url:string = 'http://localhost:5000/'
+  readonly url:string = 'http://localhost:5000'
 
   constructor(){
-    this.socket = io(this.url)
+    this.socket = io.connect(this.url)
   }
 
   // public sendMessage(message:string){

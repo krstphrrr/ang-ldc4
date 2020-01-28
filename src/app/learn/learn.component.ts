@@ -15,7 +15,7 @@ export class LearnComponent implements OnInit {
   ngOnInit(){
     //connect to socket, listen to event
     this.socket.listen('test event').subscribe((data)=>{
-      console.log(data)
+      console.log(data)      
     })
 
   }
@@ -23,7 +23,7 @@ export class LearnComponent implements OnInit {
 
   sndMessage(){
     
-    this.socket.emit('test2',this.message)
+    this.socket.emit('test3',this.message)
     this.message=''
   }
 
