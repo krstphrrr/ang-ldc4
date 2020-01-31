@@ -1,9 +1,21 @@
-.loginCard {
-  padding: 6px 8px;
-  font: 14px/16px Arial, Helvetica, sans-serif;
-  background: white;
-  background: rgba(255,255,255,0.8);
-  box-shadow: 0 0 15px rgba(0,0,0,0.2);
-  border-radius: 5px;
-  width: 300px;
+.container-fluid{
+  height:11rem;
+  /* padding-top:20px; */
+  /* padding-bottom: 20px; */
+  /* position: relative; */
+  width: 100vw;
+}
+.child{
+  padding-top: 0px;
+}
+
+.child2{
+  /* padding-top: 2rem; */
+  padding-top: 3rem;
+}
+
+.nav-link{
+  padding-left: 15px;
+  padding-right: 35px;
+  font-size: large;
 }

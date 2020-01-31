@@ -1,0 +1,24 @@
+export interface dataSoilStability {
+     PlotKey : string ;
+     RecKey : string ;
+     DateModified : Date ;
+     FormType : string ;
+     FormDate : Date ;
+     LineKey : string ;
+     Observer : string ;
+     Recorder : string ;
+     DataEntry : string ;
+     DataErrorChecking : string ;
+     SoilStabSubSurface : number ;
+     Notes : string ;
+     PrimaryKey : string ;
+     DBKey : string ;
+     Position : number ;
+     Line : string ;
+     Pos : string ;
+     Veg : string ;
+     Rating : number ;
+     Hydro : number ;
+     source : string ;
+     DateLoadedInDb : Date ;
+}

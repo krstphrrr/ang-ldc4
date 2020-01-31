@@ -1,0 +1,33 @@
+
+export interface dataHeight {
+  PrimaryKey : string ;
+  DBKey : string ;
+  PointLoc : number ;
+  PointNbr : number ;
+  RecKey : string ;
+  Height : number ;
+  Species : string ;
+  Chkbox : number ;
+  type : string ;
+  GrowthHabit_measured : string ;
+  LineKey : string ;
+  DateModified : Date ;
+  FormType : string ;
+  FormDate : Date ;
+  Observer : string ;
+  Recorder : string ;
+  DataEntry : string ;
+  DataErrorChecking : string ;
+  Direction : string ;
+  Measure : number ;
+  LineLengthAmount : number ;
+  SpacingIntervalAmount : number ;
+  SpacingType : string ;
+  HeightOption : string ;
+  HeightUOM : string ;
+  ShowCheckbox : number ;
+  CheckboxLabel : string ;
+  source : string ;
+  UOM : string ;
+  DateLoadedInDb : Date ;
+}

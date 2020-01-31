@@ -1,0 +1,29 @@
+export interface dataSpeciesInventory {
+  LineKey : string ;
+  RecKey : string ;
+  DateModified : Date ;
+  FormType : string ;
+  FormDate : Date ;
+  Observer : string ;
+  Recorder : string ;
+  DataEntry : string ;
+  DataErrorChecking : string ;
+  SpecRichMethod : number ;
+  SpecRichMeasure : number ;
+  SpecRichNbrSubPlots : number ;
+  SpecRich1Container : number ;
+  SpecRich1Shape : number ;
+  SpecRich1Dim1 : number ;
+  SpecRich1Dim2 : number ;
+  SpecRich1Area : number ;
+  Notes : string ;
+  PrimaryKey : string ;
+  DBKey : string ;
+  Species : string ;
+  source : string ;
+  SpeciesCount : string ;
+  Density : number ;
+  Plotkey : string ;
+  DateLoadedInDb : Date ;
+
+}

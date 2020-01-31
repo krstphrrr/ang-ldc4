@@ -1,6 +1,8 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { Plot } from '../../../plots/plot.model'
+import { Plot } from '../../../models/plot.model'
+import { MarkerService } from '../../../marker.service'
+
 
 @Component({
   selector: 'app-panel',
@@ -12,8 +14,12 @@ export class PanelComponent {
   pulledPlot: Plot[]=[]
 
   @Output() addMark: EventEmitter<string> = new EventEmitter<string>()
+  @Output() pullDB: EventEmitter<string> = new EventEmitter<string>()
 
-  constructor(private router:Router) { }
+  constructor(
+    private router:Router,
+    private markService: MarkerService
+    ) { }
 
   onLoadLink(){
     //complex calculation
@@ -21,9 +27,12 @@ export class PanelComponent {
  }
 
   onClick():void{
-    console.log('onAddmark method sent')
+    console.log('panel points signal')
     this.addMark.emit()
+  }
 
+  onClick2():void{
+    // this.markService.onFetchPoints()
   }
 
 }

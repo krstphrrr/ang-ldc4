@@ -1,0 +1,30 @@
+export interface dataLPI {
+  LineKey : string ;
+  RecKey : string ;
+  DateModified : Date ;
+  FormType : string ;
+  FormDate : Date ;
+  Observer : string ;
+  Recorder : string ;
+  DataEntry : string ;
+  DataErrorChecking : string ;
+  Direction : string ;
+  Measure : number ;
+  LineLengthAmount : number ;
+  SpacingIntervalAmount : number ;
+  SpacingType : string ;
+  HeightOption : string ;
+  HeightUOM : string ;
+  ShowCheckbox : number ;
+  CheckboxLabel : string ;
+  PrimaryKey : string ;
+  DBKey : string ;
+  PointLoc : number ;
+  PointNbr : number ;
+  ShrubShape : string ;
+  layer : string ;
+  code : string ;
+  chckbox : number ;
+  source : string ;
+
+}

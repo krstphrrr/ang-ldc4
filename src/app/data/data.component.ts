@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Subscription, Observable } from 'rxjs'
-import { Plot } from '../map/plots/plot.model'
+import { Plot } from '../map/models/plot.model'
 import { PlotsService} from '../map/plots/plots.service'
 import { PageEvent } from '@angular/material'
 
@@ -18,24 +18,24 @@ export class DataComponent implements OnInit, OnDestroy {
   plotsPerPage =2
   currentPage=1
   columns = [
-    {columnDef: 'primaryKey', header: "PrimaryKey", cell:(plot:Plot)=>`${plot.primaryKey}`},
-    {columnDef: 'speciesState', header: "SpeciesState", cell:(plot:Plot)=>`${plot.speciesState}`},
-    {columnDef: 'plotId', header: "PlotID", cell:(plot:Plot)=>`${plot.plotId}`},
-    {columnDef: 'plotKey', header: "PlotKey", cell:(plot:Plot)=>`${plot.plotKey}`},
-    {columnDef: 'dbKey', header: "DBKey", cell:(plot:Plot)=>`${plot.dbKey}`},
-    {columnDef: 'ecologicalSiteId', header: "EcologicalSiteID", cell:(plot:Plot)=>`${plot.ecologicalSiteId}`},
-    {columnDef: 'latitudeNad83', header: "LatitudeNad83", cell:(plot:Plot)=>`${plot.latitudeNad83}`},
-    {columnDef: 'longitudeNad83', header: "LongitudeNad83", cell:(plot:Plot)=>`${plot.longitudeNad83}`},
-    {columnDef: 'state', header: "State", cell:(plot:Plot)=>`${plot.state}`},
-    {columnDef: 'county', header: "County", cell:(plot:Plot)=>`${plot.county}`},
-    {columnDef: 'dateEstablished', header: "DateEstablished", cell:(plot:Plot)=>`${plot.dateEstablished}`},
-    {columnDef: 'projectName', header: "ProjectName", cell:(plot:Plot)=>`${plot.projectName}`},
+    {columnDef: 'primaryKey', header: "PrimaryKey", cell:(plot:Plot)=>`${plot.PrimaryKey}`},
+    {columnDef: 'speciesState', header: "SpeciesState", cell:(plot:Plot)=>`${plot.SpeciesState}`},
+    {columnDef: 'plotId', header: "PlotID", cell:(plot:Plot)=>`${plot.PlotID}`},
+    {columnDef: 'plotKey', header: "PlotKey", cell:(plot:Plot)=>`${plot.PlotKey}`},
+    {columnDef: 'dbKey', header: "DBKey", cell:(plot:Plot)=>`${plot.DBKey}`},
+    {columnDef: 'ecologicalSiteId', header: "EcologicalSiteID", cell:(plot:Plot)=>`${plot.EcologicalSiteId}`},
+    {columnDef: 'latitudeNad83', header: "LatitudeNad83", cell:(plot:Plot)=>`${plot.Latitude_NAD83}`},
+    {columnDef: 'longitudeNad83', header: "LongitudeNad83", cell:(plot:Plot)=>`${plot.Longitude_NAD83}`},
+    {columnDef: 'state', header: "State", cell:(plot:Plot)=>`${plot.State}`},
+    {columnDef: 'county', header: "County", cell:(plot:Plot)=>`${plot.County}`},
+    {columnDef: 'dateEstablished', header: "DateEstablished", cell:(plot:Plot)=>`${plot.DateEstablished}`},
+    {columnDef: 'projectName', header: "ProjectName", cell:(plot:Plot)=>`${plot.ProjectName}`},
     {columnDef: 'source', header: "Source", cell:(plot:Plot)=>`${plot.source}`},
-    {columnDef: 'locationType', header: "LocationType", cell:(plot:Plot)=>`${plot.locationType}`},
-    {columnDef: 'dateVisited', header: "DateVisited", cell:(plot:Plot)=>`${plot.dateVisited}`},
-    {columnDef: 'elevation', header: "Elevation", cell:(plot:Plot)=>`${plot.elevation}`},
-    {columnDef: 'percentCoveredByEcoSite', header: "percentCoveredByEcoSite", cell:(plot:Plot)=>`${plot.percentCoveredByEcoSite}`},
-    {columnDef: 'dateLoadedInDb', header: "dateLoadedInDb", cell:(plot:Plot)=>`${plot.dateLoadedInDb}`}
+    {columnDef: 'locationType', header: "LocationType", cell:(plot:Plot)=>`${plot.LocationType}`},
+    {columnDef: 'dateVisited', header: "DateVisited", cell:(plot:Plot)=>`${plot.DateVisited}`},
+    {columnDef: 'elevation', header: "Elevation", cell:(plot:Plot)=>`${plot.Elevation}`},
+    {columnDef: 'percentCoveredByEcoSite', header: "percentCoveredByEcoSite", cell:(plot:Plot)=>`${plot.PercentCoveredByEcoSite}`},
+    {columnDef: 'dateLoadedInDb', header: "dateLoadedInDb", cell:(plot:Plot)=>`${plot.DateLoadedInDb}`}
 
   ]
   displayedColumns = this.columns.map(c => c.columnDef)
