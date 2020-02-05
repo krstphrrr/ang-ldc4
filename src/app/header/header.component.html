@@ -1,59 +1,47 @@
-<nav class="navbar navbar-default" style="margin-bottom: 0px;width:100vw">
-  <div class="container-fluid">
-    <div class="child navbar-header">
-      <div style="width: 600px;">
-        <a routerLink="/" class="navbar-brand" (click)="onSelect('map')" style="padding-top: 10px;">
-          <img src="/assets/exports/1x/dc-logo-transp3.png" 
-               alt="" 
-               class="img-responsive" 
-               style="max-width: 400px;">
-        </a>
-      </div>
-    </div>
-    <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button> -->
-    <div class="child2">
-        <div class="navbar-default">
-          <ul class="nav navbar-nav">
-            <li class="nav-item"></li>
-            <li class="nav-item">
-              <a routerLink="/learn" (click)="onSelect('learn')" class="nav-link">Learn</a></li>
-            <li class="nav-item">
-              <a routerLink="/data" (click)="onSelect('data')" class="nav-link">Data</a></li>
-            <li class="nav-item">
-              <a routerLink="/tools" (click)="onSelect('tools')" class="nav-link">Tools</a></li>
-            <li class="nav-item">
-              <a routerLink="/files" (click)="onSelect('folder')" class="nav-link">
-                <img src="/assets/folder-logo.png" alt="" class="img-responsive" style="max-height:20px">
-              </a></li>
-              <!-- <li class="nav-item">
-                <a href="" *ngIf="authService.isLoggedIn">Special</a>
-              </li> -->
+<nav class="navbar navbar-expand-md navbar-light">
 
-              <!-- DROPDOWN -->
-            <li ngbDropdown class="nav-item d-inline-block ">
-                  <a 
-                  class="nav-link" 
-                  
-                  id="dropdown1"
-                  ngbDropdownToggle
-                  >
-                  <img src="/assets/usr-logo.png" alt="" class="img-responsive" style="max-height:20px"/>
-                
-                </a>
-                  <app-login 
-                    ngbDropdownMenu 
-                    aria-labelledby="dropdown1" 
-                    class="mainMenu"
-                    ></app-login>
-            </li>
-            <!-- <li class="nav-item d-inline-block" *ngIf="authService.isLoggedIn">
-              <a href="#">Logout</a>
-            </li> -->
-              </ul>
-          </div>
-    </div>
+    <a routerLink="/" class="navbar-brand mr-auto" (click)="onSelect('map')">
+      <img src="/assets/exports/1x/dc-logo-transp3.png" 
+          alt="" 
+          class="img-responsive w-100 order-lg-0 order-md-0" 
+          style="max-width:150px;max-height:40px;display: block;">
+    </a>
+
+  <button class="navbar-toggler order-md-0 ml-auto" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse w-100 order-1" id="navbarTogglerDemo01">
+    <ul class="navbar-nav ml-auto text-center">
+      <li class="nav-item">
+        <a routerLink="/learn" (click)="onSelect('learn')" class="nav-link">Learn</a></li>
+      <li class="nav-item">
+        <a routerLink="/tools" (click)="onSelect('tools')" class="nav-link">Tools</a></li>
+      <li class="nav-item">
+            <a routerLink="/files" (click)="onSelect('folder')" class="nav-link">
+              <img src="/assets/folder-logo.png" alt="" class="img-responsive" style="max-height:20px">
+            </a>
+      </li>
+      <li ngbDropdown class="nav-item d-inline-block">
+          <a class="nav-link" 
+              id="dropdown1"
+              ngbDropdownToggle>
+            <img src="/assets/usr-logo.png" 
+                 alt="" 
+                 class="img-responsive" 
+                 style="max-height:20px"/>
+          </a>
+            <app-login 
+              ngbDropdownMenu 
+              aria-labelledby="dropdown1" 
+              class="dropdown-menu-right">
+            </app-login>
+      </li>
+
+
+      
+
+    </ul>
 
   </div>
 </nav>

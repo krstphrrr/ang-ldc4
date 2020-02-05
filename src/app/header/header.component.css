@@ -14,8 +14,9 @@
   padding-top: 3rem;
 }
 
-.nav-link{
-  padding-left: 15px;
-  padding-right: 35px;
+.nav-item{
+  /* padding-left: 15px; */
+  padding-right: 50px;
   font-size: large;
 }
+

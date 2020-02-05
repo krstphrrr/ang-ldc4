@@ -9,7 +9,11 @@ import { AuthService } from './auth.service'
 
 export class HeaderComponent {
   @Output() featureSelected = new EventEmitter<string>()
-  public isMenuCollapsed = false
+  isCollapsed: boolean = true;
+
+  toggleCollapse(): void {
+    this.isCollapsed = !this.isCollapsed;
+  }
 
   constructor() { }
 
@@ -17,5 +21,4 @@ export class HeaderComponent {
 
       this.featureSelected.emit(feature)
   }
-
 }
