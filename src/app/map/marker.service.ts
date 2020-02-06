@@ -3,11 +3,13 @@ import { HttpClient,
          HttpResponse 
         //  HttpErrorResponse
          } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, single } from 'rxjs/operators';
 import { DataHeader } from './models/dataHeader.model'
 import { GeoIndicators } from './models/geoIndicators.models'
 import * as L from 'leaflet'
+import { socketDataService } from '../learn/socketTest.service'
+
 
 @Injectable({
   providedIn: 'root'
@@ -16,127 +18,105 @@ export class MarkerService {
   //marker array to inject anywhere
   public markers: {lat: number, long: number}[] =[];
   public lyrGrp:L.featureGroup;
+  public tmpData;
 
   loadedPoints = [];
 
-
   constructor(
-    private http: HttpClient
-  )
-
-
-  {
+    private http: HttpClient,
+    private socket:socketDataService
+  ){
     console.log('this is the service' )
     // console.log(this.markers)
     // some map markers
     // ultimately will be pulled from http/api
     this.markers = [
-      // { lat: 32.117475, long: -106.982117 },
-      // { lat: 32.424022, long: -107.440796 },
-      // { lat: 33.568861 , long: -107.677002 },
-      // { lat: 32.405473, long: -106.369629 },
-      // { lat: 32.008076, long: -106.869507 },
-      // { lat: 32.308027, long: -106.688232 }
+
     ];
     // this.makePoints()
   
   }
-  onFetchPoints(realmap:L.map){
-    this.fetchPoints(realmap)
+  onFetchPoints(realmap:L.map, tmpData){
+    this.fetchPoints(realmap, tmpData)
+    
 
   }
 
-  private fetchPoints(realmap:L.map){
-    this.http
-      .get<DataHeader[]>('http://localhost:5000/api/plots2')
+  private fetchPoints(realmap:L.map, tmpData){
 
-//////// multiple records
-    .pipe(map(
-       (responseData)=>{
-        const pointArray=[]
-        let container;
-        for(let i in responseData){
-          let singleArray = responseData[i]
-          for ( let j in singleArray){
-            if(Array.isArray(singleArray[j])){
-              let temp = singleArray[j]
-              let untemp = {...temp}
-              // let obj = Object.assign(key,responseData[key])
-              container = untemp
-              let coords = container[0].wkbGeometry.coordinates
+    
+    // this.socket.emit('fetchpoints', this.tmpData)
+    // const myobservable = this.socket.listen('pointssend', returnPoints)
 
-              pointArray.push({lat: coords[1], long: coords[0]})
-              // temp.push(singleArray[j])
-            }
-          }
+    // this.http
+    //   .get<DataHeader[]>('http://localhost:5000/api/plots2')
+    // .pipe(map(
+    //    (responseData)=>{
+
+    //     const pointArray=[]
+    //     let container;
+    //     //// START pipe  loop
+    //     for(let i in responseData){
+    //       let singleArray = responseData[i]
+    //       for ( let j in singleArray){
+    //         if(Array.isArray(singleArray[j])){
+    //           let temp = singleArray[j]
+    //           let untemp = {...temp}
+    //           container = untemp
+    //           let coords = container[0].wkbGeometry.coordinates
+    //           pointArray.push({lat: coords[1], long: coords[0]})
+    //         }
+    //       }
         
-        }
-        return [pointArray]
-// ///////////////////single record
+    //     }
+    //     return [pointArray]
+    //     /// END pipe loop      
+    // }
+    // ))
+//     myobservable
+//     .subscribe(points =>{
+//       // this.socket.emit('fetchpoints', 'data')
+//       console.log(points)
+// // typically, once the service receivwes
 
-//     //   const pointArray = []
-//     //   let container;
-//     //   for ( const key in responseData ){
-//     //     pointArray.push(key)
-//     //     // if (responseData.hasOwnProperty(key) && Array.isArray(responseData[key])){
-//     //     //   let temp = responseData[key]
-//     //     //   let untemp = {...temp}
-//     //     //   // let obj = Object.assign(key,responseData[key])
-//     //     //   container = untemp
-//     //     //   let coords = container[0].wkbGeometry.coordinates
 
-//     //     //   pointArray.push({lat: coords[1], long: coords[0]})
-//     //     //     {lat:container.})
-//     //     //   for(let i in obj){
-            
-//     //     //     pointArray.push(obj)
-//     //     //   }
-//     //       // pointArray.push({...responseData[key], })
-//     //       // pointArray.push(responseData[key])
-//     //     // }
-//     //     // pointArray.
+//     //   let unpack = points[0]
+//     //   for(let point in unpack){
+//     //     this.markers.push(unpack[point])
 //     //   }
-      // return pointArray
+//     //   //// creating marker
+//     //   const n: number = this.markers.length;
+//     //   let i: number;
+//     //   let m: L.circleMarker;
+
+//     //   let x: number;
+//     //   let y: number;
+//     //   this.lyrGrp = L.featureGroup()
+//     // for (i = 0; i < n; ++i) {
+
+//     //   x = this.markers[i].lat;
+//     //   y = this.markers[i].long;
       
-    }
-    ))
-    .subscribe(points =>{
-      let unpack = points[0]
-      for(let point in unpack){
-        this.markers.push(unpack[point])
-      }
-      //// creating marker
-      const n: number = this.markers.length;
-      let i: number;
-      let m: L.circleMarker;
+//     //   m = L.circleMarker([x,y],{
+//     //     radius:5,
+//     //     fillColor:"magenta",
+//     //     color:"yellow",
+//     //     weight:2,
+//     //     opacity:1,
+//     //     fillOpacity:.8
+//     //   }).addTo(this.lyrGrp) 
+//     // }
+//     // realmap.fitBounds(this.lyrGrp.getBounds().pad(Math.sqrt(2)/8))
 
-      let x: number;
-      let y: number;
-      this.lyrGrp = L.featureGroup()
-    for (i = 0; i < n; ++i) {
+//     // this.lyrGrp.addTo(realmap)
+//       })
 
-      x = this.markers[i].lat;
-      y = this.markers[i].long;
-      
-      m = L.circleMarker([x,y],{
-        radius:5,
-        fillColor:"magenta",
-        color:"yellow",
-        weight:2,
-        opacity:1,
-        fillOpacity:.8
-      }).addTo(this.lyrGrp) 
-    }
-    realmap.fitBounds(this.lyrGrp.getBounds().pad(Math.sqrt(2)/8))
+  }
 
-    this.lyrGrp.addTo(realmap)
-    // this.mymap.fitBounds(this.lyrGrp.getBounds())
-        // this.markers2 = points
-        // console.log(this.markers)
-        // console.log(unpack)
-        // console.log(points)
-      })
-
+  testFunction(){
+    this.http.get('http://localhost:5000/api/plots3').subscribe(data=>{
+      console.log(data)
+    })
   }
   // makePoints(){
   //   this.http.get('http://localhost:5000/api/plots2').subscribe((res:any)=>{

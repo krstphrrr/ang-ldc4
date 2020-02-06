@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { socketTest } from '../learn/socketTest.service'
+import { socketDataService } from '../learn/socketTest.service'
 
 
 @Component({
@@ -10,7 +10,7 @@ import { socketTest } from '../learn/socketTest.service'
 export class LearnComponent implements OnInit {
   message:string
 
-  constructor(private socket:socketTest) { }
+  constructor(private socket:socketDataService) { }
 
   ngOnInit(){
     //connect to socket, listen to event

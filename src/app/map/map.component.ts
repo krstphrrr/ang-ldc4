@@ -4,6 +4,10 @@ import * as L from 'leaflet'
 import { MarkerService } from './marker.service'
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { reduce } from 'rxjs/operators';
+import * as d3 from 'd3'
+import { socketDataService } from '../learn/socketTest.service'
+
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -15,13 +19,16 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public isCollapsed = false;
   public mrkr=false;
   public lyr;
+  public tmpPoints;
+  public theSubscription;
   
   
   
 
 
   constructor(
-    private markers:MarkerService
+    private markers:MarkerService,
+    private socket: socketDataService
     ) {
       
      }
@@ -38,7 +45,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     console.log('ngAfterViewInit')
     this.initMap()
     // this.showMarkers()
-    this.markers.onFetchPoints(this.mymap)
+    this.markers.onFetchPoints(this.mymap, 'data')
     
   }
 
@@ -48,6 +55,11 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
 
   private initMap(): void {
+    // let topoSVG = d3
+    //   .select(this.mymap.getPanes().overlayPane)
+    //   .append("svg")
+    //   .attr("id", "topoSVG")
+    
     this.mymap = L.map('map', {
       minZoom: 3,
       maxZoom: 19,
@@ -56,9 +68,31 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       worldCopyJump: true,
       // maxBounds: [[115,-240],[-115,240]],
       center: [ 32.344147, -106.758442 ],
-      zoom: 10,
-      zoomControl:false
+      zoom: 15,
+      zoomControl:false,
+      preferCanvas:true
     });
+
+    this.mymap.on('load', (event)=>{
+      let bbox =this.mymap.getBounds()
+      let topos = {
+        bounds:{
+          _southWest:{
+            lng:bbox._southWest.lng,
+            lat:bbox._southWest.lat
+          },
+          _northEast:{
+            lng:bbox._northEast.lng,
+            lat:bbox._northEast.lat
+          }
+        }
+      }
+      this.socket.emit('fetchpoints', topos)
+      this.socket.listen('pointssend').subscribe(data=>{
+        console.log(data, "FROM onLOAD")
+      })
+    })
+
 
     // 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
     const tiles = L.tileLayer('https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
@@ -72,14 +106,69 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       subdomains:['mt0','mt1','mt2','mt3']
     });
 
+    this.mymap.on("moveend", (event)=>{
+      if(this.theSubscription && !this.theSubscription.closed){
+        this.theSubscription.unsubscribe()
+      }
+      
+      let bbox =this.mymap.getBounds()
+      let points:[number,number][] = [[bbox._northEast.lng, bbox._northEast.lat], [bbox._southWest.lng, bbox._northEast.lat], [bbox._southWest.lng, bbox._southWest.lat], [bbox._northEast.lng, bbox._southWest.lat]]
+      
+      
+      let topos = {
+        bounds:{
+          _southWest:{
+            lng:bbox._southWest.lng,
+            lat:bbox._southWest.lat
+          },
+          _northEast:{
+            lng:bbox._northEast.lng,
+            lat:bbox._northEast.lat
+          }
+        }
+      }
+      
+      let tmpPoly = d3.polygonHull(points)
+      let tmpTopo = this.mymap.getPanes()
+      this.tmpPoints = tmpPoly
+      // console.log(bbox)
+      // console.log(topos)
+      // this.markers.onFetchPoints(this.mymap, topos)
+      this.socket.emit('fetchpoints', topos)
+      this.theSubscription = this.socket.listen('pointssend').subscribe(data=>{
+        console.log(data)
+        let m = {
+          radius:5, 
+          fillColor:"magenta",
+          color:"yellow", 
+          weight:2, 
+          opacity:1, 
+          fillOpacity:.8
+        }
+        L.geoJSON(data,{
+          pointToLayer: (feature,latlng)=>{
+            return L.circleMarker(latlng,m)
+          }
+        }).addTo(this.mymap)
+        
+      })
+
+    })
+
+    
+
     
 
     
     
     
   }
+  ngOnDestroy(){
+    this.theSubscription.unsubscribe()
+  }
 
-  // showMarkers() {
+  showMarkers() {
+    // this.markers.testFunction()
     
   //     const n: number = this.markers.markers.length;
   //     let i: number;
@@ -102,9 +191,11 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   //       fillOpacity:.8
   //     }).addTo(this.lyrGrp) 
   //   }
-  // }
+  }
+  
 
   addMarks(){
+    
     // const geobounds = this.lyrGrp.addTo(this.mymap)
     // this.mrkr = true
     

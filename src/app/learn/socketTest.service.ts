@@ -4,7 +4,7 @@ import { Observable } from 'rxjs'
 
 @Injectable({providedIn:'root'})
 
-export class socketTest {
+export class socketDataService {
   socket: any
   readonly url:string = 'http://localhost:5000'
 
@@ -12,10 +12,8 @@ export class socketTest {
     this.socket = io.connect(this.url)
   }
 
-  // public sendMessage(message:string){
-  //   console.log('socketService/msg')
-  //   this.socket.emit('loquesea', message)
-  // }
+// this.socket.listen(eventname) to
+// trigger receiving a response
   listen(eventName:string){
     return new Observable((subscriber)=>{
       this.socket.on(eventName, (data)=>{
@@ -24,7 +22,7 @@ export class socketTest {
     })
   }
 
-
+// send data
   emit(eventName:string, data:any){
     this.socket.emit(eventName, data)
   }

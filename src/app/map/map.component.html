@@ -5,6 +5,9 @@
   > 
   <app-panel 
     style="z-index: 2000; position: absolute; top:20px; left: 20px;"
-    (addMark)="mrkr===false ? addMarks() : removeMarks()">
+    
+    (addMark)="showMarkers()">
   </app-panel>
 </div>
+
+<!-- (addMark)="mrkr===false ? addMarks() : removeMarks()" -->
