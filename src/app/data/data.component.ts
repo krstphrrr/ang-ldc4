@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Subscription, Observable } from 'rxjs'
 import { Plot } from '../map/models/plot.model'
 import { PlotsService} from '../map/plots/plots.service'
-import { PageEvent } from '@angular/material'
+import { PageEvent } from '@angular/material/paginator'
 
 import { of } from 'rxjs';
 

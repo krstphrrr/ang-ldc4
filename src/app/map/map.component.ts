@@ -6,6 +6,11 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { reduce } from 'rxjs/operators';
 import * as d3 from 'd3'
 import { socketDataService } from '../learn/socketTest.service'
+import * as PIXI from 'pixi.js'
+import 'leaflet-pixi-overlay'
+import {pixiOverlay} from 'leaflet'
+import {IGeoJson} from './models/geojsonint.model'
+
 
 
 @Component({
@@ -18,9 +23,10 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   private mymap;
   public isCollapsed = false;
   public mrkr=false;
-  public lyr;
+  public lyrGrp
   public tmpPoints;
   public theSubscription;
+  public myCanvas:L.Canvas;
   
   
   
@@ -61,17 +67,22 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     //   .attr("id", "topoSVG")
     
     this.mymap = L.map('map', {
-      minZoom: 3,
-      maxZoom: 19,
+      // minZoom: 3,
+      maxZoom: 15,
       inertiaDeceleration: 1000,
       attributionControl: false,
       worldCopyJump: true,
       // maxBounds: [[115,-240],[-115,240]],
       center: [ 32.344147, -106.758442 ],
-      zoom: 15,
+      zoom: 10,
+      minZoom:7,
       zoomControl:false,
       preferCanvas:true
     });
+
+    this.mymap.invalidateSize({
+      debounceMoveend:true
+    })
 
     this.mymap.on('load', (event)=>{
       let bbox =this.mymap.getBounds()
@@ -102,11 +113,15 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     tiles.addTo(this.mymap);
 
     var googleTerrain = L.tileLayer('https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',{
-      maxZoom: 20,
+      maxZoom: 10,
       subdomains:['mt0','mt1','mt2','mt3']
     });
 
-    this.mymap.on("moveend", (event)=>{
+    this.mymap.on("dragend", (event)=>{
+      if(this.myCanvas!==undefined){
+        // this.myCanvas.clearLayers()
+        console.log('ARGH')
+      }
       if(this.theSubscription && !this.theSubscription.closed){
         this.theSubscription.unsubscribe()
       }
@@ -135,21 +150,99 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       // console.log(topos)
       // this.markers.onFetchPoints(this.mymap, topos)
       this.socket.emit('fetchpoints', topos)
+      
+     
       this.theSubscription = this.socket.listen('pointssend').subscribe(data=>{
+        if(this.lyrGrp===undefined){
+          console.log('SOMEHTING')
+        } else{
+          this.lyrGrp.clearLayers()
+          this.lyrGrp.addTo(this.mymap)
+        }
+        this.myCanvas = L.canvas({padding:0.1})
         console.log(data)
+        
+        
         let m = {
           radius:5, 
-          fillColor:"magenta",
+          fillColor:"white",
           color:"yellow", 
           weight:2, 
           opacity:1, 
           fillOpacity:.8
-        }
-        L.geoJSON(data,{
-          pointToLayer: (feature,latlng)=>{
-            return L.circleMarker(latlng,m)
-          }
-        }).addTo(this.mymap)
+        }           
+        this.lyrGrp = L.featureGroup()
+          L.geoJSON(data,{
+            
+            pointToLayer: (feature,latlng)=>{
+              
+              let label = 
+                String("ID: ") + String(feature.id) +"<br>"+
+                String("Public: ")+ String(feature.properties.Public)+"<br>"
+                switch(feature.properties.Public){
+                  case true:
+                    m.fillColor = "#80bfff";
+                    break;
+                  case false:
+                    m.fillColor = "magenta";
+                    break;
+                }
+              return L.circleMarker(latlng,m).bindTooltip(label,{opacity:0.7})
+            },
+            renderer: this.myCanvas
+          }).addTo(this.lyrGrp)
+          this.lyrGrp.addTo(this.mymap)
+
+          
+
+
+        // let pixiLayer = (function(){
+        //   let firstDraw = true
+        //   let colorScale = d3.scaleLinear<string>()
+        //   .domain([0,50,100])
+        //   .range(
+        //     ["#c6233c", "#ffd300", "#008000"]
+        //     )
+        //   let pixiContainer = new PIXI.Graphics()
+        //   return L.pixiOverlay(function(utils){
+        //     let container = utils.getContainer()
+        //     let renderer = utils.getRenderer()
+        //     let project = utils.latLngToLayerPoint
+        //     if(firstDraw){
+        //       let geojson = data
+        //       function drawPoint(color, alpha){
+
+        //         return function(poly){
+        //           let coords = project([poly[1],poly[0]])
+                
+                  
+        //           container.beginFill(color, alpha)
+        //           container.drawShape(new PIXI.Point(coords.x,coords.y))
+        //         }
+        //       }
+        //       geojson.features.forEach((feature,index)=>{
+        //         let alpha, color;
+        //         var tint = d3.color(colorScale(Math.random() * 100)).rgb();
+        //         color = 256 * (tint.r * 256 + tint.g) + tint.b;
+        //         alpha = 0.8;
+
+        //         if (feature.geometry===null)return;
+        //         if(feature.geometry.type==='Point'){
+        //           drawPoint(color,alpha)(feature.geometry.coordinates)
+                  
+        //         }
+        //       })
+              
+        //     }
+        //     firstDraw = false
+        //     renderer.render(container)
+        //   }, pixiContainer, {
+        //     destroyInteractionManager:true
+        //   })
+        // })()
+        // pixiLayer.addTo(this.mymap)
+
+        
         
       })
 

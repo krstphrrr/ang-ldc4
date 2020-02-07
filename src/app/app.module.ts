@@ -10,10 +10,18 @@ import { DataComponent } from './data/data.component';
 import { ToolsComponent } from './tools/tools.component';
 import { FolderComponent } from './folder/folder.component';
 import { UsersComponent } from './users/users.component';
-import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, 
-  MatSortModule, MatTableModule, MatExpansionModule, MatCardModule, 
-  MatGridListModule, MatButtonModule, MatSelectModule, MatTabsModule,
-  MatListModule} from "@angular/material";
+import { MatInputModule} from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
+// import { MatListModule } from "@angular/material/list";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MapOlComponent } from './map-ol/map-ol.component';
 import { PanelComponent } from './map/controls/panel/panel/panel.component';
@@ -89,7 +97,7 @@ const appRoutes: Routes = [
     MatProgressSpinnerModule,
     MatSelectModule,
     MatTabsModule,
-    MatListModule,
+    // MatListModule,
     RouterModule.forRoot(appRoutes),
     CdkTableModule,
     HttpClientModule,
