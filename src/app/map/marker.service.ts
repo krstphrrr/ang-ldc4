@@ -17,7 +17,7 @@ import { socketDataService } from '../learn/socketTest.service'
 export class MarkerService {
   //marker array to inject anywhere
   public markers: {lat: number, long: number}[] =[];
-  public lyrGrp:L.featureGroup;
+  public lyrGrp:L.FeatureGroup;
   public tmpData;
 
   loadedPoints = [];
@@ -36,13 +36,13 @@ export class MarkerService {
     // this.makePoints()
   
   }
-  onFetchPoints(realmap:L.map, tmpData){
+  onFetchPoints(realmap:L.Map, tmpData){
     this.fetchPoints(realmap, tmpData)
     
 
   }
 
-  private fetchPoints(realmap:L.map, tmpData){
+  private fetchPoints(realmap:L.Map, tmpData){
 
     
     // this.socket.emit('fetchpoints', this.tmpData)

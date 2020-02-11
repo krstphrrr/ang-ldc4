@@ -6,10 +6,14 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { reduce } from 'rxjs/operators';
 import * as d3 from 'd3'
 import { socketDataService } from '../learn/socketTest.service'
-import * as PIXI from 'pixi.js'
-import 'leaflet-pixi-overlay'
-import {pixiOverlay} from 'leaflet'
+import { wmsService } from '../map/controls/wms.service'
+// import * as PIXI from 'pixi.js'
+// import 'leaflet-pixi-overlay'
+// import {pixiOverlay} from 'leaflet'
 import {IGeoJson} from './models/geojsonint.model'
+
+import 'leaflet-draw/dist/leaflet.draw.js'
+import { GeoJsonObject } from 'geojson';
 
 
 
@@ -27,14 +31,16 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public tmpPoints;
   public theSubscription;
   public myCanvas:L.Canvas;
+  public Public = true;
   
   
   
 
 
   constructor(
-    private markers:MarkerService,
-    private socket: socketDataService
+    private markers: MarkerService,
+    private socket: socketDataService,
+    private wms: wmsService
     ) {
       
      }
@@ -77,12 +83,75 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       zoom: 10,
       minZoom:7,
       zoomControl:false,
-      preferCanvas:true
+      preferCanvas:true,
+      // drawControl:true,
+      layers:[this.wms.googleSatellite]
     });
 
     this.mymap.invalidateSize({
       debounceMoveend:true
     })
+
+
+    let drawnItems = new L.FeatureGroup()
+    this.mymap.addLayer(drawnItems)
+
+
+    let drawControl = new L.Control.Draw({
+      edit:{
+        featureGroup:drawnItems,
+        remove:false
+      },
+      draw:{
+        polyline: false,
+        polygon:{
+          allowIntersection:false,
+          showArea:true,
+          repeatMode:true
+        },
+        circle:false,
+        marker:false,
+        rectangle:false,
+        circlemarker:false
+      }
+    })
+    this.mymap.addControl(drawControl)
+  //   leafletData.getMap().then(function(map) {
+  //     leafletData.getLayers().then(function(baselayers) {
+  //        var drawnItems = baselayers.overlays.draw;
+  //        map.on('draw:created', function (e) {
+  //          var layer = e.layer;
+  //          drawnItems.addLayer(layer);
+  //          console.log(JSON.stringify(layer.toGeoJSON()));
+  //        });
+  //     });
+  // });
+    this.mymap.on(L.Draw.Event.CREATED, (event)=>{
+      let layer = event.layer
+      console.log(layer)
+    })
+
+    let baseMaps = {
+      'Hybrid':this.wms.googleHybrid,
+      'Streets': this.wms.googleStreet,
+      'Satellite': this.wms.googleSatellite,
+      'Terrain': this.wms.googleTerrain
+    }
+    let overlays = {
+      'surf': this.wms.surf,
+      'mlra': this.wms.mlra,
+      'counties':this.wms.counties,
+      'states': this.wms.states,
+      'drawn Items':drawnItems
+    }
+
+    L.control.layers(baseMaps, overlays, {collapsed:true}).addTo(this.mymap)
+
+
+// var blank = new L.tileLayer('');
+
+
+//***Add in overlays
 
     this.mymap.on('load', (event)=>{
       let bbox =this.mymap.getBounds()
@@ -112,15 +181,11 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     })
     tiles.addTo(this.mymap);
 
-    var googleTerrain = L.tileLayer('https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',{
-      maxZoom: 10,
-      subdomains:['mt0','mt1','mt2','mt3']
-    });
+
 
     this.mymap.on("dragend", (event)=>{
       if(this.myCanvas!==undefined){
-        // this.myCanvas.clearLayers()
-        console.log('ARGH')
+        //
       }
       if(this.theSubscription && !this.theSubscription.closed){
         this.theSubscription.unsubscribe()
@@ -146,21 +211,97 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       let tmpPoly = d3.polygonHull(points)
       let tmpTopo = this.mymap.getPanes()
       this.tmpPoints = tmpPoly
-      // console.log(bbox)
-      // console.log(topos)
-      // this.markers.onFetchPoints(this.mymap, topos)
+   
       this.socket.emit('fetchpoints', topos)
       
      
-      this.theSubscription = this.socket.listen('pointssend').subscribe(data=>{
+      this.theSubscription = this.socket.listen('pointssend').subscribe((data:GeoJsonObject)=>{
+
+        // clearing layergroup to avoid mem leak
         if(this.lyrGrp===undefined){
-          console.log('SOMEHTING')
+          //
         } else{
           this.lyrGrp.clearLayers()
           this.lyrGrp.addTo(this.mymap)
         }
         this.myCanvas = L.canvas({padding:0.1})
-        console.log(data)
+        console.log(data, this.Public,"on drag end")
+        
+        
+        let m = {
+          radius:5, 
+          fillColor:"white",
+          color:"yellow", 
+          weight:2, 
+          opacity:1, 
+          fillOpacity:.8
+        }           
+        this.lyrGrp = L.featureGroup()
+          L.geoJSON((data),{
+            
+            pointToLayer: (feature,latlng)=>{
+              
+              let label = 
+                String("ID: ") + String(feature.id) +"<br>"+
+                String("Public: ")+ String(feature.properties.Public)+"<br>"
+                switch(feature.properties.Public){
+                  case true:
+                    m.fillColor = "#80bfff";
+                    break;
+                  case false:
+                    m.fillColor = "magenta";
+                    break;
+                }
+              return L.circleMarker(latlng,m).bindTooltip(label,{opacity:0.7})
+            }
+          }).addTo(this.lyrGrp)
+          this.lyrGrp.addTo(this.mymap)
+      })
+    })
+
+    this.mymap.on("zoomend", (event)=>{
+      if(this.myCanvas!==undefined){
+        //
+      }
+      if(this.theSubscription && !this.theSubscription.closed){
+        this.theSubscription.unsubscribe()
+      }
+      
+      let bbox =this.mymap.getBounds()
+      let points:[number,number][] = [[bbox._northEast.lng, bbox._northEast.lat], [bbox._southWest.lng, bbox._northEast.lat], [bbox._southWest.lng, bbox._southWest.lat], [bbox._northEast.lng, bbox._southWest.lat]]
+      
+      
+      let topos = {
+        bounds:{
+          _southWest:{
+            lng:bbox._southWest.lng,
+            lat:bbox._southWest.lat
+          },
+          _northEast:{
+            lng:bbox._northEast.lng,
+            lat:bbox._northEast.lat
+          }
+        }
+      }
+      
+      let tmpPoly = d3.polygonHull(points)
+      let tmpTopo = this.mymap.getPanes()
+      this.tmpPoints = tmpPoly
+   
+      this.socket.emit('fetchpoints', topos)
+      
+     
+      this.theSubscription = this.socket.listen('pointssend').subscribe((data:GeoJsonObject)=>{
+
+        // clearing layergroup to avoid mem leak
+        if(this.lyrGrp===undefined){
+          //
+        } else{
+          this.lyrGrp.clearLayers()
+          this.lyrGrp.addTo(this.mymap)
+        }
+        this.myCanvas = L.canvas({padding:0.1})
+        console.log(data, this.Public,"on zoom end")
         
         
         let m = {
@@ -188,102 +329,133 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
                     break;
                 }
               return L.circleMarker(latlng,m).bindTooltip(label,{opacity:0.7})
-            },
-            renderer: this.myCanvas
+            }
           }).addTo(this.lyrGrp)
           this.lyrGrp.addTo(this.mymap)
-
-          
-
-
-        // let pixiLayer = (function(){
-        //   let firstDraw = true
-        //   let colorScale = d3.scaleLinear<string>()
-        //   .domain([0,50,100])
-        //   .range(
-        //     ["#c6233c", "#ffd300", "#008000"]
-        //     )
-        //   let pixiContainer = new PIXI.Graphics()
-        //   return L.pixiOverlay(function(utils){
-        //     let container = utils.getContainer()
-        //     let renderer = utils.getRenderer()
-        //     let project = utils.latLngToLayerPoint
-        //     if(firstDraw){
-        //       let geojson = data
-        //       function drawPoint(color, alpha){
-
-        //         return function(poly){
-        //           let coords = project([poly[1],poly[0]])
-                
-                  
-        //           container.beginFill(color, alpha)
-        //           container.drawShape(new PIXI.Point(coords.x,coords.y))
-        //         }
-        //       }
-        //       geojson.features.forEach((feature,index)=>{
-        //         let alpha, color;
-        //         var tint = d3.color(colorScale(Math.random() * 100)).rgb();
-        //         color = 256 * (tint.r * 256 + tint.g) + tint.b;
-        //         alpha = 0.8;
-
-        //         if (feature.geometry===null)return;
-        //         if(feature.geometry.type==='Point'){
-        //           drawPoint(color,alpha)(feature.geometry.coordinates)
-                  
-        //         }
-        //       })
-              
-        //     }
-        //     firstDraw = false
-        //     renderer.render(container)
-        //   }, pixiContainer, {
-        //     destroyInteractionManager:true
-        //   })
-        // })()
-        // pixiLayer.addTo(this.mymap)
-
-        
-        
       })
-
     })
-
-    
-
-    
-
-    
-    
-    
   }
+
   ngOnDestroy(){
     this.theSubscription.unsubscribe()
   }
 
   showMarkers() {
-    // this.markers.testFunction()
+    // clearing layergroup to avoid mem leak
+    if(this.lyrGrp===undefined){
+      //
+    } else{
+      this.lyrGrp.clearLayers()
+      this.lyrGrp.addTo(this.mymap)
+    }
+    let bbox =this.mymap.getBounds()
+    let points:[number,number][] = [[bbox._northEast.lng, bbox._northEast.lat], [bbox._southWest.lng, bbox._northEast.lat], [bbox._southWest.lng, bbox._southWest.lat], [bbox._northEast.lng, bbox._southWest.lat]]
+     // use the size of county in a spatial query to create the buffer distance 
+      //where to offset the point within.
+      // jitter only with authorized token, actual 
+
+      // divide the workload with jacob
+
+      // connection string postgres for sarah for dima stuff
+      // brandon needs a table from horizontal flux data
+      // horizontal flux needs coords but ericha etc. need to get it in
+      //
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      //
+    let topos = {
+      bounds:{
+        _southWest:{
+          lng:bbox._southWest.lng,
+          lat:bbox._southWest.lat
+        },
+        _northEast:{
+          lng:bbox._northEast.lng,
+          lat:bbox._northEast.lat
+        }
+      }
+    }
     
-  //     const n: number = this.markers.markers.length;
-  //     let i: number;
-  //     let m: L.circleMarker;
+    let tmpPoly = d3.polygonHull(points)
+    let tmpTopo = this.mymap.getPanes()
+    this.tmpPoints = tmpPoly
+    // topos['public'] = true
+    
+    if(this.Public===false){
+      topos['public'] = true
+      // send where true 
+      // change to true
+      this.socket.emit('onpublic', topos)
+      this.Public=true
 
-  //     let x: number;
-  //     let y: number;
-  //     this.lyrGrp = L.featureGroup()
-  //   for (i = 0; i < n; ++i) {
+    } else {
+      topos['public'] = false
+      // remove where true
+      // change to false
+      this.socket.emit('onpublic', topos)
+      this.Public=false
+    }
 
-  //     x = this.markers.markers[i].lat;
-  //     y = this.markers.markers[i].long;
+
+    // this.socket.emit('onpublic', topos)
+    
+   
+    // this.theSubscription = this.socket.listen('pointssend').subscribe(data=>{
+    //   if(this.lyrGrp===undefined){
+    //     console.log('SOMEHTING')
+    //   } else{
+    //     this.lyrGrp.clearLayers()
+    //     this.lyrGrp.addTo(this.mymap)
+    //   }
+    //   this.myCanvas = L.canvas({padding:0.1})
+    //   console.log(data)
       
-  //     m = L.circleMarker([x,y],{
-  //       radius:15,
-  //       fillColor:"magenta",
-  //       color:"yellow",
-  //       weight:2,
-  //       opacity:1,
-  //       fillOpacity:.8
-  //     }).addTo(this.lyrGrp) 
-  //   }
+      
+    //   let m = {
+    //     radius:5, 
+    //     fillColor:"white",
+    //     color:"yellow", 
+    //     weight:2, 
+    //     opacity:1, 
+    //     fillOpacity:.8
+    //   }           
+    //   this.lyrGrp = L.featureGroup()
+    //     L.geoJSON(data,{
+          
+    //       pointToLayer: (feature,latlng)=>{
+            
+    //         let label = 
+    //           String("ID: ") + String(feature.id) +"<br>"+
+    //           String("Public: ")+ String(feature.properties.Public)+"<br>"
+    //           switch(feature.properties.Public){
+    //             case true:
+    //               m.fillColor = "#80bfff";
+    //               break;
+    //             case false:
+    //               m.fillColor = "magenta";
+    //               break;
+    //           }
+    //         return L.circleMarker(latlng,m).bindTooltip(label,{opacity:0.7})
+    //       },
+    //       renderer: this.myCanvas
+    //     }).addTo(this.lyrGrp)
+    //     this.lyrGrp.addTo(this.mymap)
+    // })
   }
   
 

@@ -30,6 +30,8 @@ import { Routes, RouterModule } from '@angular/router'
 // import { AuthService } from './auth/auth.service'
 // import { AuthGuard } from './auth/auth.guard';
 import { CallbackComponent } from './callback/callback.component'
+import { MatButtonToggleModule } from '@angular/material/button-toggle'
+import { MatIconModule } from '@angular/material/icon'
 
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { PlotsComponent } from './map/plots/plots.component';
@@ -97,11 +99,12 @@ const appRoutes: Routes = [
     MatProgressSpinnerModule,
     MatSelectModule,
     MatTabsModule,
-    // MatListModule,
+    MatIconModule,
     RouterModule.forRoot(appRoutes),
     CdkTableModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    MatButtonToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]

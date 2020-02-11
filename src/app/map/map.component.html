@@ -1,12 +1,13 @@
 
 <div 
   id="map" 
-  style="width:100vw; z-index: 500;height:85vh;"
+  style="width:100vw; z-index: 500;height:85vh;margin-left: 15px;"
   > 
   <app-panel 
-    style="z-index: 2000; position: absolute; top:20px; left: 20px;"
+    style="z-index: 2000; position: absolute; top:10px; left: 25px;"
     
-    (addMark)="showMarkers()">
+    (addMark)="showMarkers()"
+    [childMessage]="Public">
   </app-panel>
 </div>
 
