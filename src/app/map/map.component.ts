@@ -12,7 +12,7 @@ import { wmsService } from '../map/controls/wms.service'
 // import {pixiOverlay} from 'leaflet'
 import {IGeoJson} from './models/geojsonint.model'
 
-import 'leaflet-draw/dist/leaflet.draw.js'
+import 'leaflet-draw'
 import { GeoJsonObject } from 'geojson';
 
 
@@ -46,90 +46,158 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
      }
 
   ngOnInit() {
-    // console.log('ngOnInit')
-    // // console.log(this.markers.markers)
-    // this.markers.onFetchPoints()
-    // console.log(this.markers.markers)
+    /*
+      marker service could load 
+      an onInit function with basic
+      public markers:
+      this.marker.fetchInitPoints() etc.
+    */
   }
 
 
   ngAfterViewInit():void{
     console.log('ngAfterViewInit')
+    /*
+     mapinitiation should happen after 
+     View components are initialized. 
+    */
     this.initMap()
-    // this.showMarkers()
-    this.markers.onFetchPoints(this.mymap, 'data')
+    /* 
+      markers could also be loaded here AND THEN added to map
+      this.markers.fetchInitPoints() 
+    */ 
     
   }
 
-  ngAfterViewChecked():void {
+  ngAfterViewChecked(){
     
   }
 
 
-  private initMap(): void {
+  private initMap(){
+    // trying out d3 stuff
     // let topoSVG = d3
     //   .select(this.mymap.getPanes().overlayPane)
     //   .append("svg")
     //   .attr("id", "topoSVG")
     
     this.mymap = L.map('map', {
-      // minZoom: 3,
       maxZoom: 15,
       inertiaDeceleration: 1000,
       attributionControl: false,
       worldCopyJump: true,
-      // maxBounds: [[115,-240],[-115,240]],
       center: [ 32.344147, -106.758442 ],
       zoom: 10,
       minZoom:7,
       zoomControl:false,
       preferCanvas:true,
-      // drawControl:true,
+      /* initial layer */
       layers:[this.wms.googleSatellite]
     });
-
+    /* invalidate size debouncemoveend 
+       adds a timeout on every moveend-event refetch */
     this.mymap.invalidateSize({
       debounceMoveend:true
     })
 
-
+    /* ..drawing logic >> probably could be contained inside service
+       open an empty featuregroup to insert drawing into*/
     let drawnItems = new L.FeatureGroup()
-    this.mymap.addLayer(drawnItems)
-
-
+    /* drawing control + options */
     let drawControl = new L.Control.Draw({
-      edit:{
-        featureGroup:drawnItems,
-        remove:false
-      },
       draw:{
         polyline: false,
         polygon:{
           allowIntersection:false,
-          showArea:true,
+          // showArea:true,
           repeatMode:true
         },
         circle:false,
         marker:false,
         rectangle:false,
         circlemarker:false
+      },
+      edit:{
+        // use empty featuregroup layer
+        featureGroup:drawnItems
       }
     })
     this.mymap.addControl(drawControl)
-  //   leafletData.getMap().then(function(map) {
-  //     leafletData.getLayers().then(function(baselayers) {
-  //        var drawnItems = baselayers.overlays.draw;
-  //        map.on('draw:created', function (e) {
-  //          var layer = e.layer;
-  //          drawnItems.addLayer(layer);
-  //          console.log(JSON.stringify(layer.toGeoJSON()));
-  //        });
-  //     });
-  // });
-    this.mymap.on(L.Draw.Event.CREATED, (event)=>{
-      let layer = event.layer
-      console.log(layer)
-    })
+    /* add featuregroup layer into map layers!
+       this featuregroup still needs a layer */
+    this.mymap.addLayer(drawnItems)
+    /* on map drawing created:
+       clear surrounding points, unsubscribe from 
+       other observers, refetch  */
+    this.mymap.on('draw:created', (e)=> {
+      //adding a drawing to featuregroup layer
+      drawnItems.addLayer(e.layer);
+      // bounds within drawn polygon
+      let bbox =e.layer.getBounds()
+      console.log(bbox)
+      let topos = {
+        bounds:{
+          _southWest:{
+            lng:bbox._southWest.lng,
+            lat:bbox._southWest.lat
+          },
+          _northEast:{
+            lng:bbox._northEast.lng,
+            lat:bbox._northEast.lat
+          }
+        }
+      }
+      console.log('sending bounds...', topos)
+      this.socket.emit('poly', topos)
+      this.socket.listen('something').subscribe(data=>{
+        console.log(data)
+      })
+      
+     
+      // this.theSubscription = this.socket.listen('polygon_receive').subscribe((data:GeoJsonObject)=>{
+      //   console.log("received geojson..", data)
+      //   // clearing layergroup to avoid mem leak
+      //   if(this.lyrGrp===undefined){
+      //     //
+      //   } else{
+      //     this.lyrGrp.clearLayers()
+      //     this.lyrGrp.addTo(this.mymap)
+      //   }
+      //   this.myCanvas = L.canvas({padding:0.1})
+      //   console.log(data, this.Public,"on drag end")
+        
+        
+      //   let m = {
+      //     radius:5, 
+      //     fillColor:"white",
+      //     color:"yellow", 
+      //     weight:2, 
+      //     opacity:1, 
+      //     fillOpacity:.8
+      //   }           
+      //   this.lyrGrp = L.featureGroup()
+      //     L.geoJSON((data),{
+            
+      //       pointToLayer: (feature,latlng)=>{
+              
+      //         let label = 
+      //           String("ID: ") + String(feature.id) +"<br>"+
+      //           String("Public: ")+ String(feature.properties.Public)+"<br>"
+      //           switch(feature.properties.Public){
+      //             case true:
+      //               m.fillColor = "#80bfff";
+      //               break;
+      //             case false:
+      //               m.fillColor = "magenta";
+      //               break;
+      //           }
+      //         return L.circleMarker(latlng,m).bindTooltip(label,{opacity:0.7})
+      //       }
+      //     }).addTo(this.lyrGrp)
+      //     this.lyrGrp.addTo(this.mymap)
+      // })
+      
+  });
 
     let baseMaps = {
       'Hybrid':this.wms.googleHybrid,
@@ -148,10 +216,6 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     L.control.layers(baseMaps, overlays, {collapsed:true}).addTo(this.mymap)
 
 
-// var blank = new L.tileLayer('');
-
-
-//***Add in overlays
 
     this.mymap.on('load', (event)=>{
       let bbox =this.mymap.getBounds()
@@ -208,9 +272,9 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         }
       }
       
-      let tmpPoly = d3.polygonHull(points)
-      let tmpTopo = this.mymap.getPanes()
-      this.tmpPoints = tmpPoly
+      // let tmpPoly = d3.polygonHull(points)
+      // let tmpTopo = this.mymap.getPanes()
+      // this.tmpPoints = tmpPoly
    
       this.socket.emit('fetchpoints', topos)
       
