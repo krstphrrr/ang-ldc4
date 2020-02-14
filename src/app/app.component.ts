@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 
+
 // import { PanelComponent } from './map/controls/panel/panel/panel.component'
 
 
@@ -14,5 +15,7 @@ export class AppComponent {
 
 
   constructor(){}
+
+ 
   
 }

@@ -1,15 +1,29 @@
 
 <div 
-  id="map" 
+  leaflet 
+  [leafletOptions]="options"
+  (leafletMapReady)="onMapReady($event)"
+  (leafletMapMoveEnd)="handleMapMoveEnd($event)"
+  (leafletMapZoomEnd)="handleEvent('mapZoomEnd', $event)"
   style="width:100vw; z-index: 500;height:85vh;margin-left: 15px;"
   > 
-  <app-panel style="z-index: 2000; position: absolute; top:20px; left: 10px;"
-  [childMap]="map">
+  <!-- <app-panel style="z-index: 2000; position: absolute; top:20px; left: 10px;" [childMap]="map"> -->
     
     
     <!-- (addMark)="showMarkers()" -->
     <!-- [childMessage]="Public"> -->
- </app-panel>
+ <!-- </app-panel> -->
+ <leaflet-sidebar-control [map]="map" [options]="sidebarOptions">
+
+ </leaflet-sidebar-control>
+ <div id="sidebar" class="leaflet-sidebar collapsed">
+   <div class="leaflet-sidebar-tabs">
+
+   </div>
+   <div class="leaflet-sidebar-content">
+
+   </div>
+ </div>
 </div>
 
 
