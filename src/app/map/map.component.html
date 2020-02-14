@@ -3,12 +3,14 @@
   id="map" 
   style="width:100vw; z-index: 500;height:85vh;margin-left: 15px;"
   > 
-  <app-panel 
-    style="z-index: 2000; position: absolute; top:10px; left: 25px;"
+  <app-panel style="z-index: 2000; position: absolute; top:20px; left: 10px;"
+  [childMap]="map">
     
-    (addMark)="showMarkers()"
-    [childMessage]="Public">
-  </app-panel>
+    
+    <!-- (addMark)="showMarkers()" -->
+    <!-- [childMessage]="Public"> -->
+ </app-panel>
 </div>
+
 
 <!-- (addMark)="mrkr===false ? addMarks() : removeMarks()" -->

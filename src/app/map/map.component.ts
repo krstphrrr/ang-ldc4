@@ -1,5 +1,7 @@
-import { Component, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, AfterViewInit, AfterViewChecked, ViewChild } from '@angular/core';
 import * as L from 'leaflet'
+// import {SidebarOptions} from 'leaflet'
+// import {Map, Control, DomUtil, MapOptions, tileLayer, latLng, FullscreenOptions, SidebarOptions, marker, icon, LocationEvent} from 'leaflet';
 // import { MapIconOptions } from './data/map-icon'
 import { MarkerService } from './marker.service'
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
@@ -7,15 +9,18 @@ import { reduce } from 'rxjs/operators';
 import * as d3 from 'd3'
 import { socketDataService } from '../learn/socketTest.service'
 import { wmsService } from '../map/controls/wms.service'
-// import * as PIXI from 'pixi.js'
+import { CustomControlService } from '../map/controls/custom-control.service'
+// import { NgxSidebarControlComponent } from '@runette/ngx-leaflet-sidebar'
 // import 'leaflet-pixi-overlay'
 // import {pixiOverlay} from 'leaflet'
 import {IGeoJson} from './models/geojsonint.model'
 
 import 'leaflet-draw'
 import { GeoJsonObject } from 'geojson';
+import { PanelComponent } from './controls/panel/panel/panel.component';
 
 
+ /* angular/leaflet typings: */
 
 @Component({
   selector: 'app-map',
@@ -25,6 +30,7 @@ import { GeoJsonObject } from 'geojson';
 })
 export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   private mymap;
+  public map;
   public isCollapsed = false;
   public mrkr=false;
   public lyrGrp
@@ -32,6 +38,11 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public theSubscription;
   public myCanvas:L.Canvas;
   public Public = true;
+  public mapContainer;
+
+  @ViewChild(PanelComponent) panel;
+
+
   
   
   
@@ -40,7 +51,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   constructor(
     private markers: MarkerService,
     private socket: socketDataService,
-    private wms: wmsService
+    private wms: wmsService,
+    private cust: CustomControlService
     ) {
       
      }
@@ -52,16 +64,20 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       public markers:
       this.marker.fetchInitPoints() etc.
     */
+   this.initMap()
+   this.mymap.addLayer(this.panel.drawnItems)
   }
 
 
   ngAfterViewInit():void{
     console.log('ngAfterViewInit')
+    
     /*
      mapinitiation should happen after 
      View components are initialized. 
     */
-    this.initMap()
+    
+    // this.cust.newControl(this.mymap) 
     /* 
       markers could also be loaded here AND THEN added to map
       this.markers.fetchInitPoints() 
@@ -100,38 +116,61 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       debounceMoveend:true
     })
 
+    
+    /*filter control test */
+    // let CustFilter = L.Control.extend({
+    //   onAdd: (map)=>{
+    //     let img = L.DomUtil.create('img')
+    //     // img.appendChild()
+    //     // img.src = '../../assets/exports/mat_filter.png';
+    //     // img.style.width = '10px';
+    //     return img;
+    //   },
+    //   onRemove: (map)=>{
+    //     //
+    //   }
+    // })
+
+    // let customfilter = (opts)=>{
+    //   return new CustFilter(opts)
+    // }
+
+    // customfilter({position:'bottomleft'}).addTo(this.mymap)
+
     /* ..drawing logic >> probably could be contained inside service
        open an empty featuregroup to insert drawing into*/
-    let drawnItems = new L.FeatureGroup()
-    /* drawing control + options */
-    let drawControl = new L.Control.Draw({
-      draw:{
-        polyline: false,
-        polygon:{
-          allowIntersection:false,
-          // showArea:true,
-          repeatMode:true
-        },
-        circle:false,
-        marker:false,
-        rectangle:false,
-        circlemarker:false
-      },
-      edit:{
-        // use empty featuregroup layer
-        featureGroup:drawnItems
-      }
-    })
-    this.mymap.addControl(drawControl)
+    // let drawnItems = new L.FeatureGroup()
+    // /* drawing control + options */
+    // let drawControl = new L.Control.Draw({
+    //   draw:{
+    //     polyline: false,
+    //     polygon:{
+    //       allowIntersection:false,
+    //       // showArea:true,
+    //       repeatMode:false
+    //     },
+    //     circle:false,
+    //     marker:false,
+    //     rectangle:false,
+    //     circlemarker:false
+    //   },
+    //   edit:{
+    //     // use empty featuregroup layer
+    //     // featureGroup:drawnItems
+    //   }
+    // })
+    // this.mymap.addControl(drawControl)
     /* add featuregroup layer into map layers!
-       this featuregroup still needs a layer */
-    this.mymap.addLayer(drawnItems)
+       the featuregroup itself still needs a layer */
+    // this.mymap.addLayer(this.panel.drawnItems)
     /* on map drawing created:
        clear surrounding points, unsubscribe from 
        other observers, refetch  */
     this.mymap.on('draw:created', (e)=> {
-      //adding a drawing to featuregroup layer
-      drawnItems.addLayer(e.layer);
+      if(this.panel.drawnItems===undefined){
+        console.log('its still undefined')
+      } else {
+      this.panel.drawnItems.addLayer(e.layer);
       // bounds within drawn polygon
       let bbox =e.layer.getBounds()
       console.log(bbox)
@@ -148,8 +187,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         }
       }
       console.log('sending bounds...', topos)
-      this.socket.emit('poly', topos)
-      this.socket.listen('something').subscribe(data=>{
+      this.socket.emit('poly_bounds_sent', topos)
+      this.socket.listen('poly_geojson_cameback').subscribe(data=>{
         console.log(data)
       })
       
@@ -196,24 +235,27 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       //     }).addTo(this.lyrGrp)
       //     this.lyrGrp.addTo(this.mymap)
       // })
-      
+    }
   });
+  
+  // let impCont = this.cust.newControl()
+  this.map = this.mymap
 
-    let baseMaps = {
-      'Hybrid':this.wms.googleHybrid,
-      'Streets': this.wms.googleStreet,
-      'Satellite': this.wms.googleSatellite,
-      'Terrain': this.wms.googleTerrain
-    }
-    let overlays = {
-      'surf': this.wms.surf,
-      'mlra': this.wms.mlra,
-      'counties':this.wms.counties,
-      'states': this.wms.states,
-      'drawn Items':drawnItems
-    }
+  // impCont.addTo(this.map)
+  // this.mapContainer = impCont
+  // console.log(this.mapContainer, 'from map.component')
+  // this.mapContainer = impCont.getContainer()
+  // let whereToPut = document.getElementById('geocoder')
+  
+  // function setParent(el, newParent){
+  //   newParent.appendChild(el)
+  // }
+  // setParent(htmlObject,whereToPut)
+  // document.getElementById('geocoder').appendChild(impCont.addTo(this.mymap))
+  
+ 
 
-    L.control.layers(baseMaps, overlays, {collapsed:true}).addTo(this.mymap)
+    // let a = document.getElementById('new-parent')
 
 
 

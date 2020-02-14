@@ -2,7 +2,7 @@
   
   background: rgba(255,255,255,0.7);
   width: auto;
-  max-height: 50px;
+  height: 150px;
 
 }
 .thebutton{
@@ -18,8 +18,19 @@ mat-icon{
 }
 
 .main-accordion{
+  display: block;
+  transform-origin: top left;
+  transform: rotate(-90deg) translateX(-600px);
   background: rgba(255,255,255, 0.7);
-  width: 300px;
+  width: 600px;
+  justify-content: right;
+}
+.panel-content{
+  transform-origin: top left;
+  transform: rotate(90deg);
+  margin-left: 80%;
+  height: 100px;
+  width: auto;
 }
 
 .main-form {
