@@ -17,6 +17,7 @@ import { socketDataService } from '../learn/socketTest.service'
 export class MarkerService {
   //marker array to inject anywhere
   markers;
+
   public lyrGrp:L.FeatureGroup;
   public tmpData;
 
@@ -36,6 +37,7 @@ export class MarkerService {
           fillOpacity:.8
             }           
     this.lyrGrp = L.featureGroup()
+    // using supplied geojson, create featuregroup full of markers
     L.geoJSON((geojsonObj),{
           pointToLayer: (feature,latlng)=>{
             let label = 
@@ -53,6 +55,14 @@ export class MarkerService {
           }
         }).addTo(this.lyrGrp)
       this.markers = this.lyrGrp
+  }
+
+  noMarkers(){
+    if(this.markers!=undefined){
+      this.markers = undefined
+    } else {
+      console.log('markers is still undefined')
+    }
   }
 
 

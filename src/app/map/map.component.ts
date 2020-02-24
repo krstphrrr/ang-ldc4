@@ -1,22 +1,17 @@
 /// <reference types='leaflet-sidebar-v2' />
-// import { Map, SidebarOptions } from 'leaflet';
-// import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-
 import { Component, OnInit, AfterViewInit, AfterViewChecked, ViewChild } from '@angular/core';
-import * as L from 'leaflet'
-import {Map, latLng, SidebarOptions} from 'leaflet'
+// import * as L from 'leaflet'
+import {Map, latLng, Canvas, SidebarOptions} from 'leaflet'
 
 import { MarkerService } from './marker.service'
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+
 import { Subject } from 'rxjs';
 import { debounceTime, scan } from 'rxjs/operators';
 import * as d3 from 'd3'
 import { socketDataService } from '../learn/socketTest.service'
 import { wmsService } from '../map/controls/wms.service'
 import { CustomControlService } from '../map/controls/custom-control.service'
-// import { NgxSidebarControlComponent } from '@runette/ngx-leaflet-sidebar'
-// import 'leaflet-pixi-overlay'
-// import {pixiOverlay} from 'leaflet'
+
 import {IGeoJson} from './models/geojsonint.model'
 
 import 'leaflet-draw'
@@ -42,7 +37,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     worldCopyJump: true,
     center:latLng(32.344147, -106.758442),
     zoom: 10,
-    minZoom:7,
+    minZoom:5,
     zoomControl:false,
     preferCanvas:true,
     /* initial layer */
@@ -52,19 +47,22 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   public isCollapsed = false;
   public mrkr=false;
-  public lyrGrp
+  public markerLayer
   public tmpPoints;
   public moveSubs;
-  public myCanvas:L.Canvas;
+  public myCanvas:Canvas;
   public Public = true;
   public mapContainer;
+  
+  
 
   public sidebarOptions: SidebarOptions = {
     position: 'right',
-    autopan: false,
-    closeButton: false,
-    container: 'sidebar',
+    autopan: true,
+    closeButton: true,
+    container: 'sidebar'
 }
+  
 
   @ViewChild(PanelComponent) panel;
 
@@ -81,26 +79,62 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       this.eventSubject
      }
 
-     onMapReady(map: L.Map): void {
+     onMapReady(map: Map): void {
+       console.log('onmapreadty')
       this.map = map;
     } 
 
-    handleMapMoveEnd(map: L.Map):void{
-      if(this.moveSubs && !this.moveSubs.closed){
-        this.moveSubs.unsubscribe()
-      }
+    handleMapMoveEnd(map: Map):void{
+      
+      
+      // 1. if subscriber exists, unsubscribe
+      // if(this.map){
+      //   console.log(this.markers.markers)
+      // }else{
+      //   console.log(this.markers.markers)
+      // }
+      // 2. get current bounds
       let bbox = this.map.getBounds()
       this.moveEnd.boundsUtil(bbox)
-      if(this.moveEnd.topos){
-        this.socket.emit('fetchpoints', this.moveEnd.topos)
-        this.moveSubs = this.socket.listen('pointssend')
-          .subscribe((data:GeoJsonObject)=>{
-            //marker service goes here
-            this.markers.createMarkers(data)
-            this.markers.markers.addTo(this.map)
-        })
+      if(this.map.getZoom()<=9){
+        // unsubscribes , no mem leak
+        if(this.moveSubs && !this.moveSubs.closed){
+          this.moveSubs.unsubscribe()
+        }
+        // destroys old markerLayer
+        if(this.markerLayer!=undefined){
+          console.log(this.markerLayer, "not undefined")
+          this.map.removeLayer(this.markerLayer)
+        } else{
+          console.log(this.markerLayer, "undefined!!!")
+        }
+        if(this.moveEnd.topos){
+          
+          console.log(this.map.getZoom())
+          this.socket.emit('fetchpoints', this.moveEnd.topos)
+          this.moveSubs = this.socket.listen('pointssend')
+            .subscribe((data:GeoJsonObject)=>{
+              //marker service goes here, which:
+              // a. creates a layer full of markers from geojson
+              // b. stores layer in the markers property within the service
+              this.markers.createMarkers(data)
+              this.markerLayer = this.markers.markers
+              this.markerLayer.addTo(this.map)
+          })
+        } else {
+          console.log('error: cannot define bounds')
+        }
       } else {
-        console.log('error: cannot define bounds')
+        if(this.moveSubs && !this.moveSubs.closed){
+          this.moveSubs.unsubscribe()
+        }
+        if(this.markerLayer!=undefined){
+          console.log(this.markerLayer, "not undefined above 9")
+          this.map.removeLayer(this.markerLayer)
+        } else{
+          console.log(this.markerLayer, "undefined!!! above 9")
+        }
+        console.log('below nine')
       }
     }
 
@@ -123,18 +157,6 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
 
   ngAfterViewInit():void{
-    // console.log('ngAfterViewInit')
-    
-    /*
-     mapinitiation should happen after 
-     View components are initialized. 
-    */
-    
-    // this.cust.newControl(this.mymap) 
-    /* 
-      markers could also be loaded here AND THEN added to map
-      this.markers.fetchInitPoints() 
-    */ 
     
   }
 
