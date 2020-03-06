@@ -1,7 +1,7 @@
 /// <reference types='leaflet-sidebar-v2' />
 import { Component, OnInit, AfterViewInit, AfterViewChecked, ViewChild } from '@angular/core';
 // import * as L from 'leaflet'
-import {Map, latLng, Canvas, SidebarOptions} from 'leaflet'
+import {Map, latLng, Canvas, SidebarOptions, MapOptions, LeafletEvent} from 'leaflet'
 
 import { MarkerService } from './marker.service'
 
@@ -30,7 +30,7 @@ import { MoveEndService } from '../map/mapevents/move-end.service'
 export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   // private mymap;
   public map:Map;
-  public options = {
+  public options:MapOptions = {
     maxZoom: 15,
     inertiaDeceleration: 1000,
     attributionControl: false,
@@ -60,11 +60,11 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     position: 'right',
     autopan: true,
     closeButton: true,
-    container: 'sidebar'
+    container: "sidebarr",
 }
   
 
-  @ViewChild(PanelComponent) panel;
+  // @ViewChild(PanelComponent) panel;
 
   // new rsjx subject to observe
   eventSubject = new Subject<string>()
@@ -79,21 +79,13 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       this.eventSubject
      }
 
-     onMapReady(map: Map): void {
-       console.log('onmapreadty')
+     onMapReady(map: Map){
+       console.log(this.sidebarOptions, this.options)
       this.map = map;
     } 
 
     handleMapMoveEnd(map: Map):void{
       
-      
-      // 1. if subscriber exists, unsubscribe
-      // if(this.map){
-      //   console.log(this.markers.markers)
-      // }else{
-      //   console.log(this.markers.markers)
-      // }
-      // 2. get current bounds
       let bbox = this.map.getBounds()
       this.moveEnd.boundsUtil(bbox)
       if(this.map.getZoom()<=9){
@@ -141,7 +133,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     handleEvent(eventType: string,evn) {
       this.eventSubject.next(eventType);
     }
-  
+
+    
 
   ngOnInit() {
     /*

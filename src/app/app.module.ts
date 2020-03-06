@@ -39,7 +39,7 @@ import { PlotListComponent } from './map/plots/plot-list/plot-list.component';
 import { CdkTableModule } from '@angular/cdk/table'
 import { HttpClientModule } from '@angular/common/http';
 import { LayersComponent } from './map/controls/layers/layers.component';
-import {NgxSidebarControlModule} from '@runette/ngx-leaflet-sidebar'
+import { NgxSidebarControlModule } from '@runette/ngx-leaflet-sidebar'
 
 const appRoutes: Routes = [
   { path: '', 
@@ -106,7 +106,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     FormsModule,
     MatButtonToggleModule,
-    LeafletModule.forRoot(),
+    LeafletModule,
     NgxSidebarControlModule
   ],
   providers: [],
