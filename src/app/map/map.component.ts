@@ -88,7 +88,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       
       let bbox = this.map.getBounds()
       this.moveEnd.boundsUtil(bbox)
-      if(this.map.getZoom()<=9){
+      if(this.map.getZoom()<=13){
         // unsubscribes , no mem leak
         if(this.moveSubs && !this.moveSubs.closed){
           this.moveSubs.unsubscribe()
@@ -102,7 +102,9 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         }
         if(this.moveEnd.topos){
           
-          console.log(this.map.getZoom())
+          let param = {}
+          param["one"] = 1
+          this.moveEnd.topos.params = param
           this.socket.emit('fetchpoints', this.moveEnd.topos)
           this.moveSubs = this.socket.listen('pointssend')
             .subscribe((data:GeoJsonObject)=>{
