@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { socketDataService } from '../learn/socketTest.service'
-
+import * as d3 from 'd3'
 
 @Component({
   selector: 'app-learn',
@@ -9,6 +9,7 @@ import { socketDataService } from '../learn/socketTest.service'
 })
 export class LearnComponent implements OnInit {
   message:string
+  circle:any[] = [10,20,30,40,50]
 
   constructor(private socket:socketDataService) { }
 
@@ -17,6 +18,15 @@ export class LearnComponent implements OnInit {
     this.socket.listen('test event').subscribe((data)=>{
       console.log(data)      
     })
+    let el = d3.select("#foo")
+      .selectAll('p')
+      .data(this.circle)
+      .enter()
+      .append('p')
+      .text((d)=>{return d})
+      
+    console.log(el)
+
 
   }
 

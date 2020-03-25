@@ -11,9 +11,10 @@
   width: 300px;
 }
 
-html, body { 
+body { 
   height: 100%; 
-  width: 100%; 
+  width: 100%;
+  top:78px; 
   /* position: fixed; */
  }
 .mat-tab-group>.mat-tab-header .mat-tab-label{
@@ -41,3 +42,64 @@ html, body {
 .icon {
   line-height: 30px !important;
 }
+
+#headerControls {
+  background: #4d5980;
+  background: linear-gradient(#56638f, #434d70);
+  width: 100%;
+  position: absolute;
+  top: 78px;
+  left: 0px;
+  height: 37px;
+  display: block;
+  color: #b3d9ff;
+  padding: 1px 9px;
+  border-bottom: solid 1px black;
+  z-index: 1005;
+}
+
+.cl_select {
+  background: white;
+  border-radius: 4px;
+  padding: 3px;
+  border: 1px solid #666666;
+  color: #666666;
+  font-size: 13px;
+  background: lightgray;
+  background: linear-gradient(#f2f2f2, #cccccc);
+  height: 25px;
+  cursor: pointer;
+}
+
+#baselayerList {
+  width: 155px;
+  margin-left: 0px;
+}
+
+#baselayerListDropdown {
+  width: 155px;
+}
+
+.layerList {
+  display: inline-block;
+  float:left;
+  margin: 2px 5px;
+  padding: 3px 1px;
+}
+
+.layerList span {
+  opacity: 1;
+}
+
+.layerListDropdown {
+  display: inline-block;
+  position: absolute;
+  background: white;
+  border: 1px gray solid;
+  border-radius: 0px 0px 4px 4px;
+  color: #666666;
+  font-size: 13px;
+  z-index: 2000;
+  display: none;
+}
+

@@ -44,8 +44,8 @@ import { NgxSidebarControlModule } from '@runette/ngx-leaflet-sidebar'
 const appRoutes: Routes = [
   { path: '', 
     component: MapComponent },
-  { path: 'map', 
-    component: MapComponent },
+  // { path: 'map', 
+  //   component: MapComponent },
   { path: 'learn', 
     component: LearnComponent },
 

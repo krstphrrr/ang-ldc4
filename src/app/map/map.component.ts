@@ -1,7 +1,7 @@
 /// <reference types='leaflet-sidebar-v2' />
 import { Component, OnInit, AfterViewInit, AfterViewChecked, ViewChild } from '@angular/core';
 // import * as L from 'leaflet'
-import {Map, latLng, Canvas, SidebarOptions, MapOptions, LeafletEvent} from 'leaflet'
+import {Map, latLng, Canvas, SidebarOptions, MapOptions, LeafletEvent, TileLayer} from 'leaflet'
 
 import { MarkerService } from './marker.service'
 
@@ -86,6 +86,10 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
     handleMapMoveEnd(map: Map):void{
       
+      
+      
+
+
       let bbox = this.map.getBounds()
       this.moveEnd.boundsUtil(bbox)
       if(this.map.getZoom()<=13){
@@ -95,7 +99,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         }
         // destroys old markerLayer
         if(this.markerLayer!=undefined){
-          console.log(this.markerLayer, "not undefined")
+          // console.log(this.markerLayer, "not undefined")
           this.map.removeLayer(this.markerLayer)
         } else{
           console.log(this.markerLayer, "undefined!!!")
@@ -134,7 +138,9 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
     handleEvent(eventType: string,evn) {
       this.eventSubject.next(eventType);
+      
     }
+    
 
     
 
@@ -145,6 +151,112 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       public markers:
       this.marker.fetchInitPoints() etc.
     */
+    let googleHybrid = this.wms.googleHybrid
+    let googleSatellite = this.wms.googleSatellite
+    let googleStreet = this.wms.googleStreet
+    let googleTerrain = this.wms.googleTerrain
+
+    let states = this.wms.states
+    let counties = this.wms.counties
+    let surf = this.wms.surf
+    let mlra = this.wms.mlra
+    let statsgo = this.wms.statsgo
+    let huc6 = this.wms.huc6
+    let huc8 = this.wms.huc8
+    let blank = new TileLayer('')
+
+    let opaVar = [states, counties, surf, mlra, statsgo, huc6, huc8];
+    let infoObj = {"tl_2017_us_state_wgs84": "US States", "tl_2017_us_county_wgs84": "US Counties", "surface_mgt_agency_wgs84": "Management Agency", "mlra_v42_wgs84": "LRR/MLRA", "statsgo_wgs84": "STATSGO", "wbdhu6_wgs84": "HUC-6", "wbdhu8_wgs84": "HUC-8"};
+    let infoIDField = {"tl_2017_us_state_wgs84": "name", "tl_2017_us_county_wgs84": "name", "surface_mgt_agency_wgs84": "admin_agen", "mlra_v42_wgs84": "mlra_name", "statsgo_wgs84": "mukey", "wbdhu6_wgs84": "name", "wbdhu8_wgs84": "name"};
+    let overlayID = d3.keys(infoObj);
+    let baselayers = {"Google Terrain": googleTerrain, "Google Hybrid": googleHybrid, "Google Satellite": googleSatellite, "Google Street": googleStreet, "None": blank};
+    let overlays = {"US States": states, "US Counties": counties, "Management Agency": surf, "LRR/MLRA": mlra, "STATSGO": statsgo, "HUC-6": huc6, "HUC-8": huc8};
+    let overlayTitles = d3.keys(overlays);
+
+    const layerNames:any = {};
+    layerNames.baseLayers = baselayers
+    // layerNames = {["baseLayers"]: baselayers}; //{"Google Terrain": googleTerrain, "Google Hybrid": googleHybrid, "Google Satellite": googleSatellite, "Google Street": googleStreet, "None": blank};
+    
+    layerNames.baseLayers.keys = d3.keys(layerNames.baseLayers);
+    layerNames.baseLayers.values = d3.values(layerNames.baseLayers);
+
+    layerNames.overlays = {};
+    overlayTitles.forEach(function(tmpTitle,i) {
+      layerNames.overlays[tmpTitle] = opaVar[i];
+    });
+    layerNames.overlays.keys = d3.keys(overlays);
+    layerNames.overlays.values = d3.values(overlays);
+
+    d3.select("body")
+      .insert("div", ":first-child")
+      .attr("id", "headerControls"); // header controls
+
+      d3.select("#headerControls")
+        .insert("div", ":first-child")
+        .attr("id", "mapTools")
+        .append("div")
+        .attr("id", "baselayerSelect")
+        .attr("class", "layerList")
+        .append("div")
+        .attr("id", "baselayerList")
+        .attr("class", "cl_select")
+        .property("title", "Click to change map baselayer")
+        .html('<span id="baselayerListHeader">Change Baselayer</span><span class="fa fa-caret-down pull-right" style="position:relative;top:3px;"></span>')
+        .on("click", function() { if(d3.select("#baselayerListDropdown").style("display") == "none") {d3.select("#baselayerListDropdown").style("display", "inline-block");} else {d3.select("#baselayerListDropdown").style("display", "none");} });;
+  
+
+    d3.select("#baselayerSelect")
+      .append("div")
+      .attr("id", "baselayerListDropdown")
+      .attr("class", "layerListDropdown")
+      .on("mouseleave", function() { d3.select(this).style("display", "none") });
+
+    d3.select("#baselayerListDropdown").selectAll("div")
+    .data(layerNames.baseLayers.keys)
+    .enter()
+      .append("div")
+      .attr("class", "layerName")
+      .text((d:any)=> { return d; })
+      .property("value", function(d,i) { return i; })
+      .property("title", function(d) { return d; })
+      .on("click", function() { changeBaselayer(this); })
+      .append("span")
+      .attr("class", "fa fa-check pull-right activeOverlay")
+      .style("visibility", function(d,i) { if(i == 1) {return "visible";} else {return "hidden";} });
+
+      function changeBaselayer(tmpDiv) {
+        //***Remove old layer
+        var layerDivs:any = d3.select("#baselayerListDropdown").selectAll("div");
+          
+        layerDivs._groups[0].forEach(function(tmpLayer) {
+          if(d3.select(tmpLayer).select("span").style("visibility") == "visible") {
+            d3.select(tmpLayer).select("span").style("visibility", "hidden");
+            this.map.removeLayer(layerNames.baseLayers.values[d3.select(tmpLayer).property("value")]);
+          }
+        });
+    
+        //***Add new layer
+        d3.select(tmpDiv).select("span").style("visibility", "visible");
+        this.map.addLayer(layerNames.baseLayers.values[tmpDiv.value]);
+        layerNames.baseLayers.values[tmpDiv.value].bringToBack();       
+      }
+
+      // d3.select("#mapTools")
+      // .append("div")
+      // .attr("id", "overlaySelect")
+      // .attr("class", "layerList")
+      // .append("div")
+      // .attr("id", "overlayList")
+      // .attr("class", "cl_select")
+      // .property("title", "Click to select overlay layers to display on map")
+      // .html('<span id="overlayListHeader">View Overlay Layers</span><span class="fa fa-caret-down pull-right" style="position:relative;top:3px;"></span>')
+      // .on("click", function() { if(d3.select("#overlayListDropdown").style("display") == "none") {d3.select("#overlayListDropdown").style("display", "inline-block");} else {d3.select("#overlayListDropdown").style("display", "none");} });;
+    d3.select("#overlaySelect")
+      .append("div")
+      .attr("id", "overlayListDropdown")
+      .attr("class", "layerListDropdown")
+      .on("mouseleave", function() { d3.select(this).style("display", "none") });
+    
   //  this.onMapReady(this.map)
   //  this.initMap()
   //  this.mymap.addLayer(this.panel.drawnItems)
