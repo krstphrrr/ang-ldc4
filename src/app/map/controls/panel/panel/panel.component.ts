@@ -17,6 +17,8 @@ export class PanelComponent implements OnInit, AfterViewChecked, AfterViewInit{
   changeText:boolean;
   public drawnItems;
 
+  @Output() filter:EventEmitter<any> = new EventEmitter()
+
 
   @Output() addMark: EventEmitter<string> = new EventEmitter<string>()
   @Output() pullDB: EventEmitter<string> = new EventEmitter<string>()
@@ -106,4 +108,9 @@ ngAfterViewInit(){
 
     
   }
+
+  testFilter(){
+    this.filter.emit()
+  }
+
 }

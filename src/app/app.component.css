@@ -1,9 +1,16 @@
-html,body{
-  min-width: 100vw;
-  /* position: relative; */
-  /* overflow: hidden; */
-
+app-header {
+  background:white;
+  height: 100px;
+  top:300px;
 }
-/* .row{
-  width: 100vw;
+
+.container {
+  position: fixed;
+  height:100vh;
+  width:100%;
+  top:78px;
+  padding-left:0;
+}
+/* .overlayList{
+  top:400px
 } */

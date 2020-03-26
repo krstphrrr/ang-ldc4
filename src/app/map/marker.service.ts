@@ -16,33 +16,63 @@ import { socketDataService } from '../learn/socketTest.service'
 })
 export class MarkerService {
   //marker array to inject anywhere
-  public markers: {lat: number, long: number}[] =[];
+  markers;
+
   public lyrGrp:L.FeatureGroup;
   public tmpData;
 
   loadedPoints = [];
 
   constructor(
-    private http: HttpClient,
-    private socket:socketDataService
-  ){
-    console.log('this is the service' )
-    // console.log(this.markers)
-    // some map markers
-    // ultimately will be pulled from http/api
-    this.markers = [
+    private http: HttpClient
+  ){ }
 
-    ];
-    // this.makePoints()
-  
+  createMarkers(geojsonObj){
+    let m = {
+          radius:5, 
+          fillColor:"white",
+          color:"yellow", 
+          weight:2, 
+          opacity:1, 
+          fillOpacity:.8
+            }           
+    this.lyrGrp = L.featureGroup()
+    // using supplied geojson, create featuregroup full of markers
+    L.geoJSON((geojsonObj),{
+          pointToLayer: (feature,latlng)=>{
+            let label = 
+              String("ID: ") + String(feature.id) +"<br>"+
+              String("Public: ")+ String(feature.properties.Public)+"<br>"
+              switch(feature.properties.Public){
+                case true:
+                  m.fillColor = "#80bfff";
+                  break;
+                case false:
+                  m.fillColor = "magenta";
+                  break;
+              }
+            return L.circleMarker(latlng,m).bindTooltip(label,{opacity:0.7})
+          }
+        }).addTo(this.lyrGrp)
+      this.markers = this.lyrGrp
   }
-  onFetchPoints(realmap:L.Map, tmpData){
-    this.fetchPoints(realmap, tmpData)
+
+  noMarkers(){
+    if(this.markers!=undefined){
+      this.markers = undefined
+    } else {
+      console.log('markers is still undefined')
+    }
+  }
+
+
+  // onFetchPoints(realmap:L.Map, tmpData){
+  //   this.fetchPoints(realmap, tmpData)
     
 
-  }
+  // }
 
-  private fetchPoints(realmap:L.Map, tmpData){
+  // private fetchPoints(realmap:L.Map, tmpData){
 
     
     // this.socket.emit('fetchpoints', this.tmpData)
@@ -111,13 +141,13 @@ export class MarkerService {
 //     // this.lyrGrp.addTo(realmap)
 //       })
 
-  }
+  // }
 
-  testFunction(){
-    this.http.get('http://localhost:5000/api/plots3').subscribe(data=>{
-      console.log(data)
-    })
-  }
+  // testFunction(){
+  //   this.http.get('http://localhost:5000/api/plots3').subscribe(data=>{
+  //     console.log(data)
+  //   })
+  // }
   // makePoints(){
   //   this.http.get('http://localhost:5000/api/plots2').subscribe((res:any)=>{
   //     for(const c of res){
