@@ -4,7 +4,7 @@ import * as L from 'leaflet'
 import {Map, latLng, Canvas, MapOptions, LeafletEvent, TileLayer} from 'leaflet'
 
 import { MarkerService } from './marker.service'
-
+import * as $ from 'jquery';
 import { Subject } from 'rxjs';
 import { debounceTime, scan } from 'rxjs/operators';
 import * as d3 from 'd3'
@@ -134,7 +134,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         .attr("class", "cl_select")
         .property("title", "Click to change map baselayer")
         // .property("data-toggle", "dropdown")
-        .html('<span id="baselayerListHeader">Change Baselayer</span><i class="fas fa-caret-down"></i>')
+        .html('<span id="baselayerListHeader">Change Baselayer</span><i class="fas fa-caret-down fa-pull-right"></i>')
         .on("click", function() { if(d3.select("#baselayerListDropdown").style("display") == "none") {d3.select("#baselayerListDropdown").style("display", "inline-block");} else {d3.select("#baselayerListDropdown").style("display", "none");} });;
    
 
@@ -156,7 +156,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       .property("title", function(d) { return d; })
       .on("click", function() { changeBaselayer(this); })
       .append("span")
-      .attr("class", "fa fa-check pull-right activeOverlay")
+      .attr("class", "fas fa-check fa-pull-right activeOverlay")
       .style("visibility", function(d,i) { if(i == 1) {return "visible";} else {return "hidden";} });
 
       function changeBaselayer(tmpDiv) {
@@ -176,21 +176,244 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         layerNames.baseLayers.values[tmpDiv.value].bringToBack();       
       }
 
-      // d3.select("#mapTools")
-      // .append("div")
-      // .attr("id", "overlaySelect")
-      // .attr("class", "layerList")
-      // .append("div")
-      // .attr("id", "overlayList")
-      // .attr("class", "cl_select")
-      // .property("title", "Click to select overlay layers to display on map")
-      // .html('<span id="overlayListHeader">View Overlay Layers</span><span class="fa fa-caret-down pull-right" style="position:relative;top:3px;"></span>')
-      // .on("click", function() { if(d3.select("#overlayListDropdown").style("display") == "none") {d3.select("#overlayListDropdown").style("display", "inline-block");} else {d3.select("#overlayListDropdown").style("display", "none");} });;
+      d3.select("#mapTools")
+      .append("div")
+      .attr("id", "overlaySelect")
+      .attr("class", "layerList")
+      .append("div")
+      .attr("id", "overlayList")
+      .attr("class", "cl_select")
+      .property("title", "Click to select overlay layers to display on map")
+      .html('<span id="overlayListHeader">View Overlay Layers</span><span class="fas fa-caret-down fa-pull-right" style="position:relative;top:3px;"></span>')
+      .on("click", function() { if(d3.select("#overlayListDropdown").style("display") == "none") {d3.select("#overlayListDropdown").style("display", "inline-block");} else {d3.select("#overlayListDropdown").style("display", "none");} });;
     d3.select("#overlaySelect")
       .append("div")
       .attr("id", "overlayListDropdown")
       .attr("class", "layerListDropdown")
       .on("mouseleave", function() { d3.select(this).style("display", "none") });
+
+    //******Add overlay options
+  d3.select("#overlayListDropdown").selectAll("div")
+    .data(layerNames.overlays.keys)
+    .enter()
+    .append("div")
+    .attr("id", function(d,i) { return "layerToggleDiv" + i; })
+    .attr("class", "layerName")
+    .text((d:any)=>{ return d; })
+    .property("value", function(d,i) { return i; })
+    .property("title", function(d) { return d; })
+    .property("name", function(d,i) { return overlayID[i]; })
+    .on("click", function() { changeOverlay(this); })
+    .append("span")
+    .attr("class", "fa fa-check pull-right activeOverlay")
+    .style("visibility", "hidden"); //function(d) { if(d == "US States") { map.addLayer(states); return "visible"; } else { return "hidden"; } });
+    
+    function changeOverlay(tmpDiv) {
+      if(d3.select(tmpDiv).select("span").style("visibility") == "hidden") {
+        d3.select(tmpDiv).select("span").style("visibility", "visible");
+        mappy.addLayer(layerNames.overlays.values[tmpDiv.value]);
+        // check4Json();
+        layerNames.overlays.values[tmpDiv.value].bringToFront();
+        // geoInd.bringToFront();
+        addLegendImg(tmpDiv.name, tmpDiv.title, layerNames.overlays.values[tmpDiv.value], ["overlays",tmpDiv.title]);
+      } 
+      else {
+        d3.select(tmpDiv).select("span").style("visibility", "hidden");
+        // removeTopo(topos[d3.select(tmpDiv).property("name")]);
+        mappy.removeLayer(layerNames.overlays.values[tmpDiv.value]);
+        remLegendImg(tmpDiv.name);
+      }
+      //check4Json();
+    }
+
+    //******Function to toggle tool windows
+  var toggleWords = {"legend":"Legend", "info":"Identify", "locate": "Locate", "filter": "Filter"}
+  const toolWindowToggle = function (tmpDiv) {
+    if (d3.select("#" + tmpDiv + "Div").style("opacity") == "1") {
+      d3.select("#" + tmpDiv + "Div").transition().style("opacity", "0").style("visibility", "hidden");
+      d3.select("#hc" + tmpDiv.charAt(0).toUpperCase() + tmpDiv.slice(1) + "Div").property("title", "Click to show " + toggleWords[tmpDiv] + " window");
+    }
+    else {
+      d3.select("#" + tmpDiv + "Div").transition().duration(250).ease(d3.easeCubic).style("opacity", "1").style("display", "block").style("visibility", "visible").on("end", resizePanels);            
+      d3.select("#hc" + tmpDiv.charAt(0).toUpperCase() + tmpDiv.slice(1) + "Div").property("title", "Click to hide " + toggleWords[tmpDiv] + " window");
+      // setZ(d3.select("#" + tmpDiv + "Div")._groups[0][0]);
+    }
+  }
+  function setZ(tmpWin) {
+    if (d3.select("#map").classed("introjs-showElement") == false) {
+      d3.selectAll("#legendDiv,#infoDiv,#locateDiv,#filterDiv,#pointDiv,#downloadDiv").style("z-index", function() { if(d3.select(this).style("opacity") == '1') {return 1001;} else {return 7500;} }); 
+      d3.select(tmpWin).style("z-index", 1002);
+    }
+  }
+
+  //******Adjust div position to ensure that it isn't overflowing window
+function resizePanels() {
+  var bodyRect = document.body.getBoundingClientRect();
+  var tmpWindows = ["infoDiv", "pointDiv", "locateDiv", "legendDiv", "filterDiv", "downloadDiv"];
+        
+  tmpWindows.forEach(function(win) {
+    var winRect = document.getElementById(win).getBoundingClientRect();
+    if(winRect.bottom > bodyRect.bottom) {
+      d3.select("#" + win).style("top", bodyRect.height - winRect.height + "px");
+    }
+    if(winRect.right > bodyRect.right) {
+      d3.select("#" + win).style("left", bodyRect.width - winRect.width + "px");
+    }
+  });
+  d3.select("#legendImgDiv").style("min-width", "0px").style("width", "auto");
+  var legRect = document.getElementById("legendImgDiv").getBoundingClientRect();
+  d3.select("#legendImgDiv").style("min-width", legRect.width + "px");
+}
+
+
+     //******Make div for legend
+  d3.select("body")
+  .append("div")
+  .attr("class", "legend gradDown")
+  .attr("id", "legendDiv");
+
+  $('#legendDiv').draggable({containment: "html", cancel: ".toggle-group,.layerLegend,textarea,button,select,option"});
+
+  d3.select("#legendDiv")
+    .append("h4")
+    .text("Legend")
+    .attr("class", "legTitle")
+    .attr("id", "legendTitle")
+    .append("span")
+    .html('<span class="fa fa-info-circle" data-toggle="tooltip" data-container="body" data-placement="auto" data-html="true" title="<p><u><b>Legend</b></u></p><p>Displays legends for added map layers enabling their interpretation along with control over their transparency.<br><br>Drag and drop layers to change their order on the map.</p>"</span>');
+
+  d3.select("#legendTitle")
+    .html(d3.select("#legendTitle").html() + '<div class="exitDiv"><span id="hideLegend" class="fa fa-times-circle" data-toggle="tooltip" data-container="body" data-placement="auto" data-html="true" title="<p>Click to hide window</p>"</span></div>'); 
+
+  d3.select("#hideLegend")
+    .on("click", function() { toolWindowToggle("legend"); });
+
+  d3.select("#legendDiv")
+    .append("div")
+    .attr("id", "legendDefault")
+    .text("Add a map layer to view its legend...");
+
+  d3.select("#legendDiv")
+    .append("div")
+    .attr("id", "legendImgDiv");
+
+    $("#legendImgDiv").sortable({appendTo: "#legendImgDiv", containment: "#legendImgDiv", cancel: "input,textarea,button,select,option", forcePlaceholderSize: true, placeholder: "sortable-placeholder", helper: "original", tolerance: "pointer", stop: function(event, ui) { reorder(event, ui); }, start: function(event, ui) { helperPlaceholder(event, ui); }});
+      //******Change the layer orders after drag and drop
+  function reorder(tmpEvent, tmpUI) {
+    var tmpCnt = tmpEvent.target.children.length;
+    var i = 0
+    for (let child of tmpEvent.target.children) {
+      overlays[infoObj[child.id.slice(0,-6)]].setZIndex(tmpCnt - i);
+      i += 1;
+    }
+ }
+   //******Style the helper and placeholder when dragging/sorting
+   function helperPlaceholder(tmpEvent, tmpUI) {
+    console.log(tmpUI); 
+    d3.select(".ui-sortable-placeholder.sortable-placeholder").style("width", d3.select("#" + tmpUI.item[0].id).style("width")).style("height", "37px");  //.style("background", "rgba(255,255,255,0.25)"); 
+  }
+
+
+
+
+
+    function addLegendImg(tmpName, tmpTitle, tmpLayer, tmpPath) {
+      if(tmpName.includes("surf") || tmpName.includes("mlra")) {
+        var tmpOpa = 0.6;
+      }
+      else {
+        var tmpOpa = 1;
+      }
+      tmpLayer.setOpacity(tmpOpa);
+  
+      d3.select("#legendImgDiv")
+        .insert("div", ":first-child")
+        .attr("id", tmpName + "Legend")
+        .attr("value", tmpPath)
+        .attr("class", "layerLegend")
+        .append("div")
+        .attr("id", tmpName + "LegendHeader")
+        .attr("data-toggle", "collapse")
+        .attr("data-target", "#" + tmpName + "collapseDiv")
+        // .on("click", function() { changeCaret(d3.select(this).select("span")._groups[0][0]); })
+        .append("div")
+        .attr("class", "legendTitle")
+        .html('<h6>' + tmpTitle + '</h6><div class="exitDiv"><span class="fa fa-caret-down legendCollapse" title="View legend"></span></div>');
+  
+  
+      function changeCaret(tmpSpan) {
+        if(d3.select(tmpSpan).classed("fa-caret-down")) {
+          d3.select(tmpSpan).classed("fa-caret-down", false).classed("fa-caret-up", true).property("title", "Hide legend");
+        }
+        else {
+          d3.select(tmpSpan).classed("fa-caret-up", false).classed("fa-caret-down", true).property("title", "View legend");
+        }
+      }
+  
+      d3.select("#" + tmpName + "Legend")
+        .append("div")
+        .attr("id", tmpName + "collapseDiv")
+        .attr("class", "collapseDiv collapse")
+        .append("div")
+        .attr("id", tmpName + "LegImgDiv")
+        .attr("class","legImgDiv")
+        .append("img")
+        .attr("id", tmpName + "LegendImg")
+        .attr("class", "legendImg")
+        .property("title", tmpTitle);
+  
+      $("#" + tmpName + "collapseDiv").on("shown.bs.collapse", function() { resizePanels(); });
+      $("#" + tmpName + "collapseDiv").on("hidden.bs.collapse", function() { resizePanels(); });
+  
+  
+      //***Set div width and offset after the image has been loaded
+      $("#" + tmpName + "LegendImg").one("load", function() {
+        var tmpRect = document.getElementById(tmpName + "LegendImg").getBoundingClientRect();
+        let newmaxheight = tmpRect.height - 67 
+        d3.select("#" + tmpName + "LegImgDiv").style("max-height", newmaxheight);
+        // d3.select("#" + tmpName + "LegImgDiv").style({"max-width": tmpRect.width + "px"});
+
+        d3.select("#" + tmpName + "Legend").style("opacity", "1");     
+      }).attr("src", "https://landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc:" + tmpName);
+  
+      d3.select("#" + tmpName + "collapseDiv")
+        .append("div")
+        .attr("id", tmpName + "LegendSlider")
+        .property("title", tmpTitle + " Layer Opacity: " + tmpOpa * 100 + "%");
+  
+      $("#" + tmpName + "LegendSlider").slider({animate: "fast", min: 0, max: 100, value: tmpOpa * 100, slide: function(event, ui) { layerOpacity(ui, tmpLayer); } });
+  
+      d3.select("#legendDefault").style("display", "none");
+  
+      d3.select("#legendImgDiv")
+        .style("display", "block");
+  
+      // if(d3.select("#legendDiv").style("opacity") == 0) {
+      //   toolWindowToggle("legend");
+      // }
+  
+      resizePanels();
+    }
+
+    function remLegendImg(tmpName) {
+      d3.select("#" + tmpName + "Legend").remove();
+  
+      // if(d3.select("#legendImgDiv").selectAll("div")._groups[0].length == 0) {
+      //   d3.select("#legendImgDiv").style("display", "none");
+      //   d3.select("#legendDefault").style("display", "block");
+      // }
+    }
+
+    //******Change transparency of current legend layer
+  function layerOpacity(tmpSlider, tmpLayer) {
+    var tmpOpacity = tmpSlider.value/100; 
+    tmpSlider.title = "Opacity: " + tmpSlider.value + "%"; 
+    tmpLayer.setOpacity(tmpOpacity);
+  }
+
+ 
+    
+
     
   //  this.onMapReady(this.map)
 
