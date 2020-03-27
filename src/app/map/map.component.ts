@@ -2,9 +2,12 @@
 import { Component, OnInit, AfterViewInit, AfterViewChecked, ViewChild } from '@angular/core';
 import * as L from 'leaflet'
 import {Map, latLng, Canvas, MapOptions, LeafletEvent, TileLayer} from 'leaflet'
-
+// import  '../../plugins/L.Control.Sidebar.js'
+import 'leaflet-easybutton'
+import 'leaflet-sidebar-v2'
 import { MarkerService } from './marker.service'
-import * as $ from 'jquery';
+// import * as $ from 'jquery';
+declare var $: any;
 import { Subject } from 'rxjs';
 import { debounceTime, scan } from 'rxjs/operators';
 import * as d3 from 'd3'
@@ -19,7 +22,16 @@ import { GeoJsonObject } from 'geojson';
 import { PanelComponent } from './controls/panel/panel/panel.component';
 import { MoveEndService } from '../map/mapevents/move-end.service'
 
- /* angular/leaflet typings: */
+// declare module 'leaflet' {
+//   namespace control {
+//     function sidebar(options?: any): Control.Sidebar;
+//   }
+//   namespace Control {
+//     interface Sidebar {
+//       addTo(map: L.Map): any;
+//     }
+//   }
+// }
 
 @Component({
   selector: 'app-map',
@@ -30,6 +42,8 @@ import { MoveEndService } from '../map/mapevents/move-end.service'
 export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   // private mymap;
   public mymap
+  public ctlSidebar;
+  public ctlEasybutton
   
 
 
@@ -80,7 +94,18 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       this.marker.fetchInitPoints() etc.
     */
     this.initMap()
-    
+    console.log()
+    this.ctlSidebar = L.control.sidebar({
+      autopan:true,
+      closeButton:true,
+      container:'sidebar',
+      position:'left'
+    }).addTo(this.mymap)
+    // this.ctlEasybutton = L.easyButton('glyphicon-transfer',function(){
+    //   this.ctlSidebar.
+    // }).addTo(this.mymap)
+
+
     console.log(this.mymap.eachLayer(i=>{return i}),"pop")
     let googleHybrid = this.wms.googleHybrid
     let googleSatellite = this.wms.googleSatellite
@@ -119,45 +144,45 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     layerNames.overlays.keys = d3.keys(overlays);
     layerNames.overlays.values = d3.values(overlays);
 
-    d3.select("body")
-      .insert("div", ":first-child")
-      .attr("id", "headerControls"); // header controls
+    // d3.select("body")
+    //   .insert("div", ":first-child")
+    //   .attr("id", "headerControls"); // header controls
 
-      d3.select("#headerControls")
-        .insert("div", ":first-child")
-        .attr("id", "mapTools")
-        .append("div")
-        .attr("id", "baselayerSelect")
-        .attr("class", "layerList")
-        .append("div")
-        .attr("id", "baselayerList")
-        .attr("class", "cl_select")
-        .property("title", "Click to change map baselayer")
-        // .property("data-toggle", "dropdown")
-        .html('<span id="baselayerListHeader">Change Baselayer</span><i class="fas fa-caret-down fa-pull-right"></i>')
-        .on("click", function() { if(d3.select("#baselayerListDropdown").style("display") == "none") {d3.select("#baselayerListDropdown").style("display", "inline-block");} else {d3.select("#baselayerListDropdown").style("display", "none");} });;
+    //   d3.select("#headerControls")
+    //     .insert("div", ":first-child")
+    //     .attr("id", "mapTools")
+    //     .append("div")
+    //     .attr("id", "baselayerSelect")
+    //     .attr("class", "layerList")
+    //     .append("div")
+    //     .attr("id", "baselayerList")
+    //     .attr("class", "cl_select")
+    //     .property("title", "Click to change map baselayer")
+    //     // .property("data-toggle", "dropdown")
+    //     .html('<span id="baselayerListHeader">Change Baselayer</span><i class="fas fa-caret-down fa-pull-right"></i>')
+    //     .on("click", function() { if(d3.select("#baselayerListDropdown").style("display") == "none") {d3.select("#baselayerListDropdown").style("display", "inline-block");} else {d3.select("#baselayerListDropdown").style("display", "none");} });;
    
 
-    d3.select("#baselayerSelect")
-      .append("div")
-      .attr("id", "baselayerListDropdown")
-      .attr("class", "layerListDropdown")
-      .on("mouseleave", function() { d3.select(this).style("display", "none") });
+    // d3.select("#baselayerSelect")
+    //   .append("div")
+    //   .attr("id", "baselayerListDropdown")
+    //   .attr("class", "layerListDropdown")
+    //   .on("mouseleave", function() { d3.select(this).style("display", "none") });
     
-      console.log(layerNames.baseLayers.values, "es mappy")
+    //   console.log(layerNames.baseLayers.values, "es mappy")
     
-    d3.select("#baselayerListDropdown").selectAll("div")
-    .data(layerNames.baseLayers.keys)
-    .enter()
-      .append("div")
-      .attr("class", "layerName")
-      .text((d:any)=> { return d; })
-      .property("value", function(d,i) { return i; })
-      .property("title", function(d) { return d; })
-      .on("click", function() { changeBaselayer(this); })
-      .append("span")
-      .attr("class", "fas fa-check fa-pull-right activeOverlay")
-      .style("visibility", function(d,i) { if(i == 1) {return "visible";} else {return "hidden";} });
+    // d3.select("#baselayerListDropdown").selectAll("div")
+    // .data(layerNames.baseLayers.keys)
+    // .enter()
+    //   .append("div")
+    //   .attr("class", "layerName")
+    //   .text((d:any)=> { return d; })
+    //   .property("value", function(d,i) { return i; })
+    //   .property("title", function(d) { return d; })
+    //   .on("click", function() { changeBaselayer(this); })
+    //   .append("span")
+    //   .attr("class", "fas fa-check fa-pull-right activeOverlay")
+    //   .style("visibility", function(d,i) { if(i == 1) {return "visible";} else {return "hidden";} });
 
       function changeBaselayer(tmpDiv) {
         //***Remove old layer
@@ -176,7 +201,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         layerNames.baseLayers.values[tmpDiv.value].bringToBack();       
       }
 
-      d3.select("#mapTools")
+    d3.select("#mapTools")
       .append("div")
       .attr("id", "overlaySelect")
       .attr("class", "layerList")
@@ -249,7 +274,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   //******Adjust div position to ensure that it isn't overflowing window
 function resizePanels() {
   var bodyRect = document.body.getBoundingClientRect();
-  var tmpWindows = ["infoDiv", "pointDiv", "locateDiv", "legendDiv", "filterDiv", "downloadDiv"];
+  var tmpWindows = ["infoDiv", "legendDiv"];
         
   tmpWindows.forEach(function(win) {
     var winRect = document.getElementById(win).getBoundingClientRect();
@@ -410,6 +435,33 @@ function resizePanels() {
     tmpSlider.title = "Opacity: " + tmpSlider.value + "%"; 
     tmpLayer.setOpacity(tmpOpacity);
   }
+
+   //******Make div for info
+  d3.select("body")
+    .append("div")
+    .attr("class", "legend gradDown")
+    .attr("id", "infoDiv");
+
+  $('#infoDiv').draggable({containment: "html", cancel: ".toggle-group,input,textarea,button,select,option"});
+
+  d3.select("#infoDiv")
+    .append("h4")
+    .text("Identify")
+    .attr("class", "legTitle")
+    .attr("id", "infoTitle")
+    .append("span")
+    .html('<span class="fa fa-info-circle" data-toggle="tooltip" data-container="body" data-placement="auto" data-html="true" title="<p><u><b>Identify</b></u></p><p>Displays attribute value for visible overlay layers for a clicked point on the map</p>"</span>');
+ 
+  d3.select("#infoTitle")
+    .html(d3.select("#infoTitle").html() + '<div class="exitDiv"><span id="hideInfo" class="fa fa-times-circle" data-toggle="tooltip" data-container="body" data-placement="auto" data-html="true" title="<p>Click to hide window</p>"</span></div>'); 
+
+  d3.select("#hideInfo")
+    .on("click", function() { toolWindowToggle("info"); });
+
+  d3.select("#infoDiv")
+    .append("div")
+    .attr("id", "info");
+
 
  
     
