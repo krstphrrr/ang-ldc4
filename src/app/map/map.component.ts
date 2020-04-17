@@ -55,6 +55,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public myCanvas:Canvas;
   public Public = true;
   public mapContainer;
+
+  public drawnItems;
     
 
   // @ViewChild(PanelComponent) panel;
@@ -148,41 +150,52 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     //   .insert("div", ":first-child")
     //   .attr("id", "headerControls"); // header controls
 
-    //   d3.select("#headerControls")
-    //     .insert("div", ":first-child")
-    //     .attr("id", "mapTools")
-    //     .append("div")
-    //     .attr("id", "baselayerSelect")
-    //     .attr("class", "layerList")
-    //     .append("div")
-    //     .attr("id", "baselayerList")
-    //     .attr("class", "cl_select")
-    //     .property("title", "Click to change map baselayer")
-    //     // .property("data-toggle", "dropdown")
-    //     .html('<span id="baselayerListHeader">Change Baselayer</span><i class="fas fa-caret-down fa-pull-right"></i>')
-    //     .on("click", function() { if(d3.select("#baselayerListDropdown").style("display") == "none") {d3.select("#baselayerListDropdown").style("display", "inline-block");} else {d3.select("#baselayerListDropdown").style("display", "none");} });;
+      d3.select("#test1")
+        .insert("div", ":first-child")
+        .attr("id", "mapTools")
+        .append("div")
+        .attr("id", "baselayerSelect")
+        .attr("class", "layerList")
+        .append("div")
+        .attr("id", "baselayerList")
+        .attr("class", "cl_select")
+        .property("title", "Click to change map baselayer")
+        // .property("data-toggle", "dropdown")
+        .html('<span id="baselayerListHeader">Change Baselayer</span><i class="fas fa-caret-down fa-pull-right"></i>')
+        .on("click", function() { 
+          if(d3.select("#baselayerListDropdown")
+            .style("display") == "none") {
+              d3.select("#baselayerListDropdown")
+                .style("display", "inline-block");
+              } else {
+                d3.select("#baselayerListDropdown")
+                  .style("display", "none");} 
+                });;
    
 
-    // d3.select("#baselayerSelect")
-    //   .append("div")
-    //   .attr("id", "baselayerListDropdown")
-    //   .attr("class", "layerListDropdown")
-    //   .on("mouseleave", function() { d3.select(this).style("display", "none") });
+    d3.select("#baselayerSelect")
+      .append("div")
+      .attr("id", "baselayerListDropdown")
+      .attr("class", "layerListDropdown")
+      .on("mouseleave", function() { 
+        d3.select(this)
+          .style("display", "none") 
+        });
     
     //   console.log(layerNames.baseLayers.values, "es mappy")
     
-    // d3.select("#baselayerListDropdown").selectAll("div")
-    // .data(layerNames.baseLayers.keys)
-    // .enter()
-    //   .append("div")
-    //   .attr("class", "layerName")
-    //   .text((d:any)=> { return d; })
-    //   .property("value", function(d,i) { return i; })
-    //   .property("title", function(d) { return d; })
-    //   .on("click", function() { changeBaselayer(this); })
-    //   .append("span")
-    //   .attr("class", "fas fa-check fa-pull-right activeOverlay")
-    //   .style("visibility", function(d,i) { if(i == 1) {return "visible";} else {return "hidden";} });
+    d3.select("#baselayerListDropdown").selectAll("div")
+    .data(layerNames.baseLayers.keys)
+    .enter()
+      .append("div")
+      .attr("class", "layerName")
+      .text((d:any)=> { return d; })
+      .property("value", function(d,i) { return i; })
+      .property("title", function(d) { return d; })
+      .on("click", function() { changeBaselayer(this); })
+      .append("span")
+      .attr("class", "fas fa-check fa-pull-right activeOverlay")
+      .style("visibility", function(d,i) { if(i == 1) {return "visible";} else {return "hidden";} });
 
       function changeBaselayer(tmpDiv) {
         //***Remove old layer
@@ -200,7 +213,11 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         mappy.addLayer(layerNames.baseLayers.values[tmpDiv.value]);
         layerNames.baseLayers.values[tmpDiv.value].bringToBack();       
       }
-
+      /////////////////////////////////
+    d3.select("leaflet-sidebar-content")
+    .insert("div", ": first-child")
+    .attr("id", "drawingDiv")
+      /////////////////////////////////
     d3.select("#mapTools")
       .append("div")
       .attr("id", "overlaySelect")
@@ -472,9 +489,42 @@ function resizePanels() {
   //  this.mymap.addLayer(this.panel.drawnItems)
   }
 
+  drawingControl(mapObject){
+    let drawnItems = new L.FeatureGroup()
+    /* drawing control + options */
+    let drawControl = new L.Control.Draw({
+      draw:{
+        polyline: false,
+        polygon:{
+          allowIntersection:false,
+          // showArea:true,
+          repeatMode:false
+        },
+        circle:false,
+        marker:false,
+        rectangle:false,
+        circlemarker:false
+      },
+      edit:{
+        // use empty featuregroup layer
+        featureGroup:drawnItems
+      }
+    })
+    this.drawnItems = drawnItems
+    mapObject.addControl(drawControl)
+    let container = drawControl.getContainer()
+    console.log(container)
+    let child_div = document.getElementById('drawingDiv')
+    function setParent(el:HTMLElement, newParent:HTMLElement){
+      newParent.appendChild(el)
+    }
+    setParent(container, child_div)
+    mapObject.addLayer(drawnItems)
+  }
+
 
   ngAfterViewInit():void{
-    
+    this.drawingControl(this.mymap)
   }
 
   ngAfterViewChecked(){
