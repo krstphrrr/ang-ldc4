@@ -39,6 +39,10 @@ import { PlotListComponent } from './map/plots/plot-list/plot-list.component';
 import { CdkTableModule } from '@angular/cdk/table'
 import { HttpClientModule } from '@angular/common/http';
 import { LayersComponent } from './map/controls/layers/layers.component';
+import { AppRoutingModule } from './app-routing.module';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { ProfileComponent } from './profile/profile.component';
+
 
 
 const appRoutes: Routes = [
@@ -61,7 +65,7 @@ const appRoutes: Routes = [
     component: UsersComponent }
     
 
-  // { path: , component: }
+  
 ]
 
 
@@ -81,7 +85,10 @@ const appRoutes: Routes = [
     CallbackComponent,
     PlotsComponent,
     PlotListComponent,
-    LayersComponent
+    LayersComponent,
+    NavBarComponent,
+    ProfileComponent,
+  
     
   ],
   imports: [
@@ -105,7 +112,8 @@ const appRoutes: Routes = [
     CdkTableModule,
     HttpClientModule,
     FormsModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

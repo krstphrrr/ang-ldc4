@@ -1,0 +1,29 @@
+
+  .button {
+    display: inline-flex;
+    padding: 15px 25px;
+    font-size: 10px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: rgb(183, 183, 184);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+  }
+  
+  .button:hover {background-color: rosybrown}
+  
+  .button:active {
+    background-color: rgb(145, 137, 137);
+    box-shadow: 0 5px rgb(36, 33, 33);
+    transform: translateY(4px);
+  }
+
+  .navbar-right{
+    position:absolute;
+    right:0;
+    top:0;
+   }
