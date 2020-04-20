@@ -7,7 +7,7 @@ import { Observable } from 'rxjs'
 
 export class socketDataService {
   socket: any
-  readonly url:string = 'https://landscapedatacommons.org'
+  readonly url:string = 'https://new.landscapedatacommons.org'
   // readonly url:string = 'http://localhost:5000' DEV
   constructor(){
     this.socket = io(this.url,{path:'/socket/ws2'}).connect()
