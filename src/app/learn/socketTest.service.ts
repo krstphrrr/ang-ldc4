@@ -6,7 +6,7 @@ import { Observable } from 'rxjs'
 
 export class socketDataService {
   socket: any
-  readonly url:string = 'http://localhost:5000'
+  readonly url:string = 'http://new.landscapedatacommons.org/socket'
 
   constructor(){
     this.socket = io.connect(this.url)
