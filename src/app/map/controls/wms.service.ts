@@ -24,7 +24,7 @@ export class wmsService {
       subdomains:['mt0','mt1','mt2','mt3']
     });
 
-    public counties = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms', {
+    public counties = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
       layers: 'ldc:tl_2017_us_county_wgs84',
       format: 'image/png',
       transparent: true,
@@ -33,7 +33,7 @@ export class wmsService {
       maxZoom: 20
     });
 
-    public countries = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms', {
+    public countries = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
       layers: 'ldc:countries_wgs84',
       format: 'image/png',
       transparent: true,
@@ -41,7 +41,7 @@ export class wmsService {
       version: '1.3.0',
       maxZoom: 20
     });
-    public states = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms', {
+    public states = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
       layers: 'ldc:tl_2017_us_state_wgs84',
       format: 'image/png',
       transparent: true,
@@ -52,7 +52,7 @@ export class wmsService {
 
 
 
-    public surf = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms', {
+    public surf = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
       layers: 'ldc:surface_mgt_agency_wgs84',
       format: 'image/png',
       transparent: true,
@@ -61,7 +61,7 @@ export class wmsService {
       maxZoom: 20
     });
 
-    public mlra = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms', {
+    public mlra = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
       layers: 'ldc:mlra_v42_wgs84',
       format: 'image/png',
       transparent: true,
@@ -70,7 +70,7 @@ export class wmsService {
       maxZoom: 20
     });
 
-    public statsgo = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms', {
+    public statsgo = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
       layers: 'ldc:statsgo_wgs84',
       format: 'image/png',
       transparent: true,
@@ -79,7 +79,7 @@ export class wmsService {
       maxZoom: 20
     });
 
-    public huc6 = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms', {
+    public huc6 = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
       layers: 'ldc:wbdhu6_wgs84',
       format: 'image/png',
       transparent: true,
@@ -88,7 +88,7 @@ export class wmsService {
       maxZoom: 20
     });
 
-    public huc8 = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms', {
+    public huc8 = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
       layers: 'ldc:wbdhu8_wgs84',
       format: 'image/png',
       transparent: true,
@@ -97,7 +97,7 @@ export class wmsService {
       maxZoom: 20
     });
 
-    public geoInd = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms', {
+    public geoInd = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
       layers: 'ldc:geoIndicators_public',
       format: 'image/png',
       transparent: true,
@@ -106,7 +106,7 @@ export class wmsService {
       maxZoom: 20
     });
 
-    public geoSpecies = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms', {
+    public geoSpecies = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
       layers: 'ldc:geoSpecies_public',
       format: 'image/png',
       transparent: true,
