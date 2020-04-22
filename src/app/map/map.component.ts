@@ -513,18 +513,22 @@ function resizePanels() {
     this.drawnItems = drawnItems
     mapObject.addControl(drawControl)
     let container = drawControl.getContainer()
-    console.log(container)
+    console.log(drawnItems)
     let child_div = document.getElementById('drawingDiv')
-    function setParent(el:HTMLElement, newParent:HTMLElement){
-      newParent.appendChild(el)
-    }
-    setParent(container, child_div)
+    // function setParent(el:HTMLElement, newParent:HTMLElement){
+    //   Object.defineProperty(newParent, 'appendChild',{
+
+    //   })
+    //   newParent.appendChild(el)
+    // }
+    // setParent(container, child_div)
     mapObject.addLayer(drawnItems)
   }
 
 
   ngAfterViewInit():void{
     this.drawingControl(this.mymap)
+    
   }
 
   ngAfterViewChecked(){
@@ -625,6 +629,33 @@ function resizePanels() {
     });
     /* invalidate size debouncemoveend 
        adds a timeout on every moveend-event refetch */
+
+    this.mymap.on('draw:created',(e)=>{
+      // clear topos before drawing
+      this.markerLayer.clearLayers()
+      // this.mymap.removeLayer(this.markerLayer)
+      let type = e.layerType,
+      layer = e.layer;
+      this.drawnItems.addLayer(layer)
+      let drawingbb = this.drawnItems.getBounds()
+      this.moveEnd.boundsUtil(drawingbb)
+      if(this.moveEnd.topos!==''){
+        let param = {}
+          param["one"] = 1
+          this.moveEnd.topos.params = param
+          this.socket.emit('fetchpoints', this.moveEnd.topos)
+          this.moveSubs = this.socket.listen('pointssend')
+            .subscribe((data:GeoJsonObject)=>{
+              //marker service goes here, which:
+              // a. creates a layer full of markers from geojson
+              // b. stores layer in the markers property within the service
+              this.markers.createMarkers(data)
+              this.markerLayer = this.markers.markers
+              this.markerLayer.addTo(this.mymap)
+              console.log(data)
+          })
+      }
+    })
     this.mymap.on('dragend', event=>{
       
       
