@@ -632,6 +632,10 @@ function resizePanels() {
 
     this.mymap.on('draw:created',(e)=>{
       // clear topos before drawing
+      if(this.moveSubs && !this.moveSubs.closed){
+        this.moveSubs.unsubscribe()
+      }
+      // 
       this.markerLayer.clearLayers()
       // this.mymap.removeLayer(this.markerLayer)
       let type = e.layerType,
