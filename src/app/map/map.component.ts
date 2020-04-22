@@ -68,7 +68,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     private markers: MarkerService,
     private socket: socketDataService,
     private wms: wmsService,
-    private cust: CustomControlService,
+    // private cust: CustomControlService,
     private moveEnd: MoveEndService
     ) {
       this.eventSubject
@@ -633,10 +633,40 @@ function resizePanels() {
     this.mymap.on('draw:created',(e)=>{
       // clear topos before drawing
       if(this.moveSubs && !this.moveSubs.closed){
+        // this.markerLayer.clearLayers()
         this.moveSubs.unsubscribe()
       }
-      // 
+      /*if layer with points exists, clear and create; else create 
+      only handles drawing when its the first thing the user does, 
+      before loading any other points.
+      DRAWING HNDLER NEEDS TO BE A SERVICE
+      
+      */
+
+      if(this.markerLayer){
       this.markerLayer.clearLayers()
+      let type = e.layerType,
+      layer = e.layer;
+      this.drawnItems.addLayer(layer)
+      let drawingbb = this.drawnItems.getBounds()
+      this.moveEnd.boundsUtil(drawingbb)
+      if(this.moveEnd.topos!==''){
+        let param = {}
+          param["one"] = 1
+          this.moveEnd.topos.params = param
+          this.socket.emit('fetchpoints', this.moveEnd.topos)
+          this.moveSubs = this.socket.listen('pointssend')
+            .subscribe((data:GeoJsonObject)=>{
+              //marker service goes here, which:
+              // a. creates a layer full of markers from geojson
+              // b. stores layer in the markers property within the service
+              this.markers.createMarkers(data)
+              this.markerLayer = this.markers.markers
+              this.markerLayer.addTo(this.mymap)
+              console.log(data)
+          })
+      }
+      } else {
       // this.mymap.removeLayer(this.markerLayer)
       let type = e.layerType,
       layer = e.layer;
@@ -659,6 +689,7 @@ function resizePanels() {
               console.log(data)
           })
       }
+    }
     })
     this.mymap.on('dragend', event=>{
       
