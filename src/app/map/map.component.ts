@@ -108,7 +108,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     // }).addTo(this.mymap)
 
 
-    console.log(this.mymap.eachLayer(i=>{return i}),"pop")
+    // console.log(this.mymap.eachLayer(i=>{return i}),"pop")
     let googleHybrid = this.wms.googleHybrid
     let googleSatellite = this.wms.googleSatellite
     let googleStreet = this.wms.googleStreet
@@ -513,7 +513,7 @@ function resizePanels() {
     this.drawnItems = drawnItems
     mapObject.addControl(drawControl)
     let container = drawControl.getContainer()
-    console.log(drawnItems)
+    // console.log(drawnItems)
     let child_div = document.getElementById('drawingDiv')
     // function setParent(el:HTMLElement, newParent:HTMLElement){
     //   Object.defineProperty(newParent, 'appendChild',{
@@ -639,6 +639,8 @@ function resizePanels() {
       /*if layer with points exists, clear and create; else create 
       only handles drawing when its the first thing the user does, 
       before loading any other points.
+
+      
       DRAWING HNDLER NEEDS TO BE A SERVICE
       
       */
@@ -663,7 +665,7 @@ function resizePanels() {
               this.markers.createMarkers(data)
               this.markerLayer = this.markers.markers
               this.markerLayer.addTo(this.mymap)
-              console.log(data)
+              // console.log(data)
           })
       }
       } else {
