@@ -481,7 +481,7 @@ function resizePanels() {
          })
         .append("div")
         .attr("class", "legendTitle")
-        .html('<h6>' + tmpTitle + '</h6><div class="exitDiv"><span class="fa fa-caret-down legendCollapse" title="View legend"></span></div>');
+        .html('<h6>' + tmpTitle + '</h6><div class="exitDiv"><span class="fas fa-caret-down legendCollapse" title="View legend"></span></div>');
   
   
       function changeCaret(tmpSpan) {
@@ -574,10 +574,10 @@ function resizePanels() {
     .attr("class", "legTitle")
     .attr("id", "infoTitle")
     .append("span")
-    .html('<span class="fa fa-info-circle" data-toggle="tooltip" data-container="body" data-placement="auto" data-html="true" title="<p><u><b>Identify</b></u></p><p>Displays attribute value for visible overlay layers for a clicked point on the map</p>"</span>');
+    .html('<span class="fas fa-info-circle" data-toggle="tooltip" data-container="body" data-placement="auto" data-html="true" title="<p><u><b>Identify</b></u></p><p>Displays attribute value for visible overlay layers for a clicked point on the map</p>"</span>');
  
   d3.select("#infoTitle")
-    .html(d3.select("#infoTitle").html() + '<div class="exitDiv"><span id="hideInfo" class="fa fa-times-circle" data-toggle="tooltip" data-container="body" data-placement="auto" data-html="true" title="<p>Click to hide window</p>"</span></div>'); 
+    .html(d3.select("#infoTitle").html() + '<div class="exitDiv"><span id="hideInfo" class="fas fa-times-circle" data-toggle="tooltip" data-container="body" data-placement="auto" data-html="true" title="<p>Click to hide window</p>"</span></div>'); 
 
   d3.select("#hideInfo")
     .on("click", function() { toolWindowToggle("info"); });
