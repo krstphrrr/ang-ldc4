@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client'
 import { Observable } from 'rxjs'
-
+import { environment } from '../../environments/environment'
 
 @Injectable({providedIn:'root'})
 
 export class socketDataService {
   socket: any
-  readonly url:string = 'https://new.landscapedatacommons.org/'
+  readonly url:string = environment.API_URL
   // readonly url:string = 'http://localhost:5000' DEV
   constructor(){
     this.socket = io(this.url,{path:'/ws2'}).connect()

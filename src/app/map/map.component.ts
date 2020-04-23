@@ -112,35 +112,13 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       this.marker.fetchInitPoints() etc.
     */
     this.initMap()
-    console.log()
     this.ctlSidebar = L.control.sidebar({
       autopan:true,
       closeButton:true,
       container:'sidebar',
       position:'left'
-    }).addTo(this.mymap)
-    // this.ctlEasybutton = L.easyButton('glyphicon-transfer',function(){
-    //   this.ctlSidebar.
-    // }).addTo(this.mymap)
-
-
-    // console.log(this.mymap.eachLayer(i=>{return i}),"pop")
-
-
-    
-
-    // d3.select("body")
-    //   .insert("div", ":first-child")
-    //   .attr("id", "headerControls"); // header controls
-
-      
- 
-    
-
-    
-  //  this.onMapReady(this.map)
-
-  //  this.mymap.addLayer(this.panel.drawnItems)
+    })
+     .addTo(this.mymap)
   }
 
   drawingControl(mapObject){
