@@ -228,7 +228,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
           .style("display", "none") 
         });
     
-    //   console.log(layerNames.baseLayers.values, "es mappy")
+    // console.log(layerNames.baseLayers.keys,layerNames.baseLayers.values, "es mappy")
     
     d3.select("#baselayerListDropdown").selectAll("div")
     .data(layerNames.baseLayers.keys)
@@ -246,8 +246,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       function changeBaselayer(tmpDiv) {
         //***Remove old layer
         let layerDivs:any = d3.select("#baselayerListDropdown").selectAll("div");
-          
-        layerDivs._groups[0].forEach(function(tmpLayer) {
+        
+        layerDivs.nodes().forEach(function(tmpLayer) {
           if(d3.select(tmpLayer).select("span").style("visibility") == "visible") {
             d3.select(tmpLayer).select("span").style("visibility", "hidden");
             mappy.removeLayer(layerNames.baseLayers.values[d3.select(tmpLayer).property("value")]);
@@ -415,21 +415,22 @@ function resizePanels() {
 
     $("#legendImgDiv").sortable({appendTo: "#legendImgDiv", containment: "#legendImgDiv", cancel: "input,textarea,button,select,option", forcePlaceholderSize: true, placeholder: "sortable-placeholder", helper: "original", tolerance: "pointer", stop: function(event, ui) { reorder(event, ui); }, start: function(event, ui) { helperPlaceholder(event, ui); }});
       //******Change the layer orders after drag and drop
+  let infoObj = this.infoObj
   function reorder(tmpEvent, tmpUI) {
-    var tmpCnt = tmpEvent.target.children.length;
-    var i = 0
+    let tmpCnt = tmpEvent.target.children.length;
+    let i = 0
+    
     for (let child of tmpEvent.target.children) {
-      overlays[this.infoObj[child.id.slice(0,-6)]].setZIndex(tmpCnt - i);
+      overlays[infoObj[child.id.slice(0,-6)]].setZIndex(tmpCnt - i);
       i += 1;
     }
- }
+   }
    //******Style the helper and placeholder when dragging/sorting
    function helperPlaceholder(tmpEvent, tmpUI) {
-    console.log(tmpUI); 
     d3.select(".ui-sortable-placeholder.sortable-placeholder")
       .style("width", d3.select("#" + tmpUI.item[0].id).style("width"))
       .style("height", "37px");  //.style("background", "rgba(255,255,255,0.25)"); 
-  }
+    }
 
 
 
@@ -491,15 +492,10 @@ function resizePanels() {
       
 
       $("#" + tmpName + "LegendImg").one("load", function() {
-        
-        let element = d3.select("#"+tmpName+"LegendImg").node()
-        console.log(document.querySelector("#"+tmpName+"LegendImg").getAttributeNames)
-
         var tmpRect = document.getElementById(tmpName + "LegendImg").getBoundingClientRect();
-        console.log(tmpRect)
         
-        // d3.select("#" + tmpName + "LegImgDiv").style("max-height","30px");
-        // d3.select("#" + tmpName + "LegImgDiv").style("max-width", "30px");
+        d3.select("#" + tmpName + "LegImgDiv").style("max-height",`${tmpRect.height-67}px`);
+        d3.select("#" + tmpName + "LegImgDiv").style("max-width", `${tmpRect.width}px`);
         d3.select("#" + tmpName + "Legend").style("opacity", "1");     
         }).attr("src", "https://new.landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:" + tmpName);
       
@@ -525,7 +521,7 @@ function resizePanels() {
     function remLegendImg(tmpName) {
       d3.select("#" + tmpName + "Legend").remove();
   
-      if(d3.select("#legendImgDiv").selectAll("div").node()[0].length == 0) {
+      if(d3.select("#legendImgDiv").selectAll("div").nodes().length == 0) {
         d3.select("#legendImgDiv").style("display", "none");
         d3.select("#legendDefault").style("display", "block");
       }
@@ -746,7 +742,7 @@ function resizePanels() {
           // console.log(this.markerLayer, "not undefined")
           this.mymap.removeLayer(this.markerLayer)
         } else{
-          console.log(this.markerLayer, "undefined!!!")
+          // console.log(this.markerLayer, "undefined!!!")
         }
         if(this.moveEnd.topos){
           
@@ -774,7 +770,7 @@ function resizePanels() {
           console.log(this.markerLayer, "not undefined above 9")
           this.mymap.removeLayer(this.markerLayer)
         } else{
-          console.log(this.markerLayer, "undefined!!! above 9")
+          // console.log(this.markerLayer, "undefined!!! above 9")
         }
         console.log('below nine')
       }
@@ -786,6 +782,7 @@ function resizePanels() {
   }
 
   ngOnDestroy(){
+    this.moveSubs.unsubscribe()
     this.eventSubject.unsubscribe()
   }
 
