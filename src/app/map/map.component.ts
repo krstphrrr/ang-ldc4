@@ -407,7 +407,7 @@ function resizePanels() {
   .attr("id", "legendDiv")
   
   
-  $('#legendDiv').draggable({containment: "html", cancel: ".toggle-group,.layerLegend,textarea,button,select,option"});
+  $('#legendDiv').draggable({containment: "parent", cancel: ".toggle-group,.layerLegend,textarea,button,select,option"});
 
   d3.select("#legendDiv")
     .append("h4")
@@ -515,7 +515,7 @@ function resizePanels() {
       $("#" + tmpName + "LegendImg").one("load", function() {
         
         let element = d3.select("#"+tmpName+"LegendImg").node()
-        console.log(element)
+        console.log(document.querySelector("#"+tmpName+"LegendImg").getAttributeNames)
 
         var tmpRect = document.getElementById(tmpName + "LegendImg").getBoundingClientRect();
         console.log(tmpRect)
