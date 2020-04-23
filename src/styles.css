@@ -556,7 +556,7 @@ body {
 
 #legendDiv {
   position: absolute;
-  top: calc(100%-100px);
+  top: 100px;
   left: calc(100% - 250px);
   width: auto;
   min-width: 225px;
