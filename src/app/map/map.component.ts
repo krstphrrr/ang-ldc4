@@ -1,5 +1,5 @@
 
-import { Component, OnInit, AfterViewInit, AfterViewChecked, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, AfterViewChecked, ViewChild, ElementRef, Renderer2, Directive } from '@angular/core';
 import * as L from 'leaflet'
 import {Map, latLng, Canvas, MapOptions, LeafletEvent, TileLayer} from 'leaflet'
 // import  '../../plugins/L.Control.Sidebar.js'
@@ -21,6 +21,7 @@ import 'leaflet-draw'
 import { GeoJsonObject } from 'geojson';
 import { PanelComponent } from './controls/panel/panel/panel.component';
 import { MoveEndService } from '../map/mapevents/move-end.service'
+import { CdkDrag, DragDrop } from '@angular/cdk/drag-drop';
 
 // declare module 'leaflet' {
 //   namespace control {
@@ -39,8 +40,16 @@ import { MoveEndService } from '../map/mapevents/move-end.service'
   styleUrls: [
     './map.component.css']
 })
+// @Directive({
+//   selector: '[cdkDrag]'
+// })
 export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
+  @ViewChild('test2') 
+  private test2Div: ElementRef;
+  @ViewChild('test1') 
+  private test1Div: ElementRef;
   // private mymap;
+
   public mymap
   public ctlSidebar;
   public ctlEasybutton
@@ -57,7 +66,10 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public mapContainer;
 
   public drawnItems;
-    
+
+  public tmpName;
+  public infoObj = {"tl_2017_us_state_wgs84": "US States", "tl_2017_us_county_wgs84": "US Counties", "surface_mgt_agency_wgs84": "Management Agency", "mlra_v42_wgs84": "LRR/MLRA", "statsgo_wgs84": "STATSGO", "wbdhu6_wgs84": "HUC-6", "wbdhu8_wgs84": "HUC-8"};
+  public infoIDField = {"tl_2017_us_state_wgs84": "name", "tl_2017_us_county_wgs84": "name", "surface_mgt_agency_wgs84": "admin_agen", "mlra_v42_wgs84": "mlra_name", "statsgo_wgs84": "mukey", "wbdhu6_wgs84": "name", "wbdhu8_wgs84": "name"};
 
   // @ViewChild(PanelComponent) panel;
 
@@ -65,6 +77,9 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   eventSubject = new Subject<string>()
 
   constructor(
+    private dragdrop:DragDrop,
+    private el:ElementRef,
+    private renderer: Renderer2,
     private markers: MarkerService,
     private socket: socketDataService,
     private wms: wmsService,
@@ -72,6 +87,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     private moveEnd: MoveEndService
     ) {
       this.eventSubject
+
      }
 
    
@@ -109,6 +125,64 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
 
     // console.log(this.mymap.eachLayer(i=>{return i}),"pop")
+
+
+    
+
+    // d3.select("body")
+    //   .insert("div", ":first-child")
+    //   .attr("id", "headerControls"); // header controls
+
+      
+ 
+    
+
+    
+  //  this.onMapReady(this.map)
+
+  //  this.mymap.addLayer(this.panel.drawnItems)
+  }
+
+  drawingControl(mapObject){
+    let drawnItems = new L.FeatureGroup()
+    /* drawing control + options */
+    let drawControl = new L.Control.Draw({
+      draw:{
+        polyline: false,
+        polygon:{
+          allowIntersection:false,
+          // showArea:true,
+          repeatMode:false
+        },
+        circle:false,
+        marker:false,
+        rectangle:false,
+        circlemarker:false
+      },
+      edit:{
+        // use empty featuregroup layer
+        featureGroup:drawnItems
+      }
+    })
+    this.drawnItems = drawnItems
+    mapObject.addControl(drawControl)
+    let container = drawControl.getContainer()
+    // console.log(drawnItems)
+    let child_div = document.getElementById('drawingDiv')
+    // function setParent(el:HTMLElement, newParent:HTMLElement){
+    //   Object.defineProperty(newParent, 'appendChild',{
+
+    //   })
+    //   newParent.appendChild(el)
+    // }
+    // setParent(container, child_div)
+    mapObject.addLayer(drawnItems)
+  }
+
+
+  ngAfterViewInit():void{
+    this.drawingControl(this.mymap)
+
     let googleHybrid = this.wms.googleHybrid
     let googleSatellite = this.wms.googleSatellite
     let googleStreet = this.wms.googleStreet
@@ -122,12 +196,10 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     let huc6 = this.wms.huc6
     let huc8 = this.wms.huc8
     let blank = new L.TileLayer('')
-    
 
+    // let layerNames = this.markerLayer
+    let overlayID = d3.keys(this.infoObj);
     let opaVar = [states, counties, surf, mlra, statsgo, huc6, huc8];
-    let infoObj = {"tl_2017_us_state_wgs84": "US States", "tl_2017_us_county_wgs84": "US Counties", "surface_mgt_agency_wgs84": "Management Agency", "mlra_v42_wgs84": "LRR/MLRA", "statsgo_wgs84": "STATSGO", "wbdhu6_wgs84": "HUC-6", "wbdhu8_wgs84": "HUC-8"};
-    let infoIDField = {"tl_2017_us_state_wgs84": "name", "tl_2017_us_county_wgs84": "name", "surface_mgt_agency_wgs84": "admin_agen", "mlra_v42_wgs84": "mlra_name", "statsgo_wgs84": "mukey", "wbdhu6_wgs84": "name", "wbdhu8_wgs84": "name"};
-    let overlayID = d3.keys(infoObj);
     let baselayers = {"Google Terrain": googleTerrain, "Google Hybrid": googleHybrid, "Google Satellite": googleSatellite, "Google Street": googleStreet, "None": blank};
     let overlays = {"US States": states, "US Counties": counties, "Management Agency": surf, "LRR/MLRA": mlra, "STATSGO": statsgo, "HUC-6": huc6, "HUC-8": huc8};
     let overlayTitles = d3.keys(overlays);
@@ -146,11 +218,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     layerNames.overlays.keys = d3.keys(overlays);
     layerNames.overlays.values = d3.values(overlays);
 
-    // d3.select("body")
-    //   .insert("div", ":first-child")
-    //   .attr("id", "headerControls"); // header controls
-
-      d3.select("#test1")
+    d3.select("#test1")
         .insert("div", ":first-child")
         .attr("id", "mapTools")
         .append("div")
@@ -160,7 +228,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         .attr("id", "baselayerList")
         .attr("class", "cl_select")
         .property("title", "Click to change map baselayer")
-        // .property("data-toggle", "dropdown")
+        .property("data-toggle", "dropdown")
         .html('<span id="baselayerListHeader">Change Baselayer</span><i class="fas fa-caret-down fa-pull-right"></i>')
         .on("click", function() { 
           if(d3.select("#baselayerListDropdown")
@@ -250,6 +318,9 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     .attr("class", "fa fa-check pull-right activeOverlay")
     .style("visibility", "hidden"); //function(d) { if(d == "US States") { map.addLayer(states); return "visible"; } else { return "hidden"; } });
     
+
+
+    /*Overlay changing function: needs to add legend div somewhere*/
     function changeOverlay(tmpDiv) {
       if(d3.select(tmpDiv).select("span").style("visibility") == "hidden") {
         d3.select(tmpDiv).select("span").style("visibility", "visible");
@@ -267,6 +338,10 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       }
       //check4Json();
     }
+      //******Set z-indexes of moveable divs so that clicked one is always on top
+    d3.selectAll("#legendDiv,#infoDiv,#locateDiv,#filterDiv,#pointDiv,#downloadDiv")
+      .on("mousedown", function() { setZ(this); });
+
 
     //******Function to toggle tool windows
   var toggleWords = {"legend":"Legend", "info":"Identify", "locate": "Locate", "filter": "Filter"}
@@ -278,28 +353,36 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     else {
       d3.select("#" + tmpDiv + "Div").transition().duration(250).ease(d3.easeCubic).style("opacity", "1").style("display", "block").style("visibility", "visible").on("end", resizePanels);            
       d3.select("#hc" + tmpDiv.charAt(0).toUpperCase() + tmpDiv.slice(1) + "Div").property("title", "Click to hide " + toggleWords[tmpDiv] + " window");
-      // setZ(d3.select("#" + tmpDiv + "Div")._groups[0][0]);
+      setZ(d3.select(`#${tmpDiv}Div`).node()[0]);
     }
   }
   function setZ(tmpWin) {
-    if (d3.select("#map").classed("introjs-showElement") == false) {
-      d3.selectAll("#legendDiv,#infoDiv,#locateDiv,#filterDiv,#pointDiv,#downloadDiv").style("z-index", function() { if(d3.select(this).style("opacity") == '1') {return 1001;} else {return 7500;} }); 
+    if (d3.select("#map")) {
+      d3.selectAll("#legendDiv,#infoDiv,#locateDiv,#filterDiv,#pointDiv,#downloadDiv")
+        .style("z-index", function() { 
+          if(d3.select(this).style("opacity") == '1') {
+            return 1001;
+          } else {
+            return 7500;
+          }
+        }); 
       d3.select(tmpWin).style("z-index", 1002);
     }
   }
 
   //******Adjust div position to ensure that it isn't overflowing window
 function resizePanels() {
-  var bodyRect = document.body.getBoundingClientRect();
+  let mapRect = document.getElementById("test2").getBoundingClientRect()
+  // var bodyRect = document.body.getBoundingClientRect();
   var tmpWindows = ["infoDiv", "legendDiv"];
         
   tmpWindows.forEach(function(win) {
     var winRect = document.getElementById(win).getBoundingClientRect();
-    if(winRect.bottom > bodyRect.bottom) {
-      d3.select("#" + win).style("top", bodyRect.height - winRect.height + "px");
+    if(winRect.bottom > mapRect.bottom) {
+      d3.select("#" + win).style("top", mapRect.height - winRect.height + "px");
     }
-    if(winRect.right > bodyRect.right) {
-      d3.select("#" + win).style("left", bodyRect.width - winRect.width + "px");
+    if(winRect.right > mapRect.right) {
+      d3.select("#" + win).style("left", mapRect.width - winRect.width + "px");
     }
   });
   d3.select("#legendImgDiv").style("min-width", "0px").style("width", "auto");
@@ -309,11 +392,21 @@ function resizePanels() {
 
 
      //******Make div for legend
-  d3.select("body")
+     
+    //  let newDiv = this.renderer.createElement('div')
+
+    //  this.renderer.addClass(newDiv,'legend')
+    //  this.renderer.addClass(newDiv,'gradDown')
+    //  this.renderer.setAttribute(newDiv,'id','legendDiv')
+    //  this.renderer.appendChild(this.test2Div.nativeElement, newDiv)
+     
+    //  this.renderer.appendChild(this.el.nativeElement, newDiv)
+ d3.select("#test2")
   .append("div")
   .attr("class", "legend gradDown")
-  .attr("id", "legendDiv");
-
+  .attr("id", "legendDiv")
+  
+  
   $('#legendDiv').draggable({containment: "html", cancel: ".toggle-group,.layerLegend,textarea,button,select,option"});
 
   d3.select("#legendDiv")
@@ -328,7 +421,10 @@ function resizePanels() {
     .html(d3.select("#legendTitle").html() + '<div class="exitDiv"><span id="hideLegend" class="fa fa-times-circle" data-toggle="tooltip" data-container="body" data-placement="auto" data-html="true" title="<p>Click to hide window</p>"</span></div>'); 
 
   d3.select("#hideLegend")
-    .on("click", function() { toolWindowToggle("legend"); });
+    .on("click", function() {
+       toolWindowToggle("legend"); 
+       
+      });
 
   d3.select("#legendDiv")
     .append("div")
@@ -345,14 +441,16 @@ function resizePanels() {
     var tmpCnt = tmpEvent.target.children.length;
     var i = 0
     for (let child of tmpEvent.target.children) {
-      overlays[infoObj[child.id.slice(0,-6)]].setZIndex(tmpCnt - i);
+      overlays[this.infoObj[child.id.slice(0,-6)]].setZIndex(tmpCnt - i);
       i += 1;
     }
  }
    //******Style the helper and placeholder when dragging/sorting
    function helperPlaceholder(tmpEvent, tmpUI) {
     console.log(tmpUI); 
-    d3.select(".ui-sortable-placeholder.sortable-placeholder").style("width", d3.select("#" + tmpUI.item[0].id).style("width")).style("height", "37px");  //.style("background", "rgba(255,255,255,0.25)"); 
+    d3.select(".ui-sortable-placeholder.sortable-placeholder")
+      .style("width", d3.select("#" + tmpUI.item[0].id).style("width"))
+      .style("height", "37px");  //.style("background", "rgba(255,255,255,0.25)"); 
   }
 
 
@@ -360,6 +458,7 @@ function resizePanels() {
 
 
     function addLegendImg(tmpName, tmpTitle, tmpLayer, tmpPath) {
+      // this.tmpName = tmpName
       if(tmpName.includes("surf") || tmpName.includes("mlra")) {
         var tmpOpa = 0.6;
       }
@@ -377,14 +476,16 @@ function resizePanels() {
         .attr("id", tmpName + "LegendHeader")
         .attr("data-toggle", "collapse")
         .attr("data-target", "#" + tmpName + "collapseDiv")
-        // .on("click", function() { changeCaret(d3.select(this).select("span")._groups[0][0]); })
+        .on("click", 
+          function() { changeCaret(d3.select(this).select("span").node()[0]); 
+         })
         .append("div")
         .attr("class", "legendTitle")
         .html('<h6>' + tmpTitle + '</h6><div class="exitDiv"><span class="fa fa-caret-down legendCollapse" title="View legend"></span></div>');
   
   
       function changeCaret(tmpSpan) {
-        if(d3.select(tmpSpan).classed("fa-caret-down")) {
+        if(d3.select(tmpSpan).classed("fa-caret-down", true)) {
           d3.select(tmpSpan).classed("fa-caret-down", false).classed("fa-caret-up", true).property("title", "Hide legend");
         }
         else {
@@ -409,15 +510,21 @@ function resizePanels() {
   
   
       //***Set div width and offset after the image has been loaded
-      $("#" + tmpName + "LegendImg").one("load", function() {
-        var tmpRect = document.getElementById(tmpName + "LegendImg").getBoundingClientRect();
-        let newmaxheight = tmpRect.height - 67 
-        d3.select("#" + tmpName + "LegImgDiv").style("max-height", newmaxheight);
-        // d3.select("#" + tmpName + "LegImgDiv").style({"max-width": tmpRect.width + "px"});
+      
 
+      $("#" + tmpName + "LegendImg").one("load", function() {
+        
+        let element = d3.select("#"+tmpName+"LegendImg").node()
+        console.log(element)
+
+        var tmpRect = document.getElementById(tmpName + "LegendImg").getBoundingClientRect();
+        console.log(tmpRect)
+        
+        // d3.select("#" + tmpName + "LegImgDiv").style("max-height","30px");
+        // d3.select("#" + tmpName + "LegImgDiv").style("max-width", "30px");
         d3.select("#" + tmpName + "Legend").style("opacity", "1");     
-      }).attr("src", "https://landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc:" + tmpName);
-  
+        }).attr("src", "https://new.landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:" + tmpName);
+      
       d3.select("#" + tmpName + "collapseDiv")
         .append("div")
         .attr("id", tmpName + "LegendSlider")
@@ -430,9 +537,9 @@ function resizePanels() {
       d3.select("#legendImgDiv")
         .style("display", "block");
   
-      // if(d3.select("#legendDiv").style("opacity") == 0) {
-      //   toolWindowToggle("legend");
-      // }
+        if(d3.select("#legendDiv").style("opacity") == '0') {
+          toolWindowToggle("legend");
+        }
   
       resizePanels();
     }
@@ -440,10 +547,10 @@ function resizePanels() {
     function remLegendImg(tmpName) {
       d3.select("#" + tmpName + "Legend").remove();
   
-      // if(d3.select("#legendImgDiv").selectAll("div")._groups[0].length == 0) {
-      //   d3.select("#legendImgDiv").style("display", "none");
-      //   d3.select("#legendDefault").style("display", "block");
-      // }
+      if(d3.select("#legendImgDiv").selectAll("div").node()[0].length == 0) {
+        d3.select("#legendImgDiv").style("display", "none");
+        d3.select("#legendDefault").style("display", "block");
+      }
     }
 
     //******Change transparency of current legend layer
@@ -454,7 +561,7 @@ function resizePanels() {
   }
 
    //******Make div for info
-  d3.select("body")
+  d3.select("#map")
     .append("div")
     .attr("class", "legend gradDown")
     .attr("id", "infoDiv");
@@ -480,59 +587,12 @@ function resizePanels() {
     .attr("id", "info");
 
 
- 
-    
-
-    
-  //  this.onMapReady(this.map)
-
-  //  this.mymap.addLayer(this.panel.drawnItems)
-  }
-
-  drawingControl(mapObject){
-    let drawnItems = new L.FeatureGroup()
-    /* drawing control + options */
-    let drawControl = new L.Control.Draw({
-      draw:{
-        polyline: false,
-        polygon:{
-          allowIntersection:false,
-          // showArea:true,
-          repeatMode:false
-        },
-        circle:false,
-        marker:false,
-        rectangle:false,
-        circlemarker:false
-      },
-      edit:{
-        // use empty featuregroup layer
-        featureGroup:drawnItems
-      }
-    })
-    this.drawnItems = drawnItems
-    mapObject.addControl(drawControl)
-    let container = drawControl.getContainer()
-    // console.log(drawnItems)
-    let child_div = document.getElementById('drawingDiv')
-    // function setParent(el:HTMLElement, newParent:HTMLElement){
-    //   Object.defineProperty(newParent, 'appendChild',{
-
-    //   })
-    //   newParent.appendChild(el)
-    // }
-    // setParent(container, child_div)
-    mapObject.addLayer(drawnItems)
-  }
-
-
-  ngAfterViewInit():void{
-    this.drawingControl(this.mymap)
-    
   }
 
   ngAfterViewChecked(){
-    
+    // if(this.tmpName){
+    //   console.log(document.getElementById(this.tmpName + "LegendImg").getBoundingClientRect())
+    // }
   }
   
   // onMapReady(map:Map){

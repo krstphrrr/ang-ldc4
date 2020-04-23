@@ -33,6 +33,7 @@ import { CallbackComponent } from './callback/callback.component'
 import { MatButtonToggleModule } from '@angular/material/button-toggle'
 import { MatIconModule } from '@angular/material/icon'
 
+import { DragDropModule } from '@angular/cdk/drag-drop'
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { PlotsComponent } from './map/plots/plots.component';
 import { PlotListComponent } from './map/plots/plot-list/plot-list.component';
@@ -105,7 +106,8 @@ const appRoutes: Routes = [
     CdkTableModule,
     HttpClientModule,
     FormsModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]
