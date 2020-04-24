@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment'
 export class socketDataService {
   socket: any
   readonly url:string = environment.API_URL
+  
 
   constructor(){
     this.socket = io(this.url,{path:'/ws2'}).connect()

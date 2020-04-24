@@ -22,6 +22,7 @@ import { GeoJsonObject } from 'geojson';
 import { PanelComponent } from './controls/panel/panel/panel.component';
 import { MoveEndService } from '../map/mapevents/move-end.service'
 import { CdkDrag, DragDrop } from '@angular/cdk/drag-drop';
+import * as turf from '@turf/turf'
 
 // declare module 'leaflet' {
 //   namespace control {
@@ -564,88 +565,9 @@ function resizePanels() {
   }
 
   ngAfterViewChecked(){
-    // if(this.tmpName){
-    //   console.log(document.getElementById(this.tmpName + "LegendImg").getBoundingClientRect())
-    // }
+
   }
   
-  // onMapReady(map:Map){
-  //   map.on("dragend", (event)=>{
-      
-  //     if(this.theSubscription && !this.theSubscription.closed){
-  //       this.theSubscription.unsubscribe()
-  //     }
-      
-  //     let bbox = map.getBounds()
-  //     console.log()
-  //     let points:[number,number][] = [[bbox._northEast.lng, bbox._northEast.lat], [bbox._southWest.lng, bbox._northEast.lat], [bbox._southWest.lng, bbox._southWest.lat], [bbox._northEast.lng, bbox._southWest.lat]]
-      
-      
-  //     let topos = {
-  //       bounds:{
-  //         _southWest:{
-  //           lng:bbox._southWest.lng,
-  //           lat:bbox._southWest.lat
-  //         },
-  //         _northEast:{
-  //           lng:bbox._northEast.lng,
-  //           lat:bbox._northEast.lat
-  //         }
-  //       }
-  //     }
-      
-      
-   
-  //     this.socket.emit('fetchpoints', topos)
-      
-     
-  //     this.theSubscription = this.socket.listen('pointssend')
-  //       .subscribe((data:GeoJsonObject)=>{
-
-  //       // clearing layergroup to avoid mem leak
-  //       if(this.lyrGrp===undefined){
-  //         //
-  //       } else{
-  //         this.lyrGrp.clearLayers()
-  //         this.lyrGrp.addTo(map)
-  //       }
-  //       // this.myCanvas = L.canvas({padding:0.1})
-  //       console.log(data, this.Public,"on drag end")
-        
-        
-  //       // let m = {
-  //       //   radius:5, 
-  //       //   fillColor:"white",
-  //       //   color:"yellow", 
-  //       //   weight:2, 
-  //       //   opacity:1, 
-  //       //   fillOpacity:.8
-  //       // }           
-  //       // this.lyrGrp = L.featureGroup()
-  //       //   L.geoJSON((data),{
-            
-  //       //     pointToLayer: (feature,latlng)=>{
-              
-  //       //       let label = 
-  //       //         String("ID: ") + String(feature.id) +"<br>"+
-  //       //         String("Public: ")+ String(feature.properties.Public)+"<br>"
-  //       //         switch(feature.properties.Public){
-  //       //           case true:
-  //       //             m.fillColor = "#80bfff";
-  //       //             break;
-  //       //           case false:
-  //       //             m.fillColor = "magenta";
-  //       //             break;
-  //       //         }
-  //       //       return L.circleMarker(latlng,m).bindTooltip(label,{opacity:0.7})
-  //       //     }
-  //       //   }).addTo(this.lyrGrp)
-  //       //   this.lyrGrp.addTo(map)
-  //     })
-  //   })
-  // }
-
-
   private initMap(){
    
     this.mymap = L.map('map', {
@@ -684,13 +606,13 @@ function resizePanels() {
       let type = e.layerType,
       layer = e.layer;
       this.drawnItems.addLayer(layer)
-      let drawingbb = this.drawnItems.getBounds()
-      this.moveEnd.boundsUtil(drawingbb)
-      if(this.moveEnd.topos!==''){
+      console.log(this.drawnItems)
+      let drawingbb = this.drawnItems.toGeoJSON().features[0].geometry.coordinates[0]
+      this.moveEnd.coordsArray(drawingbb)
+      if(this.moveEnd.coords!==''){
         let param = {}
-          param["one"] = 1
-          this.moveEnd.topos.params = param
-          this.socket.emit('fetchpoints', this.moveEnd.topos)
+          console.log(this.moveEnd.coords, 'vacio')
+          this.socket.emit('drawing', this.moveEnd.coords)
           this.moveSubs = this.socket.listen('pointssend')
             .subscribe((data:GeoJsonObject)=>{
               //marker service goes here, which:
@@ -707,13 +629,12 @@ function resizePanels() {
       let type = e.layerType,
       layer = e.layer;
       this.drawnItems.addLayer(layer)
-      let drawingbb = this.drawnItems.getBounds()
-      this.moveEnd.boundsUtil(drawingbb)
-      if(this.moveEnd.topos!==''){
-        let param = {}
-          param["one"] = 1
-          this.moveEnd.topos.params = param
-          this.socket.emit('fetchpoints', this.moveEnd.topos)
+      let drawingbb = this.drawnItems.toGeoJSON().features[0].geometry.coordinates[0]
+      this.moveEnd.coordsArray(drawingbb)
+      if(this.moveEnd.coords!==''){
+          console.log(this.moveEnd.coords)
+          /* turf debugging: need points of polygon */
+          this.socket.emit('drawing', this.moveEnd.coords)
           this.moveSubs = this.socket.listen('pointssend')
             .subscribe((data:GeoJsonObject)=>{
               //marker service goes here, which:

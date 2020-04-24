@@ -5,6 +5,7 @@ import { Map } from 'leaflet'
 })
 export class MoveEndService {
   topos;
+  coords;
 
   constructor() {
 
@@ -30,5 +31,8 @@ export class MoveEndService {
         }
       }
       this.topos = topos
+  }
+  coordsArray(boundsObj){
+    this.coords = boundsObj
   }
 }
