@@ -494,9 +494,9 @@ function resizePanels() {
 
       $("#" + tmpName + "LegendImg").one("load", function() {
         var tmpRect = document.getElementById(tmpName + "LegendImg").getBoundingClientRect();
-        
-        d3.select("#" + tmpName + "LegImgDiv").style("max-height",`${tmpRect.height-67}px`);
-        d3.select("#" + tmpName + "LegImgDiv").style("max-width", `${tmpRect.width}px`);
+        console.log(tmpRect)
+        // d3.select("#" + tmpName + "LegImgDiv").style("max-height",`${tmpRect.height-67}px`);
+        // d3.select("#" + tmpName + "LegImgDiv").style("max-width", `${tmpRect.width}px`);
         d3.select("#" + tmpName + "Legend").style("opacity", "1");     
         }).attr("src", "https://new.landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:" + tmpName);
       
