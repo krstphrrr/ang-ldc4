@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LayerService } from './layer.service';
+import { LayerService } from '../../services/layer.service';
 
 describe('LayerService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

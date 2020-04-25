@@ -5,14 +5,14 @@ import {Map, latLng, Canvas, MapOptions, LeafletEvent, TileLayer} from 'leaflet'
 // import  '../../plugins/L.Control.Sidebar.js'
 import 'leaflet-easybutton'
 import 'leaflet-sidebar-v2'
-import { MarkerService } from './marker.service'
+import { MarkerService } from '../services/marker.service'
 // import * as $ from 'jquery';
 declare var $: any;
 import { Subject } from 'rxjs';
 import { debounceTime, scan } from 'rxjs/operators';
 import * as d3 from 'd3'
-import { socketDataService } from '../learn/socketTest.service'
-import { wmsService } from '../map/controls/wms.service'
+import { socketDataService } from '../services/socketTest.service'
+import { wmsService } from '../services/wms.service'
 import { CustomControlService } from '../map/controls/custom-control.service'
 
 import {IGeoJson} from './models/geojsonint.model'
@@ -20,9 +20,10 @@ import {IGeoJson} from './models/geojsonint.model'
 import 'leaflet-draw'
 import { GeoJsonObject } from 'geojson';
 import { PanelComponent } from './controls/panel/panel/panel.component';
-import { MoveEndService } from '../map/mapevents/move-end.service'
+import { MoveEndService } from '../services/move-end.service'
 import { CdkDrag, DragDrop } from '@angular/cdk/drag-drop';
 import * as turf from '@turf/turf'
+import {LayerService} from '../services/layer.service'
 
 // declare module 'leaflet' {
 //   namespace control {
@@ -45,15 +46,15 @@ import * as turf from '@turf/turf'
 //   selector: '[cdkDrag]'
 // })
 export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
-  @ViewChild('test2') 
+  @ViewChild('container') 
   private test2Div: ElementRef;
-  @ViewChild('test1') 
-  private test1Div: ElementRef;
+  @ViewChild('pane_container') 
+  private paneDiv: ElementRef;
   // private mymap;
 
   public mymap
   public ctlSidebar;
-  public ctlEasybutton
+  public initLayers;
   
 
 
@@ -71,7 +72,11 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public tmpName;
   public infoObj = {"tl_2017_us_state_wgs84": "US States", "tl_2017_us_county_wgs84": "US Counties", "surface_mgt_agency_wgs84": "Management Agency", "mlra_v42_wgs84": "LRR/MLRA", "statsgo_wgs84": "STATSGO", "wbdhu6_wgs84": "HUC-6", "wbdhu8_wgs84": "HUC-8"};
   public infoIDField = {"tl_2017_us_state_wgs84": "name", "tl_2017_us_county_wgs84": "name", "surface_mgt_agency_wgs84": "admin_agen", "mlra_v42_wgs84": "mlra_name", "statsgo_wgs84": "mukey", "wbdhu6_wgs84": "name", "wbdhu8_wgs84": "name"};
-
+  public sat;
+  public terr;
+  public hy;
+  public st;
+  public layerCheck;
   // @ViewChild(PanelComponent) panel;
 
   // new rsjx subject to observe
@@ -84,7 +89,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     private markers: MarkerService,
     private socket: socketDataService,
     private wms: wmsService,
-    // private cust: CustomControlService,
+    private layerServ: LayerService,
     private moveEnd: MoveEndService
     ) {
       this.eventSubject
@@ -112,14 +117,28 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       public markers:
       this.marker.fetchInitPoints() etc.
     */
-    this.initMap()
-    this.ctlSidebar = L.control.sidebar({
-      autopan:true,
-      closeButton:true,
-      container:'sidebar',
-      position:'left'
-    })
-     .addTo(this.mymap)
+   this.getLayers2('sat')
+   this.getLayers2('st')
+   this.getLayers2('terr')
+   this.getLayers2('hy')
+   this.layerCheck = this.layerServ.layer
+  
+  }
+  getLayers2(which=null){
+    if(which==='sat'){
+      this.wms.getLayers(which)
+      .subscribe(lays => this.sat = lays)
+    } else if(which=='st'){
+      this.wms.getLayers(which)
+      .subscribe(lays => this.st = lays)
+    } else if(which=='terr'){
+      this.wms.getLayers(which)
+      .subscribe(lays => this.terr = lays)
+    } else if (which=='hy'){
+      this.wms.getLayers(which)
+      .subscribe(lays => this.hy = lays)
+    }
+    
   }
 
   drawingControl(mapObject){
@@ -160,12 +179,15 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
 
   ngAfterViewInit():void{
+    this.initMap()
+    this.ctlSidebar = L.control.sidebar({
+      autopan:true,
+      closeButton:true,
+      container:'sidebar',
+      position:'left'
+    })
+     .addTo(this.mymap)
     this.drawingControl(this.mymap)
-
-    let googleHybrid = this.wms.googleHybrid
-    let googleSatellite = this.wms.googleSatellite
-    let googleStreet = this.wms.googleStreet
-    let googleTerrain = this.wms.googleTerrain
 
     let states = this.wms.states
     let counties = this.wms.counties
@@ -179,7 +201,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     // let layerNames = this.markerLayer
     let overlayID = d3.keys(this.infoObj);
     let opaVar = [states, counties, surf, mlra, statsgo, huc6, huc8];
-    let baselayers = {"Google Terrain": googleTerrain, "Google Hybrid": googleHybrid, "Google Satellite": googleSatellite, "Google Street": googleStreet, "None": blank};
+    let baselayers = {"Google Terrain": this.terr, "Google Hybrid": this.hy, "Google Satellite": this.sat, "Google Street": this.st, "None": blank};
     let overlays = {"US States": states, "US Counties": counties, "Management Agency": surf, "LRR/MLRA": mlra, "STATSGO": statsgo, "HUC-6": huc6, "HUC-8": huc8};
     let overlayTitles = d3.keys(overlays);
 
@@ -197,7 +219,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     layerNames.overlays.keys = d3.keys(overlays);
     layerNames.overlays.values = d3.values(overlays);
 
-    d3.select("#test1")
+    d3.select("#pane_container")
         .insert("div", ":first-child")
         .attr("id", "mapTools")
         .append("div")
@@ -230,25 +252,36 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         });
     
     // console.log(layerNames.baseLayers.keys,layerNames.baseLayers.values, "es mappy")
-    
+    let layerCheck = this.layerCheck
+    if(layerCheck && layerCheck===true){
+      console.log('layercheck:true')
+      mappy.addLayer(this.hy)
+    }
+    layerCheck = false
     d3.select("#baselayerListDropdown").selectAll("div")
     .data(layerNames.baseLayers.keys)
     .enter()
       .append("div")
       .attr("class", "layerName")
       .text((d:any)=> { return d; })
-      .property("value", function(d,i) { return i; })
+      .property("value", (d,i)=>{ return i; })
       .property("title", function(d) { return d; })
       .on("click", function() { changeBaselayer(this); })
       .append("span")
       .attr("class", "fas fa-check fa-pull-right activeOverlay")
       .style("visibility", function(d,i) { if(i == 1) {return "visible";} else {return "hidden";} });
-
+      if(layerCheck!==true){
+        console.log('layercheck:false')
+        mappy.addLayer(this.hy)
+      }
+      
       function changeBaselayer(tmpDiv) {
         //***Remove old layer
         let layerDivs:any = d3.select("#baselayerListDropdown").selectAll("div");
-        
+        // mappy.addLayer(hylayer)
         layerDivs.nodes().forEach(function(tmpLayer) {
+          // layerVar = false
+          
           if(d3.select(tmpLayer).select("span").style("visibility") == "visible") {
             d3.select(tmpLayer).select("span").style("visibility", "hidden");
             mappy.removeLayer(layerNames.baseLayers.values[d3.select(tmpLayer).property("value")]);
@@ -258,9 +291,9 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         //***Add new layer
         d3.select(tmpDiv).select("span").style("visibility", "visible");
         mappy.addLayer(layerNames.baseLayers.values[tmpDiv.value]);
-        layerNames.baseLayers.values[tmpDiv.value].bringToBack();       
+        layerNames.baseLayers.values[tmpDiv.value].bringToFront();       
       }
-      /////////////////////////////////
+      ///////////////////////////////
     d3.select("leaflet-sidebar-content")
     .insert("div", ": first-child")
     .attr("id", "drawingDiv")
@@ -351,7 +384,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   //******Adjust div position to ensure that it isn't overflowing window
 function resizePanels() {
-  let mapRect = document.getElementById("test2").getBoundingClientRect()
+  let mapRect = document.getElementById("container").getBoundingClientRect()
   // var bodyRect = document.body.getBoundingClientRect();
   var tmpWindows = ["infoDiv", "legendDiv"];
         
@@ -380,7 +413,7 @@ function resizePanels() {
     //  this.renderer.appendChild(this.test2Div.nativeElement, newDiv)
      
     //  this.renderer.appendChild(this.el.nativeElement, newDiv)
- d3.select("#test2")
+ d3.select("#container")
   .append("div")
   .attr("class", "legend gradDown")
   .attr("id", "legendDiv")
@@ -493,8 +526,8 @@ function resizePanels() {
       
 
       $("#" + tmpName + "LegendImg").one("load", function() {
-        var tmpRect = document.getElementById(tmpName + "LegendImg").getBoundingClientRect();
-        console.log(tmpRect)
+        // var tmpRect = document.getElementById(tmpName + "LegendImg").getBoundingClientRect();
+        // console.log(tmpRect)
         // d3.select("#" + tmpName + "LegImgDiv").style("max-height",`${tmpRect.height-67}px`);
         // d3.select("#" + tmpName + "LegImgDiv").style("max-width", `${tmpRect.width}px`);
         d3.select("#" + tmpName + "Legend").style("opacity", "1");     
@@ -572,7 +605,7 @@ function resizePanels() {
    
     this.mymap = L.map('map', {
       maxZoom: 15,
-      inertiaDeceleration: 1000,
+      // inertiaDeceleration: 1000,
       attributionControl: false,
       worldCopyJump: true,
       center:[32.344147, -106.758442],
@@ -581,7 +614,7 @@ function resizePanels() {
       zoomControl:false,
       preferCanvas:true,
       /* initial layer */
-      layers:[this.wms.googleSatellite]
+      layers:[this.sat]
     });
     /* invalidate size debouncemoveend 
        adds a timeout on every moveend-event refetch */
@@ -701,9 +734,18 @@ function resizePanels() {
 
     
   }
+  // returnMap(event){
+  //  console.log(event)
+  //  if(event='map'){
+  //   //  this.initMap()
+  //  }
+  // }
 
   ngOnDestroy(){
-    this.moveSubs.unsubscribe()
+    if(this.moveSubs){
+      this.moveSubs.unsubscribe()
+    }
+    
     this.eventSubject.unsubscribe()
   }
 

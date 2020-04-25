@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, Input, Renderer2, AfterViewChe
 import * as L from 'leaflet'
 import { Router } from '@angular/router';
 import { Plot } from '../../../models/plot.model'
-import { MarkerService } from '../../../marker.service'
+import { MarkerService } from '../../../../services/marker.service'
 import { CustomControlService } from '../../custom-control.service'
 
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as L from 'leaflet'
-import { wmsService } from '../../map/controls/wms.service'
+import { wmsService } from '../../services/wms.service'
 
 @Injectable({
   providedIn: 'root'

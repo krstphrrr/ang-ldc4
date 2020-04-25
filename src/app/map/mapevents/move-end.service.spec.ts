@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MoveEndService } from './move-end.service';
+import { MoveEndService } from '../../services/move-end.service';
 
 describe('MoveEndService', () => {
   let service: MoveEndService;

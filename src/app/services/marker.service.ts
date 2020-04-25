@@ -5,10 +5,10 @@ import { HttpClient,
          } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 import { map, single } from 'rxjs/operators';
-import { DataHeader } from './models/dataHeader.model'
-import { GeoIndicators } from './models/geoIndicators.models'
+import { DataHeader } from '../map/models/dataHeader.model'
+import { GeoIndicators } from '../map/models/geoIndicators.models'
 import * as L from 'leaflet'
-import { socketDataService } from '../learn/socketTest.service'
+import { socketDataService } from './socketTest.service'
 
 
 @Injectable({

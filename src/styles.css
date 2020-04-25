@@ -115,20 +115,20 @@ body {
 }
 
 #baselayerList {
-  width: 155px;
+  width: 165px;
   margin-left: 0px;
 }
 
 #baselayerListDropdown {
-  width: 155px;
+  width: 165px;
 }
 
 #overlayList {
-  width: 160px;
+  width: 165px;
 }
 
 #overlayListDropdown {
-  width: 160px;
+  width: 165px;
   max-height: 526px;
   overflow-y: auto;
 }

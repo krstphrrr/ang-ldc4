@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { AuthService } from './auth.service'
-
+import { Router } from '@angular/router'
+import {LayerService} from '../services/layer.service'
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -15,9 +16,20 @@ export class HeaderComponent {
     this.isCollapsed = !this.isCollapsed;
   }
 
-  constructor() { }
+  constructor(
+    private router:Router,
+    private layerServ: LayerService
+    ) { }
 
   onSelect(feature:string){
+      if(feature==="map"){
+        this.layerServ.checkLayer(feature)
+
+      }
       this.featureSelected.emit(feature)
+      // if (feature==='map'){
+      //   console.log('es map')
+      //   this.router.navigate(['/'])
+      // }
   }
 }

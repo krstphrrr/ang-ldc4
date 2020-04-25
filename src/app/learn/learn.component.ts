@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { socketDataService } from '../learn/socketTest.service'
+import { socketDataService } from '../services/socketTest.service'
 import * as d3 from 'd3'
 
 @Component({
