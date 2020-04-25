@@ -25,7 +25,7 @@ export class wmsService {
       subdomains:['mt0','mt1','mt2','mt3']
     });
 
-    public counties = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
+    public counties = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms?tiled=true', {
       layers: 'ldc2:tl_2017_us_county_wgs84',
       format: 'image/png',
       transparent: true,
@@ -42,7 +42,7 @@ export class wmsService {
     //   version: '1.3.0',
     //   maxZoom: 20
     // });
-    public states = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
+    public states = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms?tiled=true', {
       layers: 'ldc2:tl_2017_us_state_wgs84',
       format: 'image/png',
       transparent: true,
@@ -53,7 +53,7 @@ export class wmsService {
 
 
 
-    public surf = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
+    public surf = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms?tiled=true', {
       layers: 'ldc2:surface_mgt_agency_wgs84',
       format: 'image/png',
       transparent: true,
@@ -62,7 +62,7 @@ export class wmsService {
       maxZoom: 20
     });
 
-    public mlra = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
+    public mlra = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms?tiled=true', {
       layers: 'ldc2:mlra_v42_wgs84',
       format: 'image/png',
       transparent: true,
@@ -71,7 +71,7 @@ export class wmsService {
       maxZoom: 20
     });
 
-    public statsgo = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
+    public statsgo = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms?tiled=true', {
       layers: 'ldc2:statsgo_wgs84',
       format: 'image/png',
       transparent: true,
@@ -80,7 +80,7 @@ export class wmsService {
       maxZoom: 20
     });
 
-    public huc6 = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
+    public huc6 = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms?tiled=true', {
       layers: 'ldc2:wbdhu6_wgs84',
       format: 'image/png',
       transparent: true,
@@ -89,7 +89,7 @@ export class wmsService {
       maxZoom: 20
     });
 
-    public huc8 = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
+    public huc8 = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms?tiled=true', {
       layers: 'ldc2:wbdhu8_wgs84',
       format: 'image/png',
       transparent: true,
