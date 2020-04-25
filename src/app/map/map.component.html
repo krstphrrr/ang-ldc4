@@ -23,6 +23,13 @@
       <div id="pane_container" #pane_container>
 
       </div>
+      <div id="output_container">
+      <p *ngIf="resultOutput;else elseBlock">Showing {{ resultOutput }} results...</p>
+
+      </div>
+      <ng-template #elseBlock id="output_container">
+        <p>No results to show..</p>
+      </ng-template>
       
         
       

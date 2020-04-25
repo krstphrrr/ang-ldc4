@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, 
-         HttpResponse 
-        //  HttpErrorResponse
-         } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 import { map, single } from 'rxjs/operators';
 import { DataHeader } from '../map/models/dataHeader.model'

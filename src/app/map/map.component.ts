@@ -77,6 +77,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public hy;
   public st;
   public layerCheck;
+  public resultOutput;
   // @ViewChild(PanelComponent) panel;
 
   // new rsjx subject to observe
@@ -648,13 +649,15 @@ function resizePanels() {
           this.socket.emit('drawing', this.moveEnd.coords)
           this.moveSubs = this.socket.listen('pointssend')
             .subscribe((data:GeoJsonObject)=>{
+              this.resultOutput = ''
               //marker service goes here, which:
               // a. creates a layer full of markers from geojson
               // b. stores layer in the markers property within the service
+              
               this.markers.createMarkers(data)
               this.markerLayer = this.markers.markers
               this.markerLayer.addTo(this.mymap)
-              // console.log(data)
+              this.resultOutput = data['features'].length
           })
       }
       } else {
@@ -670,13 +673,16 @@ function resizePanels() {
           this.socket.emit('drawing', this.moveEnd.coords)
           this.moveSubs = this.socket.listen('pointssend')
             .subscribe((data:GeoJsonObject)=>{
+              this.resultOutput = ''
               //marker service goes here, which:
               // a. creates a layer full of markers from geojson
               // b. stores layer in the markers property within the service
               this.markers.createMarkers(data)
               this.markerLayer = this.markers.markers
               this.markerLayer.addTo(this.mymap)
-              console.log(data)
+              this.resultOutput = data['features'].length
+              
+              // console.log(data['features'].length)
           })
       }
     }
@@ -706,12 +712,14 @@ function resizePanels() {
           this.socket.emit('fetchpoints', this.moveEnd.topos)
           this.moveSubs = this.socket.listen('pointssend')
             .subscribe((data:GeoJsonObject)=>{
+              this.resultOutput = ''
               //marker service goes here, which:
               // a. creates a layer full of markers from geojson
               // b. stores layer in the markers property within the service
               this.markers.createMarkers(data)
               this.markerLayer = this.markers.markers
               this.markerLayer.addTo(this.mymap)
+              this.resultOutput = data['features'].length
           })
         } else {
           console.log('error: cannot define bounds')
