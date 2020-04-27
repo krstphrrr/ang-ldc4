@@ -24,6 +24,7 @@ import { MoveEndService } from '../services/move-end.service'
 import { CdkDrag, DragDrop } from '@angular/cdk/drag-drop';
 import * as turf from '@turf/turf'
 import {LayerService} from '../services/layer.service'
+import { MapLoadService } from '../services/mapLoad.service'
 
 // declare module 'leaflet' {
 //   namespace control {
@@ -62,7 +63,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public mrkr=false;
   public markerLayer
   public tmpPoints;
-  public moveSubs;
+  public movementSubscription;
   public myCanvas:Canvas;
   public Public = true;
   public mapContainer;
@@ -91,40 +92,29 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     private socket: socketDataService,
     private wms: wmsService,
     private layerServ: LayerService,
-    private moveEnd: MoveEndService
+    private moveEnd: MoveEndService,
+    private mapLoad: MapLoadService
     ) {
       this.eventSubject
-
      }
-
-   
-
-    handleMapMoveEnd(){
-
-    }
-
-    handleEvent(eventType: string,evn) {
-      this.eventSubject.next(eventType);
-      
-    }
-    
-
     
 
   ngOnInit() {
     /*
-      marker service could load 
-      an onInit function with basic
-      public markers:
-      this.marker.fetchInitPoints() etc.
+    get layers 2 will asynchronously get wms cached tiles, 
+    but on init, not after view
     */
+  //  this.initMap()
+  //  this.mymap.on('load',console.log('hmmm'))
+   
    this.getLayers2('sat')
    this.getLayers2('st')
    this.getLayers2('terr')
    this.getLayers2('hy')
    this.layerCheck = this.layerServ.layer
-  
   }
+
+
   getLayers2(which=null){
     if(which==='sat'){
       this.wms.getLayers(which)
@@ -178,9 +168,20 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     mapObject.addLayer(drawnItems)
   }
 
+  onMapLoad_TEST(){
+    this.mapLoad.testMethod(this.mymap)
+
+  }
+
 
   ngAfterViewInit():void{
-    this.initMap()
+    /* creating a point */
+     this.initMap()
+     this.mymap.on('load', this.onMapLoad_TEST())
+    
+    
+    
+    
     this.ctlSidebar = L.control.sidebar({
       autopan:true,
       closeButton:true,
@@ -258,7 +259,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       console.log('layercheck:true')
       mappy.addLayer(this.hy)
     }
-    layerCheck = false
+    this.layerCheck = false
     d3.select("#baselayerListDropdown").selectAll("div")
     .data(layerNames.baseLayers.keys)
     .enter()
@@ -328,7 +329,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     .property("name", function(d,i) { return overlayID[i]; })
     .on("click", function() { changeOverlay(this); })
     .append("span")
-    .attr("class", "fa fa-check pull-right activeOverlay")
+    .attr("class", "fas fa-check pull-right activeOverlay")
     .style("visibility", "hidden"); //function(d) { if(d == "US States") { map.addLayer(states); return "visible"; } else { return "hidden"; } });
     
 
@@ -616,15 +617,22 @@ function resizePanels() {
       preferCanvas:true,
       /* initial layer */
       layers:[this.sat]
-    });
+    }).on('load', (e)=>{
+      if(e){
+        console.log('echale')
+      }
+    })
+    
+    
+    
     /* invalidate size debouncemoveend 
        adds a timeout on every moveend-event refetch */
-
+    // this map.on(event, SERVICE.METHOD(EVENT))
     this.mymap.on('draw:created',(e)=>{
       // clear topos before drawing
-      if(this.moveSubs && !this.moveSubs.closed){
+      if(this.movementSubscription && !this.movementSubscription.closed){
         // this.markerLayer.clearLayers()
-        this.moveSubs.unsubscribe()
+        this.movementSubscription.unsubscribe()
       }
       /*if layer with points exists, clear and create; else create 
       only handles drawing when its the first thing the user does, 
@@ -647,7 +655,7 @@ function resizePanels() {
         let param = {}
           console.log(this.moveEnd.coords, 'vacio')
           this.socket.emit('drawing', this.moveEnd.coords)
-          this.moveSubs = this.socket.listen('pointssend')
+          this.movementSubscription = this.socket.listen('pointssend')
             .subscribe((data:GeoJsonObject)=>{
               this.resultOutput = ''
               //marker service goes here, which:
@@ -671,7 +679,7 @@ function resizePanels() {
           console.log(this.moveEnd.coords)
           /* turf debugging: need points of polygon */
           this.socket.emit('drawing', this.moveEnd.coords)
-          this.moveSubs = this.socket.listen('pointssend')
+          this.movementSubscription = this.socket.listen('pointssend')
             .subscribe((data:GeoJsonObject)=>{
               this.resultOutput = ''
               //marker service goes here, which:
@@ -688,14 +696,14 @@ function resizePanels() {
     }
     })
     this.mymap.on('dragend', event=>{
-      
-      
+
       let bbox = this.mymap.getBounds()
       this.moveEnd.boundsUtil(bbox)
       if(this.mymap.getZoom()<=13){
         // unsubscribes , no mem leak
-        if(this.moveSubs && !this.moveSubs.closed){
-          this.moveSubs.unsubscribe()
+        if(this.movementSubscription && !this.movementSubscription.closed){
+          // console.log('zoom unsubscribe')
+          this.movementSubscription.unsubscribe()
         }
         // destroys old markerLayer
         if(this.markerLayer!=undefined){
@@ -710,7 +718,7 @@ function resizePanels() {
           param["one"] = 1
           this.moveEnd.topos.params = param
           this.socket.emit('fetchpoints', this.moveEnd.topos)
-          this.moveSubs = this.socket.listen('pointssend')
+          this.movementSubscription = this.socket.listen('pointssend')
             .subscribe((data:GeoJsonObject)=>{
               this.resultOutput = ''
               //marker service goes here, which:
@@ -725,8 +733,8 @@ function resizePanels() {
           console.log('error: cannot define bounds')
         }
       } else {
-        if(this.moveSubs && !this.moveSubs.closed){
-          this.moveSubs.unsubscribe()
+        if(this.movementSubscription && !this.movementSubscription.closed){
+          this.movementSubscription.unsubscribe()
         }
         if(this.markerLayer!=undefined){
           console.log(this.markerLayer, "not undefined above 9")
@@ -737,24 +745,14 @@ function resizePanels() {
         console.log('below nine')
       }
     })
-
-    
-
-    
   }
-  // returnMap(event){
-  //  console.log(event)
-  //  if(event='map'){
-  //   //  this.initMap()
-  //  }
-  // }
 
   ngOnDestroy(){
-    if(this.moveSubs){
-      this.moveSubs.unsubscribe()
+    if(this.movementSubscription){
+      this.movementSubscription.unsubscribe()
     }
     
-    this.eventSubject.unsubscribe()
+
   }
 
 }

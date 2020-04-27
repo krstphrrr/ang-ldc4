@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ZoomEndService } from './zoom-end.service';
+import { ZoomEndService } from '../../services/mapLoad.service';
 
 describe('ZoomEndService', () => {
   let service: ZoomEndService;
