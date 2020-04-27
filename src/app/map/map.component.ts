@@ -106,12 +106,17 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     */
   //  this.initMap()
   //  this.mymap.on('load',console.log('hmmm'))
-   
+   let initLay = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+    maxZoom: 20,
+    subdomains:['mt0','mt1','mt2','mt3']
+  }); 
    this.getLayers2('sat')
    this.getLayers2('st')
    this.getLayers2('terr')
    this.getLayers2('hy')
    this.layerCheck = this.layerServ.layer
+   this.initMap(initLay)
+
   }
 
 
@@ -170,16 +175,15 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   onMapLoad_TEST(){
     this.mapLoad.testMethod(this.mymap)
-
+    
   }
 
 
   ngAfterViewInit():void{
     /* creating a point */
-     this.initMap()
+    //  this.initMap()
+     
      this.mymap.on('load', this.onMapLoad_TEST())
-    
-    
     
     
     this.ctlSidebar = L.control.sidebar({
@@ -255,11 +259,12 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     
     // console.log(layerNames.baseLayers.keys,layerNames.baseLayers.values, "es mappy")
     let layerCheck = this.layerCheck
-    if(layerCheck && layerCheck===true){
+    if(this.layerCheck && this.layerCheck===true){
       console.log('layercheck:true')
       mappy.addLayer(this.hy)
+      this.layerCheck = false
     }
-    this.layerCheck = false
+    
     d3.select("#baselayerListDropdown").selectAll("div")
     .data(layerNames.baseLayers.keys)
     .enter()
@@ -272,13 +277,14 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       .append("span")
       .attr("class", "fas fa-check fa-pull-right activeOverlay")
       .style("visibility", function(d,i) { if(i == 1) {return "visible";} else {return "hidden";} });
-      if(layerCheck!==true){
+      if(this.layerCheck!==true){
         console.log('layercheck:false')
         mappy.addLayer(this.hy)
       }
       
       function changeBaselayer(tmpDiv) {
         //***Remove old layer
+        
         let layerDivs:any = d3.select("#baselayerListDropdown").selectAll("div");
         // mappy.addLayer(hylayer)
         layerDivs.nodes().forEach(function(tmpLayer) {
@@ -603,24 +609,21 @@ function resizePanels() {
 
   }
   
-  private initMap(){
-   
+  private initMap(initLayer:L.TileLayer=null){
+    
     this.mymap = L.map('map', {
       maxZoom: 15,
-      // inertiaDeceleration: 1000,
+      inertiaDeceleration: 10000,
       attributionControl: false,
       worldCopyJump: true,
       center:[32.344147, -106.758442],
       zoom: 10,
+      zoomSnap:.3,
       minZoom:5,
       zoomControl:false,
       preferCanvas:true,
       /* initial layer */
-      layers:[this.sat]
-    }).on('load', (e)=>{
-      if(e){
-        console.log('echale')
-      }
+      layers:[(initLayer?initLayer:this.sat)]
     })
     
     
