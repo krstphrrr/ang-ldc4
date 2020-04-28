@@ -49,7 +49,7 @@ export class MarkerService {
                 m.fillOpacity = .2;
                 break;
             }
-            return L.circleMarker(latlng,m).bindTooltip(label,{opacity:.5})
+            return L.circleMarker(latlng,m).bindTooltip(label,{opacity:0.5})
           }
         }).addTo(this.lyrGrp)
       this.markers = this.lyrGrp

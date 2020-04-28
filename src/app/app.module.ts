@@ -21,7 +21,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
-// import { LeafletModule } from '@asymmetrik/ngx-leaflet'
+// import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MapOlComponent } from './map-ol/map-ol.component';
 import { PanelComponent } from './map/controls/panel/panel/panel.component';
@@ -40,6 +40,8 @@ import { PlotListComponent } from './map/plots/plot-list/plot-list.component';
 import { CdkTableModule } from '@angular/cdk/table'
 import { HttpClientModule } from '@angular/common/http';
 import { LayersComponent } from './map/controls/layers/layers.component';
+import { OverlayModule } from '@angular/cdk/overlay';
+
 
 
 const appRoutes: Routes = [
@@ -107,7 +109,8 @@ const appRoutes: Routes = [
     HttpClientModule,
     FormsModule,
     MatButtonToggleModule,
-    DragDropModule
+    DragDropModule,
+    OverlayModule
   ],
   providers: [],
   bootstrap: [AppComponent]

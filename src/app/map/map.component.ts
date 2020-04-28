@@ -25,6 +25,7 @@ import { CdkDrag, DragDrop } from '@angular/cdk/drag-drop';
 import * as turf from '@turf/turf'
 import {LayerService} from '../services/layer.service'
 import { MapLoadService } from '../services/mapLoad.service'
+import { SpinnerService } from '../services/spinner.service'
 
 // declare module 'leaflet' {
 //   namespace control {
@@ -56,7 +57,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public mymap
   public ctlSidebar;
   public initLayers;
-  
+  // public loading:Spinner;
 
 
   public isCollapsed = false;
@@ -94,7 +95,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     private wms: wmsService,
     private layerServ: LayerService,
     private moveEnd: MoveEndService,
-    private mapLoad: MapLoadService
+    private mapLoad: MapLoadService,
+    private spinner: SpinnerService
     ) {
       this.eventSubject
      }
@@ -186,7 +188,14 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   ngAfterViewInit():void{
     /* creating a point */
     //  this.initMap()
-     
+    // setTimeout(
+    //   () => this.spinner.spin$.next(false), 1000
+    //  )
+ 
+    //  setTimeout( 
+    //   () => this.spinner.spin$.next(false), 3000
+    //  )
+ 
      this.mymap.on('load', this.onMapLoad_TEST())
     
     
