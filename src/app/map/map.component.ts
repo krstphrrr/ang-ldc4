@@ -79,6 +79,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public st;
   public layerCheck;
   public resultOutput;
+  public deactivateMap;
   // @ViewChild(PanelComponent) panel;
 
   // new rsjx subject to observe
@@ -106,16 +107,18 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     */
   //  this.initMap()
   //  this.mymap.on('load',console.log('hmmm'))
-   let initLay = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+  this.deactivateMap = false
+  let initLay = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
     maxZoom: 20,
     subdomains:['mt0','mt1','mt2','mt3']
-  }); 
+   }); 
    this.getLayers2('sat')
    this.getLayers2('st')
    this.getLayers2('terr')
    this.getLayers2('hy')
    this.layerCheck = this.layerServ.layer
    this.initMap(initLay)
+   
 
   }
 
@@ -174,7 +177,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   }
 
   onMapLoad_TEST(){
-    this.mapLoad.testMethod(this.mymap)
+    // this.mapLoad.testMethod(this.mymap)
+   
     
   }
 
@@ -183,7 +187,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     /* creating a point */
     //  this.initMap()
      
-     this.mymap.on('load', this.onMapLoad_TEST())
+    //  this.mymap.on('load', this.onMapLoad_TEST())
     
     
     this.ctlSidebar = L.control.sidebar({
@@ -697,57 +701,63 @@ function resizePanels() {
           })
       }
     }
-    })
-    this.mymap.on('dragend', event=>{
 
-      let bbox = this.mymap.getBounds()
-      this.moveEnd.boundsUtil(bbox)
-      if(this.mymap.getZoom()<=13){
-        // unsubscribes , no mem leak
-        if(this.movementSubscription && !this.movementSubscription.closed){
-          // console.log('zoom unsubscribe')
-          this.movementSubscription.unsubscribe()
-        }
-        // destroys old markerLayer
-        if(this.markerLayer!=undefined){
-          // console.log(this.markerLayer, "not undefined")
-          this.mymap.removeLayer(this.markerLayer)
-        } else{
-          // console.log(this.markerLayer, "undefined!!!")
-        }
-        if(this.moveEnd.topos){
-          
-          let param = {}
-          param["one"] = 1
-          this.moveEnd.topos.params = param
-          this.socket.emit('fetchpoints', this.moveEnd.topos)
-          this.movementSubscription = this.socket.listen('pointssend')
-            .subscribe((data:GeoJsonObject)=>{
-              this.resultOutput = ''
-              //marker service goes here, which:
-              // a. creates a layer full of markers from geojson
-              // b. stores layer in the markers property within the service
-              this.markers.createMarkers(data)
-              this.markerLayer = this.markers.markers
-              this.markerLayer.addTo(this.mymap)
-              this.resultOutput = data['features'].length
-          })
-        } else {
-          console.log('error: cannot define bounds')
-        }
-      } else {
-        if(this.movementSubscription && !this.movementSubscription.closed){
-          this.movementSubscription.unsubscribe()
-        }
-        if(this.markerLayer!=undefined){
-          console.log(this.markerLayer, "not undefined above 9")
-          this.mymap.removeLayer(this.markerLayer)
-        } else{
-          // console.log(this.markerLayer, "undefined!!! above 9")
-        }
-        console.log('below nine')
-      }
     })
+
+
+
+      this.mymap.on('load', event=>{
+
+        let bbox = this.mymap.getBounds()
+        this.moveEnd.boundsUtil(bbox)
+        if(this.mymap.getZoom()<=13){
+          // unsubscribes , no mem leak
+          if(this.movementSubscription && !this.movementSubscription.closed){
+            // console.log('zoom unsubscribe')
+            this.movementSubscription.unsubscribe()
+          }
+          // destroys old markerLayer
+          if(this.markerLayer!=undefined){
+            // console.log(this.markerLayer, "not undefined")
+            this.mymap.removeLayer(this.markerLayer)
+          } else{
+            // console.log(this.markerLayer, "undefined!!!")
+          }
+          if(this.moveEnd.topos){
+            
+            let param = {}
+            param["one"] = 1
+            this.moveEnd.topos.params = param
+            this.socket.emit('fetchpoints', this.moveEnd.topos)
+            this.movementSubscription = this.socket.listen('pointssend')
+              .subscribe((data:GeoJsonObject)=>{
+                this.resultOutput = ''
+                //marker service goes here, which:
+                // a. creates a layer full of markers from geojson
+                // b. stores layer in the markers property within the service
+                this.markers.createMarkers(data)
+                this.markerLayer = this.markers.markers
+                this.markerLayer.addTo(this.mymap)
+                this.resultOutput = data['features'].length
+            })
+          } else {
+            console.log('error: cannot define bounds')
+          }
+        } else {
+          if(this.movementSubscription && !this.movementSubscription.closed){
+            this.movementSubscription.unsubscribe()
+          }
+          if(this.markerLayer!=undefined){
+            console.log(this.markerLayer, "not undefined above 9")
+            this.mymap.removeLayer(this.markerLayer)
+          } else{
+            // console.log(this.markerLayer, "undefined!!! above 9")
+          }
+          console.log('below nine')
+        }
+      })
+
+    
   }
 
   ngOnDestroy(){
