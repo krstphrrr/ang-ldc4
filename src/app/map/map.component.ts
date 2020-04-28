@@ -709,52 +709,22 @@ function resizePanels() {
     }
 
     })
+    this.mymap.on('loading', console.log('loading...'))
 
 
 
-      this.mymap.on('movestart', event=>{
+    this.mymap.on('movestart', event=>{
 
         let bbox = this.mymap.getBounds()
         this.moveEnd.boundsUtil(bbox)
-        if(this.mymap.getZoom()<=13){
-          // unsubscribes , no mem leak
-          if(this.movementSubscription && !this.movementSubscription.closed){
-            // console.log('zoom unsubscribe')
-            this.movementSubscription.unsubscribe()
-          }
-          // destroys old markerLayer
-          if(this.markerLayer!=undefined){
-            // console.log(this.markerLayer, "not undefined")
-            this.mymap.removeLayer(this.markerLayer)
-          } else{
-            // console.log(this.markerLayer, "undefined!!!")
-          }
-          if(this.moveEnd.topos){
-            
-            // let param = {}
-            // param["one"] = 1
-            // this.moveEnd.topos.params = param
-            this.socket.emit('fetchpoints', this.moveEnd.topos)
-            this.movementSubscription = this.socket.listen('pointssend')
-              .subscribe((data:GeoJsonObject)=>{
-                this.resultOutput = ''
-                this.resultOutput = data['features'].length
-            })
-          } else {
-            console.log('error: cannot define bounds')
-          }
-        } else {
-          if(this.movementSubscription && !this.movementSubscription.closed){
-            this.movementSubscription.unsubscribe()
-          }
-          if(this.markerLayer!=undefined){
-            console.log(this.markerLayer, "not undefined above 9")
-            this.mymap.removeLayer(this.markerLayer)
-          } else{
-            // console.log(this.markerLayer, "undefined!!! above 9")
-          }
-          console.log('below nine')
-        }
+        this.socket.emit('fetchpoints', this.moveEnd.topos)
+        this.movementSubscription = this.socket.listen('pointssend')
+          .subscribe((data:GeoJsonObject)=>{
+            this.resultOutput = ''
+            this.resultOutput = data['features'].length
+          })
+          
+        
       })
 
     

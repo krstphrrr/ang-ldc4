@@ -18,31 +18,7 @@ export class AppComponent implements OnInit {
     private spinner:SpinnerService
   ){}
   ngOnInit(){
-    setTimeout(
-      () => this.spinner.show(), 2000
-    )
-    setTimeout(
-      () => this.spinner.show(), 2500
-    )
 
-    setTimeout(
-      () => this.spinner.hide(), 3000
-    )
-    setTimeout(
-      () => this.spinner.hide(), 3500
-    )
-
-    setTimeout(
-      () => {
-        this.spinner.show();
-        this.spinner.show();
-        this.spinner.show();
-        this.spinner.show();
-      }, 4000
-    )
-    setTimeout(
-      () => this.spinner.reset(), 5000
-    )
   }
  
   
