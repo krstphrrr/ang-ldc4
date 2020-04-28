@@ -177,7 +177,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   }
 
   onMapLoad_TEST(){
-    // this.mapLoad.testMethod(this.mymap)
+    this.mapLoad.testMethod(this.mymap)
    
     
   }
@@ -187,7 +187,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     /* creating a point */
     //  this.initMap()
      
-    //  this.mymap.on('load', this.onMapLoad_TEST())
+     this.mymap.on('load', this.onMapLoad_TEST())
     
     
     this.ctlSidebar = L.control.sidebar({
@@ -629,9 +629,6 @@ function resizePanels() {
       /* initial layer */
       layers:[(initLayer?initLayer:this.sat)]
     })
-    
-    
-    
     /* invalidate size debouncemoveend 
        adds a timeout on every moveend-event refetch */
     // this map.on(event, SERVICE.METHOD(EVENT))
@@ -706,7 +703,7 @@ function resizePanels() {
 
 
 
-      this.mymap.on('load', event=>{
+      this.mymap.on('movestart', event=>{
 
         let bbox = this.mymap.getBounds()
         this.moveEnd.boundsUtil(bbox)
@@ -725,19 +722,13 @@ function resizePanels() {
           }
           if(this.moveEnd.topos){
             
-            let param = {}
-            param["one"] = 1
-            this.moveEnd.topos.params = param
+            // let param = {}
+            // param["one"] = 1
+            // this.moveEnd.topos.params = param
             this.socket.emit('fetchpoints', this.moveEnd.topos)
             this.movementSubscription = this.socket.listen('pointssend')
               .subscribe((data:GeoJsonObject)=>{
                 this.resultOutput = ''
-                //marker service goes here, which:
-                // a. creates a layer full of markers from geojson
-                // b. stores layer in the markers property within the service
-                this.markers.createMarkers(data)
-                this.markerLayer = this.markers.markers
-                this.markerLayer.addTo(this.mymap)
                 this.resultOutput = data['features'].length
             })
           } else {

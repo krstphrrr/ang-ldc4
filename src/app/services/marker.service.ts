@@ -27,9 +27,9 @@ export class MarkerService {
   createMarkers(geojsonObj){
     let m = {
           radius:5, 
-          fillColor:"white",
-          color:"yellow", 
-          weight:2, 
+          fillColor:"blue",
+          color:"dark grey", 
+          weight:.5, 
           opacity:1, 
           fillOpacity:.8
             }           
@@ -37,18 +37,19 @@ export class MarkerService {
     // using supplied geojson, create featuregroup full of markers
     L.geoJSON((geojsonObj),{
           pointToLayer: (feature,latlng)=>{
+            // console.log(feature)
             let label = 
               String("ID: ") + String(feature.id) +"<br>"+
               String("Public: ")+ String(feature.properties.Public)+"<br>"
-              switch(feature.properties.Public){
-                case true:
-                  m.fillColor = "#80bfff";
-                  break;
-                case false:
-                  m.fillColor = "magenta";
-                  break;
-              }
-            return L.circleMarker(latlng,m).bindTooltip(label,{opacity:0.7})
+            switch(feature.properties.Public){
+              case true:
+                m.fillOpacity = 1;
+                break;
+              case false:
+                m.fillOpacity = .2;
+                break;
+            }
+            return L.circleMarker(latlng,m).bindTooltip(label,{opacity:.5})
           }
         }).addTo(this.lyrGrp)
       this.markers = this.lyrGrp
