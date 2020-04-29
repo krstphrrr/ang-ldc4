@@ -450,7 +450,7 @@ function resizePanels() {
         .attr("data-toggle", "collapse")
         .attr("data-target", "#" + tmpName + "collapseDiv")
         .on("click", 
-          function() { changeCaret(d3.select(this).select("span").node()[0]); 
+          function() { changeCaret((d3.select(this).select("span").node())); 
          })
         .append("div")
         .attr("class", "legendTitle")
