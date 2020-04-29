@@ -28,6 +28,7 @@
     "@fortawesome/fontawesome-free": "^5.13.0",
     "@ng-bootstrap/ng-bootstrap": "^6.1.0",
     "@popperjs/core": "^2.4.0",
+    "@runette/ngx-leaflet-sidebar": "^1.0.3",
     "@turf/turf": "^5.1.6",
     "@types/geojson": "^7946.0.7",
     "@types/jquery": "^3.3.36",

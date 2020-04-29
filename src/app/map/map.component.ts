@@ -18,7 +18,7 @@ import 'leaflet-draw'
 import { GeoJsonObject } from 'geojson';
 import { PanelComponent } from './controls/panel/panel/panel.component';
 import { MoveEndService } from '../services/move-end.service'
-import { CdkDrag, DragDrop } from '@angular/cdk/drag-drop';
+
 import * as turf from '@turf/turf'
 import {LayerService} from '../services/layer.service'
 import { MapLoadService } from '../services/mapLoad.service'
@@ -65,7 +65,6 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public allPoints:L.FeatureGroup;
 
   constructor(
-    private dragdrop:DragDrop,
     private el:ElementRef,
     private renderer: Renderer2,
     private markers: MarkerService,
