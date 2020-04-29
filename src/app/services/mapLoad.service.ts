@@ -47,7 +47,7 @@ export class MapLoadService {
       this.movementSubscription = this.socket.listen('pointssend')
         .subscribe((data:GeoJsonObject)=>{
           this.markers.createMarkers(data)
-          this.markerLayer = this.markers.markers
+          this.markerLayer = this.markers.lyrGrp
           this.markerLayer.addTo(map)
 
         })
@@ -55,6 +55,14 @@ export class MapLoadService {
     // while (this.is_drawing===false){
     //   // this.socket.emitcoo
     // }
+  }
+  removeLayers(lyer=null){
+    
+    if(lyer!==null){
+      lyer.clearLayers()
+    }else{
+      this.markers.markers.clearLayers()
+    }
   }
   
 

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { SpinnerService} from '../app/services/spinner.service'
+import { Component } from '@angular/core';
+
 
 // import { PanelComponent } from './map/controls/panel/panel/panel.component'
 
@@ -11,15 +11,13 @@ import { SpinnerService} from '../app/services/spinner.service'
   providers: []
 })
 
-export class AppComponent implements OnInit {
+export class AppComponent {
 
 
   constructor(
-    private spinner:SpinnerService
-  ){}
-  ngOnInit(){
 
-  }
+  ){}
+
  
   
 }

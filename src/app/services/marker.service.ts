@@ -46,7 +46,7 @@ export class MarkerService {
                 m.fillOpacity = 1;
                 break;
               case false:
-                m.fillOpacity = .2;
+                m.fillOpacity = .1;
                 break;
             }
             return L.circleMarker(latlng,m).bindTooltip(label,{opacity:0.5})

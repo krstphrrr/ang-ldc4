@@ -3,7 +3,7 @@ import { Component, OnInit, AfterViewInit, AfterViewChecked, ViewChild, ElementR
 import * as L from 'leaflet'
 import {Map, latLng, Canvas, MapOptions, LeafletEvent, TileLayer} from 'leaflet'
 // import  '../../plugins/L.Control.Sidebar.js'
-import 'leaflet-easybutton'
+
 import 'leaflet-sidebar-v2'
 import { MarkerService } from '../services/marker.service'
 // import * as $ from 'jquery';
@@ -13,9 +13,6 @@ import { debounceTime, scan } from 'rxjs/operators';
 import * as d3 from 'd3'
 import { socketDataService } from '../services/socketTest.service'
 import { wmsService } from '../services/wms.service'
-import { CustomControlService } from '../map/controls/custom-control.service'
-
-import {IGeoJson} from './models/geojsonint.model'
 
 import 'leaflet-draw'
 import { GeoJsonObject } from 'geojson';
@@ -25,18 +22,6 @@ import { CdkDrag, DragDrop } from '@angular/cdk/drag-drop';
 import * as turf from '@turf/turf'
 import {LayerService} from '../services/layer.service'
 import { MapLoadService } from '../services/mapLoad.service'
-import { SpinnerService } from '../services/spinner.service'
-
-// declare module 'leaflet' {
-//   namespace control {
-//     function sidebar(options?: any): Control.Sidebar;
-//   }
-//   namespace Control {
-//     interface Sidebar {
-//       addTo(map: L.Map): any;
-//     }
-//   }
-// }
 
 @Component({
   selector: 'app-map',
@@ -44,9 +29,7 @@ import { SpinnerService } from '../services/spinner.service'
   styleUrls: [
     './map.component.css']
 })
-// @Directive({
-//   selector: '[cdkDrag]'
-// })
+
 export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   @ViewChild('container') 
   private test2Div: ElementRef;
@@ -57,8 +40,6 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public mymap
   public ctlSidebar;
   public initLayers;
-  // public loading:Spinner;
-
 
   public isCollapsed = false;
   public mrkr=false;
@@ -81,10 +62,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public layerCheck;
   public resultOutput;
   public deactivateMap;
-  // @ViewChild(PanelComponent) panel;
-
-  // new rsjx subject to observe
-  eventSubject = new Subject<string>()
+  public allPoints:L.FeatureGroup;
 
   constructor(
     private dragdrop:DragDrop,
@@ -95,20 +73,15 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     private wms: wmsService,
     private layerServ: LayerService,
     private moveEnd: MoveEndService,
-    private mapLoad: MapLoadService,
-    private spinner: SpinnerService
+    private mapLoad: MapLoadService
+
     ) {
-      this.eventSubject
+
      }
     
 
   ngOnInit() {
-    /*
-    get layers 2 will asynchronously get wms cached tiles, 
-    but on init, not after view
-    */
-  //  this.initMap()
-  //  this.mymap.on('load',console.log('hmmm'))
+
   this.deactivateMap = false
   let initLay = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
     maxZoom: 20,
@@ -124,65 +97,23 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   }
 
+  onMapLoad_TEST(test){
+    if(test===0){
+      
+        this.mapLoad.testMethod(this.mymap)
 
-  getLayers2(which=null){
-    if(which==='sat'){
-      this.wms.getLayers(which)
-      .subscribe(lays => this.sat = lays)
-    } else if(which=='st'){
-      this.wms.getLayers(which)
-      .subscribe(lays => this.st = lays)
-    } else if(which=='terr'){
-      this.wms.getLayers(which)
-      .subscribe(lays => this.terr = lays)
-    } else if (which=='hy'){
-      this.wms.getLayers(which)
-      .subscribe(lays => this.hy = lays)
-    }
-    
-  }
+      } 
+  //   if(test===1) {
+  //     this.mymap.eachLayer((layer)=>{
+  //        if(layer._radius===5){
+  //         this.mymap.removeLayer(layer)
+  //     }
+  //   })
+  //   // this.mymap.addLayer(this.allPoints)
+  //   // console.log(this.allPoints)
+  // }
+}
 
-  drawingControl(mapObject){
-    let drawnItems = new L.FeatureGroup()
-    /* drawing control + options */
-    let drawControl = new L.Control.Draw({
-      draw:{
-        polyline: false,
-        polygon:{
-          allowIntersection:false,
-          // showArea:true,
-          repeatMode:false
-        },
-        circle:false,
-        marker:false,
-        rectangle:false,
-        circlemarker:false
-      },
-      edit:{
-        // use empty featuregroup layer
-        featureGroup:drawnItems
-      }
-    })
-    this.drawnItems = drawnItems
-    mapObject.addControl(drawControl)
-    let container = drawControl.getContainer()
-    // console.log(drawnItems)
-    let child_div = document.getElementById('drawingDiv')
-    // function setParent(el:HTMLElement, newParent:HTMLElement){
-    //   Object.defineProperty(newParent, 'appendChild',{
-
-    //   })
-    //   newParent.appendChild(el)
-    // }
-    // setParent(container, child_div)
-    mapObject.addLayer(drawnItems)
-  }
-
-  onMapLoad_TEST(){
-    this.mapLoad.testMethod(this.mymap)
-   
-    
-  }
 
 
   ngAfterViewInit():void{
@@ -196,7 +127,16 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     //   () => this.spinner.spin$.next(false), 3000
     //  )
  
-     this.mymap.on('load', this.onMapLoad_TEST())
+     this.mymap.on('load', this.onMapLoad_TEST(0))
+     this.mymap.on('draw:deleted',()=>{
+      this.mymap.eachLayer((layer)=>{
+        if(layer._radius===5){
+         this.mymap.removeLayer(layer)
+        }
+      })
+      this.mymap.addLayer(this.allPoints)
+     })
+     
     
     
     this.ctlSidebar = L.control.sidebar({
@@ -622,8 +562,63 @@ function resizePanels() {
 
   }
   
-  private initMap(initLayer:L.TileLayer=null){
+
+  getLayers2(which=null){
+    if(which==='sat'){
+      this.wms.getLayers(which)
+      .subscribe(lays => this.sat = lays)
+    } else if(which=='st'){
+      this.wms.getLayers(which)
+      .subscribe(lays => this.st = lays)
+    } else if(which=='terr'){
+      this.wms.getLayers(which)
+      .subscribe(lays => this.terr = lays)
+    } else if (which=='hy'){
+      this.wms.getLayers(which)
+      .subscribe(lays => this.hy = lays)
+    }
     
+  }
+
+  drawingControl(mapObject){
+    let drawnItems = new L.FeatureGroup()
+    /* drawing control + options */
+    let drawControl = new L.Control.Draw({
+      draw:{
+        polyline: false,
+        polygon:{
+          allowIntersection:false,
+          // showArea:true,
+          repeatMode:false
+        },
+        circle:false,
+        marker:false,
+        rectangle:false,
+        circlemarker:false
+      },
+      edit:{
+        // use empty featuregroup layer
+        featureGroup:drawnItems
+      }
+    })
+    this.drawnItems = drawnItems
+    mapObject.addControl(drawControl)
+    let container = drawControl.getContainer()
+    // console.log(drawnItems)
+    let child_div = document.getElementById('drawingDiv')
+    // function setParent(el:HTMLElement, newParent:HTMLElement){
+    //   Object.defineProperty(newParent, 'appendChild',{
+
+    //   })
+    //   newParent.appendChild(el)
+    // }
+    // setParent(container, child_div)
+    mapObject.addLayer(drawnItems)
+  }
+
+  
+  private initMap(initLayer:L.TileLayer=null){
+    this.allPoints=L.featureGroup()
     this.mymap = L.map('map', {
       maxZoom: 15,
       inertiaDeceleration: 10000,
@@ -641,7 +636,13 @@ function resizePanels() {
     /* invalidate size debouncemoveend 
        adds a timeout on every moveend-event refetch */
     // this map.on(event, SERVICE.METHOD(EVENT))
+    
     this.mymap.on('draw:created',(e)=>{
+      this.mymap.eachLayer((layer)=>{
+      if(layer._radius===5){
+        this.allPoints.addLayer(layer)
+       }
+     })
       // clear topos before drawing
       if(this.movementSubscription && !this.movementSubscription.closed){
         // this.markerLayer.clearLayers()
@@ -657,7 +658,14 @@ function resizePanels() {
       */
 
       if(this.markerLayer){
+      // remove old layer
       this.markerLayer.clearLayers()
+      if(this.markerLayer){
+        console.log(this.markerLayer)
+        this.mymap.clearLayers()
+        this.mapLoad.removeLayers(this.markerLayer)
+      }
+      
       let type = e.layerType,
       layer = e.layer;
       this.drawnItems.addLayer(layer)
@@ -683,6 +691,11 @@ function resizePanels() {
       }
       } else {
       // this.mymap.removeLayer(this.markerLayer)
+      this.mymap.eachLayer((layer)=>{
+        if(layer._radius===5){
+          this.mymap.removeLayer(layer)
+        }
+      })
       let type = e.layerType,
       layer = e.layer;
       this.drawnItems.addLayer(layer)
@@ -713,19 +726,19 @@ function resizePanels() {
 
 
 
-    this.mymap.on('movestart', event=>{
+    // this.mymap.on('movestart', event=>{
 
-        let bbox = this.mymap.getBounds()
-        this.moveEnd.boundsUtil(bbox)
-        this.socket.emit('fetchpoints', this.moveEnd.topos)
-        this.movementSubscription = this.socket.listen('pointssend')
-          .subscribe((data:GeoJsonObject)=>{
-            this.resultOutput = ''
-            this.resultOutput = data['features'].length
-          })
+    //     let bbox = this.mymap.getBounds()
+    //     this.moveEnd.boundsUtil(bbox)
+    //     this.socket.emit('fetchpoints', this.moveEnd.topos)
+    //     this.movementSubscription = this.socket.listen('pointssend')
+    //       .subscribe((data:GeoJsonObject)=>{
+    //         this.resultOutput = ''
+    //         this.resultOutput = data['features'].length
+    //       })
           
         
-      })
+    //   })
 
     
   }
