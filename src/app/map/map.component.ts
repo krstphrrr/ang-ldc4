@@ -659,12 +659,11 @@ function resizePanels() {
 
       if(this.markerLayer){
       // remove old layer
-      this.markerLayer.clearLayers()
-      if(this.markerLayer){
-        console.log(this.markerLayer)
-        this.mymap.clearLayers()
-        this.mapLoad.removeLayers(this.markerLayer)
-      }
+      this.mymap.eachLayer((layer)=>{
+        if(layer._radius===5){
+          this.mymap.removeLayer(layer)
+        }
+      })
       
       let type = e.layerType,
       layer = e.layer;
