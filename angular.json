@@ -43,9 +43,7 @@
               "node_modules/@fortawesome/fontawesome-free/js/fontawesome.min.js",
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/jquery-ui-dist/jquery-ui.min.js",
-              "node_modules/@turf/turf/turf.min.js",
-              "node_modules/leaflet-spin/leaflet.spin.min.js",
-              "node_modules/spin.js/spin.js"
+              "node_modules/@turf/turf/turf.min.js"
             ]
           },
           "configurations": {
