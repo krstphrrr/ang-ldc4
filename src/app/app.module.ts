@@ -23,7 +23,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MapOlComponent } from './map-ol/map-ol.component';
+
 import { PanelComponent } from './map/controls/panel/panel/panel.component';
 import { LoginComponent } from './header/login/login.component';
 import { Routes, RouterModule } from '@angular/router'
@@ -77,7 +77,6 @@ const appRoutes: Routes = [
     ToolsComponent,
     FolderComponent,
     UsersComponent,
-    MapOlComponent,
     PanelComponent,
     LoginComponent,
     CallbackComponent,
