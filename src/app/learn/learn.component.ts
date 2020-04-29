@@ -18,16 +18,7 @@ export class LearnComponent implements OnInit {
     this.socket.listen('test event').subscribe((data)=>{
       console.log(data)      
     })
-    let el = d3.select("#foo")
-      .selectAll('p')
-      .data(this.circle)
-      .enter()
-      .append('p')
-      .text((d)=>{return d})
-      
-    console.log(el)
-
-
+  
   }
 
 

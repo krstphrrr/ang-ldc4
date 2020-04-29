@@ -62,7 +62,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public layerCheck;
   public resultOutput;
   public deactivateMap;
-  public allPoints:L.FeatureGroup;
+  public allPoints;
 
   constructor(
     private el:ElementRef,
@@ -96,12 +96,22 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   }
 
-  onMapLoad_TEST(test){
-    if(test===0){
-      
-        this.mapLoad.testMethod(this.mymap)
-
-      } 
+  onMapLoad_TEST(){
+    this.allPoints = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms?tiled=true', {
+      layers: 'ldc3:geoIndicators',
+      format: 'image/png',
+      transparent: true,
+      // tiled: true,
+      version: '1.3.0',
+      maxZoom: 20
+    });
+    this.mymap.addLayer(this.allPoints)
+    this.mymap.eachLayer((layer)=>{
+      if(layer===this.allPoints){
+        layer.bringToFront()
+      }
+    })
+    
   //   if(test===1) {
   //     this.mymap.eachLayer((layer)=>{
   //        if(layer._radius===5){
@@ -126,11 +136,12 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     //   () => this.spinner.spin$.next(false), 3000
     //  )
  
-     this.mymap.on('load', this.onMapLoad_TEST(0))
+     this.mymap.on('load', this.onMapLoad_TEST())
      this.mymap.on('draw:deleted',()=>{
       this.mymap.eachLayer((layer)=>{
         if(layer._radius===5){
          this.mymap.removeLayer(layer)
+         
         }
       })
       this.mymap.addLayer(this.allPoints)
@@ -637,10 +648,12 @@ function resizePanels() {
     // this map.on(event, SERVICE.METHOD(EVENT))
     
     this.mymap.on('draw:created',(e)=>{
+      
       this.mymap.eachLayer((layer)=>{
-      if(layer._radius===5){
-        this.allPoints.addLayer(layer)
+      if(layer===this.allPoints){
+        this.mymap.removeLayer(layer)
        }
+      
      })
       // clear topos before drawing
       if(this.movementSubscription && !this.movementSubscription.closed){

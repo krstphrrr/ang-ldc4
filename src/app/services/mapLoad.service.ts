@@ -45,12 +45,15 @@ export class MapLoadService {
       this.socket.emit('fetchpoints',this.moveEnd.topos)
       this.movementSubscription = this.socket.listen('pointssend')
         .subscribe((data:GeoJsonObject)=>{
-          this.markers.createMarkers(data)
-          this.markerLayer = this.markers.lyrGrp
-          this.markerLayer.addTo(map)
+          
+          
+          // this.markers.createMarkers(data)
+          // this.markerLayer = this.markers.lyrGrp
+          // this.markerLayer.addTo(map)
 
         })
     }
+    
     // while (this.is_drawing===false){
     //   // this.socket.emitcoo
     // }
