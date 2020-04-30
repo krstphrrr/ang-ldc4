@@ -302,7 +302,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     .style("visibility", "hidden"); //function(d) { if(d == "US States") { map.addLayer(states); return "visible"; } else { return "hidden"; } });
     
 
-
+     let allPoints = this.allPoints
     /*Overlay changing function: needs to add legend div somewhere*/
     function changeOverlay(tmpDiv) {
       if(d3.select(tmpDiv).select("span").style("visibility") == "hidden") {
@@ -310,6 +310,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         mappy.addLayer(layerNames.overlays.values[tmpDiv.value]);
         // check4Json();
         layerNames.overlays.values[tmpDiv.value].bringToFront();
+        
+        allPoints.bringToFront()
         // geoInd.bringToFront();
         addLegendImg(tmpDiv.name, tmpDiv.title, layerNames.overlays.values[tmpDiv.value], ["overlays",tmpDiv.title]);
       } 
