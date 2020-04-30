@@ -262,7 +262,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         //***Add new layer
         d3.select(tmpDiv).select("span").style("visibility", "visible");
         mappy.addLayer(layerNames.baseLayers.values[tmpDiv.value]);
-        layerNames.baseLayers.values[tmpDiv.value].bringToFront();       
+        layerNames.baseLayers.values[tmpDiv.value].bringToFront();
+        allPoints.bringToFront()       
       }
       ///////////////////////////////
     d3.select("leaflet-sidebar-content")
