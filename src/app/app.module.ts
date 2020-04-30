@@ -41,6 +41,9 @@ import { CdkTableModule } from '@angular/cdk/table'
 import { HttpClientModule } from '@angular/common/http';
 import { LayersComponent } from './map/controls/layers/layers.component';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { ProfileComponent } from './profile/profile.component';
+import { AppRoutingModule } from './app-routing.module';
 
 
 const appRoutes: Routes = [
@@ -82,7 +85,9 @@ const appRoutes: Routes = [
     CallbackComponent,
     PlotsComponent,
     PlotListComponent,
-    LayersComponent
+    LayersComponent,
+    NavBarComponent,
+    ProfileComponent
     
   ],
   imports: [
@@ -109,7 +114,8 @@ const appRoutes: Routes = [
     MatButtonToggleModule,
     DragDropModule,
     OverlayModule,
-    MatMenuModule
+    MatMenuModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
