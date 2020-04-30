@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  API_URL: 'https://new.landscapedatacommons.org/'
+  API_URL: 'https://landscapedatacommons.org/'
 };
