@@ -28,7 +28,7 @@ export class MarkerService {
   createMarkers(geojsonObj){
     let m = {
           radius:5, 
-          fillColor:"blue",
+          fillColor:"cyan",
           color:"dark grey", 
           weight:.5, 
           opacity:1, 
@@ -47,7 +47,7 @@ export class MarkerService {
                 m.fillOpacity = 1;
                 break;
               case false:
-                m.fillOpacity = .1;
+                m.fillOpacity = .3;
                 break;
             }
             return L.circleMarker(latlng,m).bindTooltip(label,{opacity:0.5})

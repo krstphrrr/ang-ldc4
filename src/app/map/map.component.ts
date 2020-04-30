@@ -80,6 +80,19 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     
 
   ngOnInit() {
+    this.allPoints = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms?tiled=true', {
+      layers: 'ldc3:geoIndicators',
+      format: 'image/png',
+      transparent: true,
+      // tiled: true,
+      version: '1.3.0',
+      maxZoom: 20
+    });
+  
+
+  
+
+  ////
 
   this.deactivateMap = false
   let initLay = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
@@ -97,14 +110,6 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   }
 
   onMapLoad_TEST(){
-    this.allPoints = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms?tiled=true', {
-      layers: 'ldc3:geoIndicators',
-      format: 'image/png',
-      transparent: true,
-      // tiled: true,
-      version: '1.3.0',
-      maxZoom: 20
-    });
     this.mymap.addLayer(this.allPoints)
     this.mymap.eachLayer((layer)=>{
       if(layer===this.allPoints){
@@ -126,16 +131,10 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
 
   ngAfterViewInit():void{
-    /* creating a point */
-    //  this.initMap()
-    // setTimeout(
-    //   () => this.spinner.spin$.next(false), 1000
-    //  )
- 
-    //  setTimeout( 
-    //   () => this.spinner.spin$.next(false), 3000
-    //  )
- 
+
+    //// get feature info for WMS layers test
+    this.mymap.on()
+
      this.mymap.on('load', this.onMapLoad_TEST())
      this.mymap.on('draw:deleted',()=>{
       this.mymap.eachLayer((layer)=>{
