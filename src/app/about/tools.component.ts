@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./tools.component.css']
 })
 export class ToolsComponent implements OnInit {
-
+  public isAbout = false;
   constructor() { }
 
   ngOnInit() {

@@ -7,7 +7,7 @@ import { HeaderComponent } from './header/header.component';
 import { MapComponent } from './map/map.component';
 import { LearnComponent } from './learn/learn.component';
 import { DataComponent } from './data/data.component';
-import { ToolsComponent } from './tools/tools.component';
+import { ToolsComponent } from './about/tools.component';
 import { FolderComponent } from './folder/folder.component';
 import { UsersComponent } from './users/users.component';
 import { MatInputModule} from '@angular/material/input';
@@ -21,7 +21,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
-
+import { MatMenuModule } from '@angular/material/menu'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { PanelComponent } from './map/controls/panel/panel/panel.component';
@@ -108,7 +108,8 @@ const appRoutes: Routes = [
     FormsModule,
     MatButtonToggleModule,
     DragDropModule,
-    OverlayModule
+    OverlayModule,
+    MatMenuModule
   ],
   providers: [],
   bootstrap: [AppComponent]

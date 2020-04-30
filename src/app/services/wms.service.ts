@@ -34,7 +34,7 @@ export class wmsService {
       maxZoom: 20
     });
 
-    // public countries = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
+    // public countries = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms', {
     //   layers: 'ldc2:countries_wgs84',
     //   format: 'image/png',
     //   transparent: true,
@@ -98,7 +98,7 @@ export class wmsService {
       maxZoom: 20
     });
 
-    // public geoInd = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
+    // public geoInd = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms', {
     //   layers: 'ldc2:geoIndicators_public',
     //   format: 'image/png',
     //   transparent: true,
@@ -107,7 +107,7 @@ export class wmsService {
     //   maxZoom: 20
     // });
 
-    // public geoSpecies = L.tileLayer.wms('https://new.landscapedatacommons.org/geoserver/wms', {
+    // public geoSpecies = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms', {
     //   layers: 'ldc2:geoSpecies_public',
     //   format: 'image/png',
     //   transparent: true,

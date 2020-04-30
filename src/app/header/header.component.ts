@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { AuthService } from './auth.service'
+
 import { Router } from '@angular/router'
 import {LayerService} from '../services/layer.service'
 @Component({
@@ -11,6 +11,7 @@ import {LayerService} from '../services/layer.service'
 export class HeaderComponent {
   @Output() featureSelected = new EventEmitter<string>()
   isCollapsed: boolean = true;
+
 
   toggleCollapse(): void {
     this.isCollapsed = !this.isCollapsed;
@@ -32,4 +33,6 @@ export class HeaderComponent {
       //   this.router.navigate(['/'])
       // }
   }
+
+
 }
