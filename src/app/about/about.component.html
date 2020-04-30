@@ -2,8 +2,8 @@
   <div class="mdl-cell mdl-cell--4-col">
     <div id="main-text">
       <div id="templateForContent">
-          <div id="container-text">
-            <div id="entry-about" *ngIf=false>
+          <div id="container-text" [ngSwitch]="isAbout">
+            <div id="entry-about" *ngSwitchCase="'about'"> 
               <p>
                 The Landscape Data Commons is an inter-agency monitoring 
                 data repository and portal, led by the USDA-ARS at the 
@@ -15,7 +15,7 @@
                 To get involved, contact Sarah McCord (sarah.mccord@usda.gov) or Nicholas Webb (nwebb@nmsu.edu).
               </p>
             </div>
-            <div id="entry-partners" *ngIf=true>
+            <div id="entry-partners" *ngSwitchCase="'partners'">
               <h2 class="entry-title">Partner Programs</h2>
               <p>The Landscape Data Commons is a partnership of a diversity of monitoring programs. </p>
               <p></p>

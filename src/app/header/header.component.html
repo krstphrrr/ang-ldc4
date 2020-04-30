@@ -19,21 +19,13 @@
           <a routerLink="/data" (click)="onSelect('data')" class="nav-link">Data</a></li>
       
       
-      <li class="nav-item">
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            About
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a routerLink="/tools" (click)="onSelect('tools')" class="nav-link">About</a>
-          </div>
-        </div>
-      </li>
-      
-      
-      
-      
-      
+          <li ngbDropdown class="nav-item d-inline-block">
+            <a ngbDropdownToggle  class="nav-link" id="dropdown1">About</a>
+              <div class="dropdown-menu" ngbDropdownMenu>
+                <a ngbDropdownItem routerLink="/about" (click)="onSelect('about')" class="nav-link">About LDC</a>
+                <a ngbDropdownItem routerLink="/about" (click)="onSelect('partners')" class="nav-link">LDC Partners</a>
+              </div>
+          </li>
       
         <li class="nav-item">
             <a routerLink="/files" (click)="onSelect('folder')" class="nav-link">
@@ -41,19 +33,23 @@
             </a>
       </li>
       <li ngbDropdown class="nav-item d-inline-block">
-          <a class="nav-link" 
-              id="dropdown1"
-              ngbDropdownToggle>
+          <a class="nav-link" (click)="auth.login()" *ngIf="!auth.loggedIn" style="cursor:pointer">
             <img src="/assets/usr-logo.png" 
                  alt="" 
                  class="img-responsive" 
                  style="max-height:20px"/>
           </a>
-            <app-login 
-              ngbDropdownMenu 
-              aria-labelledby="dropdown1" 
-              class="dropdown-menu-right">
-            </app-login>
+          <a ngbDropdownToggle class="nav-link" *ngIf="auth.loggedIn">
+            <img src="/assets/usr-logo.png" 
+                 alt="" 
+                 class="img-responsive" 
+                 style="max-height:20px"/>
+          </a>
+            <div class="dropdown-menu" ngbDropdownMenu>
+              <a routerLink="profile" *ngIf="auth.loggedIn" class="nav-link" style="cursor:pointer">Profile</a>
+              <a class="nav-link" (click)="auth.logout()" *ngIf="auth.loggedIn" style="cursor:pointer">Log Out</a>
+            </div>
+          
       </li>
 
 

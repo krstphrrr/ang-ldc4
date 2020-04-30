@@ -7,7 +7,7 @@ import { HeaderComponent } from './header/header.component';
 import { MapComponent } from './map/map.component';
 import { LearnComponent } from './learn/learn.component';
 import { DataComponent } from './data/data.component';
-import { ToolsComponent } from './about/tools.component';
+import { AboutComponent } from './about/about.component';
 import { FolderComponent } from './folder/folder.component';
 import { UsersComponent } from './users/users.component';
 import { MatInputModule} from '@angular/material/input';
@@ -41,10 +41,10 @@ import { CdkTableModule } from '@angular/cdk/table'
 import { HttpClientModule } from '@angular/common/http';
 import { LayersComponent } from './map/controls/layers/layers.component';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { NavBarComponent } from './nav-bar/nav-bar.component';
+// import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { ProfileComponent } from './profile/profile.component';
-import { AppRoutingModule } from './app-routing.module';
-
+// import { AppRoutingModule } from './app-routing.module';
+import { AuthGuard } from './services/auth.guard';
 
 const appRoutes: Routes = [
   { path: '', 
@@ -57,13 +57,15 @@ const appRoutes: Routes = [
   { path: 'data', 
     component: DataComponent },
 
-  { path: 'tools', 
-    component: ToolsComponent },
+  { path: 'about', 
+    component: AboutComponent },
 
   { path: 'files', 
     component: FolderComponent },
-  { path: 'user', 
-    component: UsersComponent }
+
+  { path: 'profile', 
+    component: ProfileComponent,
+    canActivate: [AuthGuard] }
     
 
   // { path: , component: }
@@ -77,7 +79,7 @@ const appRoutes: Routes = [
     MapComponent,
     LearnComponent,
     DataComponent,
-    ToolsComponent,
+    AboutComponent,
     FolderComponent,
     UsersComponent,
     PanelComponent,
@@ -86,7 +88,7 @@ const appRoutes: Routes = [
     PlotsComponent,
     PlotListComponent,
     LayersComponent,
-    NavBarComponent,
+    // NavBarComponent,
     ProfileComponent
     
   ],
@@ -114,8 +116,8 @@ const appRoutes: Routes = [
     MatButtonToggleModule,
     DragDropModule,
     OverlayModule,
-    MatMenuModule,
-    AppRoutingModule
+    MatMenuModule
+    // AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
