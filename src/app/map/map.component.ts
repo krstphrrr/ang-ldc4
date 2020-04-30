@@ -80,15 +80,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     
 
   ngOnInit() {
-    this.allPoints = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms?tiled=true', {
-      layers: 'ldc3:geoIndicators',
-      format: 'image/png',
-      transparent: true,
-      // tiled: true,
-      version: '1.3.0',
-      maxZoom: 20
-    });
-  
+ 
 
   
 
@@ -110,6 +102,15 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   }
 
   onMapLoad_TEST(){
+    this.allPoints = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms?tiled=true', {
+      layers: 'ldc3:geoIndicators',
+      format: 'image/png',
+      transparent: true,
+      // tiled: true,
+      version: '1.3.0',
+      maxZoom: 20
+    });
+  
     this.mymap.addLayer(this.allPoints)
     this.mymap.eachLayer((layer)=>{
       if(layer===this.allPoints){
@@ -133,7 +134,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   ngAfterViewInit():void{
 
     //// get feature info for WMS layers test
-    this.mymap.on()
+    // this.mymap.on()
 
      this.mymap.on('load', this.onMapLoad_TEST())
      this.mymap.on('draw:deleted',()=>{
@@ -501,7 +502,7 @@ function resizePanels() {
         // d3.select("#" + tmpName + "LegImgDiv").style("max-height",`${tmpRect.height-67}px`);
         // d3.select("#" + tmpName + "LegImgDiv").style("max-width", `${tmpRect.width}px`);
         d3.select("#" + tmpName + "Legend").style("opacity", "1");     
-        }).attr("src", "https://new.landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:" + tmpName);
+        }).attr("src", "https://landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:" + tmpName);
       
       d3.select("#" + tmpName + "collapseDiv")
         .append("div")
