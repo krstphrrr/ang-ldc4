@@ -19,10 +19,34 @@
           Tools
           <span class="sidebar-close"><i class="fa fa-caret-right"></i></span>
       </h1>
-
+      <div class="row">
       <div id="pane_container" #pane_container>
 
       </div>
+      <br>
+    </div>
+      <form>
+        <div class="row" style="padding-top:10%">
+          
+            <div class="col-sm">
+              <mat-slide-toggle
+              [color]="color"
+              [checked]="checked"
+              [disabled]="disabled" 
+              ngModel 
+              name="publicfilter">
+              Public
+              </mat-slide-toggle>
+            </div>
+            <div class="col-sm">
+              
+              <mat-checkbox>Lock extent</mat-checkbox>
+            </div>
+        </div>
+      </form>
+        
+
+ 
       <div id="output_container">
       <p *ngIf="resultOutput;else elseBlock">Showing {{ resultOutput }} results...</p>
 

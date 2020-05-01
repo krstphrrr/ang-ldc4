@@ -3,7 +3,7 @@ import { Component, OnInit, AfterViewInit, AfterViewChecked, ViewChild, ElementR
 import * as L from 'leaflet'
 import {Map, latLng, Canvas, MapOptions, LeafletEvent, TileLayer} from 'leaflet'
 // import  '../../plugins/L.Control.Sidebar.js'
-
+import { ThemePalette } from '@angular/material/core'
 import 'leaflet-sidebar-v2'
 import { MarkerService } from '../services/marker.service'
 // import * as $ from 'jquery';
@@ -36,7 +36,9 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   @ViewChild('pane_container') 
   private paneDiv: ElementRef;
   // private mymap;
-
+  public color: ThemePalette = "accent";
+  public checked = false;
+  public disabled = false;
   public mymap
   public ctlSidebar;
   public initLayers;
@@ -328,6 +330,13 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     d3.selectAll("#legendDiv,#infoDiv,#locateDiv,#filterDiv,#pointDiv,#downloadDiv")
       .on("mousedown", function() { setZ(this); });
 
+
+
+      d3.select("#pane_container")
+    .append("div")
+    .attr("class", "filter_array")
+    .attr("id", "filters")
+    .html()
 
     //******Function to toggle tool windows
   var toggleWords = {"legend":"Legend", "info":"Identify", "locate": "Locate", "filter": "Filter"}
@@ -628,7 +637,6 @@ function resizePanels() {
     // setParent(container, child_div)
     mapObject.addLayer(drawnItems)
   }
-
   
   private initMap(initLayer:L.TileLayer=null){
     this.allPoints=L.featureGroup()
@@ -637,8 +645,8 @@ function resizePanels() {
       inertiaDeceleration: 10000,
       attributionControl: false,
       worldCopyJump: true,
-      center:[32.344147, -106.758442],
-      zoom: 10,
+      center:[41.14269416, -108.721814],
+      zoom: 5.7,
       zoomSnap:.3,
       minZoom:5,
       zoomControl:false,
@@ -736,7 +744,13 @@ function resizePanels() {
     }
 
     })
-    this.mymap.on('loading', console.log('loading...'))
+    
+    this.mymap.on('movestart', event=>{
+      let bbox = this.mymap.getBounds()
+      let center = this.mymap.getCenter()
+      let zoomE = this.mymap.getZoom()
+      console.log(center, zoomE)
+    })
 
 
 

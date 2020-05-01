@@ -23,7 +23,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatMenuModule } from '@angular/material/menu'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { MatCheckboxModule } from '@angular/material/checkbox'
 import { PanelComponent } from './map/controls/panel/panel/panel.component';
 import { LoginComponent } from './header/login/login.component';
 import { Routes, RouterModule } from '@angular/router'
@@ -41,7 +41,7 @@ import { CdkTableModule } from '@angular/cdk/table'
 import { HttpClientModule } from '@angular/common/http';
 import { LayersComponent } from './map/controls/layers/layers.component';
 import { OverlayModule } from '@angular/cdk/overlay';
-// import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ProfileComponent } from './profile/profile.component';
 // import { AppRoutingModule } from './app-routing.module';
 import { AuthGuard } from './services/auth.guard';
@@ -88,7 +88,6 @@ const appRoutes: Routes = [
     PlotsComponent,
     PlotListComponent,
     LayersComponent,
-    // NavBarComponent,
     ProfileComponent
     
   ],
@@ -116,8 +115,9 @@ const appRoutes: Routes = [
     MatButtonToggleModule,
     DragDropModule,
     OverlayModule,
-    MatMenuModule
-    // AppRoutingModule
+    MatMenuModule,
+    MatSlideToggleModule,
+    MatCheckboxModule
   ],
   providers: [],
   bootstrap: [AppComponent]
