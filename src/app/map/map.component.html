@@ -32,7 +32,7 @@
               <mat-slide-toggle
               [color]="color"
               [checked]="checked"
-              [disabled]="disabled" 
+              (change)="toggle($event)"
               ngModel 
               name="publicfilter">
               Public
@@ -40,7 +40,7 @@
             </div>
             <div class="col-sm">
               
-              <mat-checkbox>Lock extent</mat-checkbox>
+              <mat-checkbox [checked]="checked" (change)="lockExtent($event)">Lock extent</mat-checkbox>
             </div>
         </div>
       </form>

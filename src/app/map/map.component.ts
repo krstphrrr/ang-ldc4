@@ -22,6 +22,8 @@ import { MoveEndService } from '../services/move-end.service'
 import * as turf from '@turf/turf'
 import {LayerService} from '../services/layer.service'
 import { MapLoadService } from '../services/mapLoad.service'
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-map',
@@ -38,7 +40,6 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   // private mymap;
   public color: ThemePalette = "accent";
   public checked = false;
-  public disabled = false;
   public mymap
   public ctlSidebar;
   public initLayers;
@@ -65,6 +66,9 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public resultOutput;
   public deactivateMap;
   public allPoints;
+  public isLocked;
+  public extentCoords;
+  public defaultExtent;
 
   constructor(
     private el:ElementRef,
@@ -87,8 +91,11 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   
 
   ////
-
+  let southwest = L.latLng([51.0156176,-69.393794])
+  let northeast = L.latLng([27.213765,-131.539653])
+  this.defaultExtent = L.latLngBounds(southwest,northeast)
   this.deactivateMap = false
+  this.extentCoords = this.defaultExtent
   let initLay = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
     maxZoom: 20,
     subdomains:['mt0','mt1','mt2','mt3']
@@ -637,6 +644,72 @@ function resizePanels() {
     // setParent(container, child_div)
     mapObject.addLayer(drawnItems)
   }
+
+  toggle(event:MatSlideToggleChange){
+    if(this.movementSubscription){
+      this.movementSubscription.unsubscribe()
+    }
+    this.mymap.eachLayer((layer)=>{
+      if(layer===this.allPoints){
+        this.mymap.removeLayer(layer)
+       }
+     })
+     this.mymap.eachLayer((layer)=>{
+      if(layer._radius===5){
+        this.mymap.removeLayer(layer)
+      }
+    })
+     
+    if(event.checked===true){
+      console.log('bring publics')
+
+      this.mymap.removeLayer(this.allPoints)
+      this.moveEnd.boundsUtil(this.extentCoords)
+      let param = {}
+      param['public'] = true
+      this.moveEnd.topos.param = param
+      this.socket.emit('fetchpublic', this.moveEnd.topos)
+      this.movementSubscription = this.socket.listen('pointssend')
+        .subscribe((data:GeoJsonObject)=>{
+          
+          this.markers.createMarkers(data)
+          this.markerLayer = this.markers.markers
+          this.markerLayer.addTo(this.mymap)
+          this.resultOutput = data['features'].length
+        })
+      
+    } else {
+      console.log('no publics')
+      
+      this.mymap.removeLayer(this.allPoints)
+      this.moveEnd.boundsUtil(this.extentCoords)
+      let param = {}
+      param['public'] = false
+      this.moveEnd.topos.param = param
+      this.socket.emit('fetchpublic', this.moveEnd.topos)
+      this.movementSubscription = this.socket.listen('pointssend')
+        .subscribe((data:GeoJsonObject)=>{
+          
+          this.markers.createMarkers(data)
+          this.markerLayer = this.markers.markers
+          this.markerLayer.addTo(this.mymap)
+          this.resultOutput = data['features'].length
+        })
+    }
+  }
+  lockExtent(event:MatCheckboxChange){
+    
+    // console.log('checkbox', event.checked)
+    if(event.checked===true){
+      
+      this.extentCoords = this.mymap.getBounds()
+      console.log('current bounds locked at: ',this.extentCoords.toBBoxString())
+    } else {
+
+      this.extentCoords = this.defaultExtent
+      console.log('extent returned to: ',this.extentCoords.toBBoxString())
+    }
+  }
   
   private initMap(initLayer:L.TileLayer=null){
     this.allPoints=L.featureGroup()
@@ -749,7 +822,7 @@ function resizePanels() {
       let bbox = this.mymap.getBounds()
       let center = this.mymap.getCenter()
       let zoomE = this.mymap.getZoom()
-      console.log(center, zoomE)
+      console.log(bbox)
     })
 
 
