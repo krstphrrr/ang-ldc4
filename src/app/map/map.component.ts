@@ -668,13 +668,18 @@ function resizePanels() {
       let param = {}
       param['public'] = true
       this.moveEnd.topos.param = param
-      this.socket.emit('fetchpublic', this.moveEnd.topos)
+      this.socket.emit('fetchpublic2', this.moveEnd.topos)
       this.movementSubscription = this.socket.listen('pointssend')
         .subscribe((data:GeoJsonObject)=>{
           
           this.markers.createMarkers(data)
           this.markerLayer = this.markers.markers
           this.markerLayer.addTo(this.mymap)
+            console.log(data)
+            /// need to extract features for table
+            /// histogram? 
+            /// can udf's in sql have unlimited number of 
+            /// arguments?
           this.resultOutput = data['features'].length
         })
       
@@ -686,13 +691,14 @@ function resizePanels() {
       let param = {}
       param['public'] = false
       this.moveEnd.topos.param = param
-      this.socket.emit('fetchpublic', this.moveEnd.topos)
+      this.socket.emit('fetchpublic2', this.moveEnd.topos)
       this.movementSubscription = this.socket.listen('pointssend')
         .subscribe((data:GeoJsonObject)=>{
           
           this.markers.createMarkers(data)
           this.markerLayer = this.markers.markers
           this.markerLayer.addTo(this.mymap)
+          console.log(data)
           this.resultOutput = data['features'].length
         })
     }
