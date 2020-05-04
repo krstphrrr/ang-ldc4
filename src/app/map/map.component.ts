@@ -822,8 +822,12 @@ function resizePanels() {
       if(layer===this.allPoints){
         this.mymap.removeLayer(layer)
        }
+       if(layer===this.rect){
+        layer.remove()
+      }
       
      })
+     
       // clear topos before drawing
       if(this.movementSubscription && !this.movementSubscription.closed){
         // this.markerLayer.clearLayers()
