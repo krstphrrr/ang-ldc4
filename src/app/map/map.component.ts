@@ -69,6 +69,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public isLocked;
   public extentCoords;
   public defaultExtent;
+  public rect;
 
   constructor(
     private el:ElementRef,
@@ -127,15 +128,24 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       }
     })
     
-  //   if(test===1) {
-  //     this.mymap.eachLayer((layer)=>{
-  //        if(layer._radius===5){
-  //         this.mymap.removeLayer(layer)
-  //     }
-  //   })
-  //   // this.mymap.addLayer(this.allPoints)
-  //   // console.log(this.allPoints)
-  // }
+//     this.moveEnd.boundsUtil(this.extentCoords)
+//     let param = {}
+//     param['public'] = true
+//     this.moveEnd.topos.param = param
+//     this.socket.emit('fetchpublic2', this.moveEnd.topos)
+//     this.movementSubscription = this.socket.listen('pointssend')
+//       .subscribe((data:GeoJsonObject)=>{
+        
+//         this.markers.createMarkers(data)
+//         this.markerLayer = this.markers.markers
+//         this.markerLayer.addTo(this.mymap)
+//           console.log(data)
+//           /// need to extract features for table
+//           /// histogram? 
+//           /// can udf's in sql have unlimited number of 
+//           /// arguments?
+//         this.resultOutput = data['features'].length
+//       })
 }
 
 
@@ -675,7 +685,28 @@ function resizePanels() {
           this.markers.createMarkers(data)
           this.markerLayer = this.markers.markers
           this.markerLayer.addTo(this.mymap)
-            console.log(data)
+          let set_proj = new Set()
+          let projects = []
+          let aim_proj = {}
+          let lmf_proj = {}
+
+            console.log(data["features"].filter(item=>item.properties.Project==='AIM').length, "DATA")
+            console.log(data["features"].filter(item=>item.properties.Project==='LMF').length, "DATA")
+            // create objects for each proj: {'aim': total} , this obj will then be used to create summary table on the fly
+            
+            // data["features"].reduce((c,{Project: key})=> (c['properties][key]||0)+1,c['properties'])
+            for(let i in data['features']){
+              let each_feature = data['features'][i].properties
+              
+              // console.log()
+              if(set_proj.has(each_feature['Project'])){
+             
+            } else {
+              set_proj.add(each_feature["Project"])
+              
+            }
+          }
+            console.log(set_proj, "SET")
             /// need to extract features for table
             /// histogram? 
             /// can udf's in sql have unlimited number of 
@@ -705,14 +736,26 @@ function resizePanels() {
   }
   lockExtent(event:MatCheckboxChange){
     
-    // console.log('checkbox', event.checked)
+    // if checkbox = checked => getbounds and store them
     if(event.checked===true){
       
       this.extentCoords = this.mymap.getBounds()
+      this.rect = L.rectangle(this.extentCoords, {
+        color: "#FF5733",
+        fillOpacity:0, 
+        weight: 5})
+      this.rect.addTo(this.mymap)
       console.log('current bounds locked at: ',this.extentCoords.toBBoxString())
+      
     } else {
 
       this.extentCoords = this.defaultExtent
+      console.log(this.rect, "RECTANGLE LAYER")
+      this.mymap.eachLayer((layer)=>{
+        if(layer===this.rect){
+          layer.remove()
+        }
+        })
       console.log('extent returned to: ',this.extentCoords.toBBoxString())
     }
   }

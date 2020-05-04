@@ -29,7 +29,7 @@ export class MarkerService {
     let m = {
           radius:5, 
           fillColor:"cyan",
-          color:"dark grey", 
+          color:"black", 
           weight:.5, 
           opacity:1, 
           fillOpacity:.8
@@ -47,7 +47,7 @@ export class MarkerService {
                 m.fillOpacity = 1;
                 break;
               case false:
-                m.fillOpacity = .3;
+                m.fillOpacity = .4;
                 break;
             }
             return L.circleMarker(latlng,m).bindTooltip(label,{opacity:0.5})
