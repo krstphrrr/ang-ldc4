@@ -3,7 +3,7 @@ import * as L from 'leaflet'
 import { Router } from '@angular/router';
 import { Plot } from '../../../models/plot.model'
 import { MarkerService } from '../../../../services/marker.service'
-import { CustomControlService } from '../../custom-control.service'
+import { CustomControlService } from '../../../../services/custom-control.service'
 
 
 @Component({
@@ -42,22 +42,22 @@ ngAfterViewChecked(){
   
 }
 ngAfterViewInit(){
-  this.layerControl(this.childMap)
+  // this.layerControl(this.childMap)
   this.drawingControl(this.childMap)
 }
 
-  layerControl(mapObject){
-    // mapobject should have a public copy of the L.Map used at the map component..
-    let impCont = this.cust.newControl()
-    impCont.addTo(mapObject)
-    let container = impCont.getContainer()
-    // console.log(container, 'from panellll')
-    let child_div = document.getElementById('layersDiv')
-    function setParent(el, newParent){
-      newParent.appendChild(el)
-    }
-    setParent(container, child_div)
-  }
+  // layerControl(mapObject){
+  //   // mapobject should have a public copy of the L.Map used at the map component..
+  //   let impCont = this.cust.newControl()
+  //   impCont.addTo(mapObject)
+  //   let container = impCont.getContainer()
+  //   // console.log(container, 'from panellll')
+  //   let child_div = document.getElementById('layersDiv')
+  //   function setParent(el, newParent){
+  //     newParent.appendChild(el)
+  //   }
+  //   setParent(container, child_div)
+  // }
   drawingControl(mapObject){
     let drawnItems = new L.FeatureGroup()
     /* drawing control + options */

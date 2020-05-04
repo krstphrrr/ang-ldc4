@@ -45,6 +45,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ProfileComponent } from './profile/profile.component';
 // import { AppRoutingModule } from './app-routing.module';
 import { AuthGuard } from './services/auth.guard';
+import { SummaryTableComponent } from './map/summary-table/summary-table.component';
 
 const appRoutes: Routes = [
   { path: '', 
@@ -88,7 +89,8 @@ const appRoutes: Routes = [
     PlotsComponent,
     PlotListComponent,
     LayersComponent,
-    ProfileComponent
+    ProfileComponent,
+    SummaryTableComponent
     
   ],
   imports: [

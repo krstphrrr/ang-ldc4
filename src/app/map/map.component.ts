@@ -18,12 +18,22 @@ import 'leaflet-draw'
 import { GeoJsonObject } from 'geojson';
 import { PanelComponent } from './controls/panel/panel/panel.component';
 import { MoveEndService } from '../services/move-end.service'
-
+import { CustomControlService } from '../services/custom-control.service'
 import * as turf from '@turf/turf'
 import {LayerService} from '../services/layer.service'
 import { MapLoadService } from '../services/mapLoad.service'
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { SummaryTableComponent } from './summary-table/summary-table.component'
+
+// interface Project {
+//   project: string;
+//   length: string;
+// }
+
+
+
+
 
 @Component({
   selector: 'app-map',
@@ -70,6 +80,10 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public extentCoords;
   public defaultExtent;
   public rect;
+  public projects = []; 
+  public aim_proj = {};
+  public lmf_proj = {};
+
 
   constructor(
     private el:ElementRef,
@@ -79,9 +93,11 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     private wms: wmsService,
     private layerServ: LayerService,
     private moveEnd: MoveEndService,
-    private mapLoad: MapLoadService
+    private mapLoad: MapLoadService,
+    private dataBus: CustomControlService
 
     ) {
+
 
      }
     
@@ -690,8 +706,28 @@ function resizePanels() {
           let aim_proj = {}
           let lmf_proj = {}
 
-            console.log(data["features"].filter(item=>item.properties.Project==='AIM').length, "DATA")
-            console.log(data["features"].filter(item=>item.properties.Project==='LMF').length, "DATA")
+            // console.log(data["features"].filter(item=>item.properties.Project==='AIM').length, "DATA")
+            
+            // console.log(data["features"].filter(item=>item.properties.Project==='LMF').length, "DATA")
+            
+            if(data["features"].filter(item=>item.properties.Project==='AIM').length!==0){
+              this.aim_proj["project"] = "AIM"
+              this.aim_proj["length"] = data["features"].filter(item=>item.properties.Project==='AIM').length
+              this.projects.push(this.aim_proj)
+              console.log(this.projects)
+            }
+            if(data["features"].filter(item=>item.properties.Project==='LMF').length!==0){
+              this.lmf_proj["project"] = "LMF"
+              this.lmf_proj["length"] = data["features"].filter(item=>item.properties.Project==='LMF').length
+              this.projects.push(this.lmf_proj)
+              console.log(this.projects)
+            }
+            this.dataBus.currentData.subscribe(dat=>{
+              // console.log(dat, 'dentro de subscribe')
+              this.projects.push(dat)
+            })
+
+            
             // create objects for each proj: {'aim': total} , this obj will then be used to create summary table on the fly
             
             // data["features"].reduce((c,{Project: key})=> (c['properties][key]||0)+1,c['properties'])

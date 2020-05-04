@@ -49,7 +49,17 @@
  
       <div id="output_container">
       <p *ngIf="resultOutput;else elseBlock">Showing {{ resultOutput }} results...</p>
+      
+      <app-summary-table *ngIf="resultOutput;">
 
+      </app-summary-table>
+      <!-- <mat-select>
+        <mat-option 
+        *ngFor="let proj of projects"
+        [value]="proj.project">
+        {{proj.length}}
+        </mat-option>
+      </mat-select> -->
       </div>
       <ng-template #elseBlock id="output_container">
         <p>No results to show..</p>
