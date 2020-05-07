@@ -2,8 +2,9 @@ import { DataSource } from '@angular/cdk/collections';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
-import { Observable, of as observableOf, merge } from 'rxjs';
+import { Observable, of as observableOf, merge, of } from 'rxjs';
 import { CustomControlService } from '../../services/custom-control.service';
+import { OnInit } from '@angular/core';
 
 // TODO: Replace this with your own data model type
 export interface SummaryTableItem {
@@ -25,9 +26,9 @@ export interface SummaryTableItem {
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
-export class SummaryTableDataSource extends DataSource<SummaryTableItem> {
-  // data: SummaryTableItem[] = EXAMPLE_DATA;
-  projects
+export class SummaryTableDataSource extends DataSource<SummaryTableItem> implements OnInit {
+  data
+  
   // paginator: MatPaginator;
   sort: MatSort;
 
@@ -35,7 +36,15 @@ export class SummaryTableDataSource extends DataSource<SummaryTableItem> {
     private dataBus:CustomControlService
   ) {
     super();
-   
+    this.data = this.dataBus.getdataSource$()
+  }
+  ngOnInit(){
+    // let observe = this.dataBus.dataSource$.subscribe(val=>{
+    //   console.log(val)
+    // })
+    
+    console.log(this.data)
+    // dataObservable.
   }
 
   /**
@@ -44,19 +53,21 @@ export class SummaryTableDataSource extends DataSource<SummaryTableItem> {
    * @returns A stream of the items to be rendered.
    */
   connect(): Observable<SummaryTableItem[]> {
-    // Combine everything that affects the rendered data into one update
-    // stream for the data-table to consume.
-    
-    this.dataBus.currentData.subscribe(dat => this.projects = dat)
+    // let source = of(this.dataBus.currentData)
+    // let subscribe = source
+    //   .subscribe(val=>{
+    //     console.log(val,"no se")
+    //     // this.data.push(val)
+      // })
     const dataMutations = [
-      observableOf(this.projects),
+      observableOf(this.data),
       // this.paginator.page,
       this.sort.sortChange
     ];
 
     return merge(...dataMutations).pipe(map(() => {
       // return this.getPagedData(this.getSortedData([...this.data]));
-      return this.getSortedData([...this.projects]);
+      return this.getSortedData([...this.data]);
 
     }));
   }

@@ -103,7 +103,10 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     
 
   ngOnInit() {
- 
+    // this.dataBus.currentData.subscribe(dat=>{
+    //   console.log(dat, 'dentro de subscribe')
+    //   this.projects.push(dat)
+    // })
 
   
 
@@ -702,30 +705,26 @@ function resizePanels() {
           this.markerLayer = this.markers.markers
           this.markerLayer.addTo(this.mymap)
           let set_proj = new Set()
-          let projects = []
-          let aim_proj = {}
-          let lmf_proj = {}
+          // let projects = []
+          // let aim_proj = {}
+          // let lmf_proj = {}
 
             // console.log(data["features"].filter(item=>item.properties.Project==='AIM').length, "DATA")
             
             // console.log(data["features"].filter(item=>item.properties.Project==='LMF').length, "DATA")
-            
+            console.log(this.projects, "antes")
             if(data["features"].filter(item=>item.properties.Project==='AIM').length!==0){
               this.aim_proj["project"] = "AIM"
               this.aim_proj["length"] = data["features"].filter(item=>item.properties.Project==='AIM').length
               this.projects.push(this.aim_proj)
-              console.log(this.projects)
+              
             }
             if(data["features"].filter(item=>item.properties.Project==='LMF').length!==0){
               this.lmf_proj["project"] = "LMF"
               this.lmf_proj["length"] = data["features"].filter(item=>item.properties.Project==='LMF').length
               this.projects.push(this.lmf_proj)
-              console.log(this.projects)
             }
-            this.dataBus.currentData.subscribe(dat=>{
-              // console.log(dat, 'dentro de subscribe')
-              this.projects.push(dat)
-            })
+            this.dataBus.changeData(this.projects)
 
             
             // create objects for each proj: {'aim': total} , this obj will then be used to create summary table on the fly
@@ -765,7 +764,19 @@ function resizePanels() {
           this.markers.createMarkers(data)
           this.markerLayer = this.markers.markers
           this.markerLayer.addTo(this.mymap)
-          console.log(data)
+          
+            if(data["features"].filter(item=>item.properties.Project==='AIM').length!==0){
+              this.aim_proj["project"] = "AIM"
+              this.aim_proj["length"] = data["features"].filter(item=>item.properties.Project==='AIM').length
+              this.projects.push(this.aim_proj)
+              
+            }
+            if(data["features"].filter(item=>item.properties.Project==='LMF').length!==0){
+              this.lmf_proj["project"] = "LMF"
+              this.lmf_proj["length"] = data["features"].filter(item=>item.properties.Project==='LMF').length
+              this.projects.push(this.lmf_proj)
+            }
+            this.dataBus.changeData(this.projects)
           this.resultOutput = data['features'].length
         })
     }
@@ -870,6 +881,8 @@ function resizePanels() {
               this.markers.createMarkers(data)
               this.markerLayer = this.markers.markers
               this.markerLayer.addTo(this.mymap)
+
+              
               this.resultOutput = data['features'].length
           })
       }
@@ -908,10 +921,10 @@ function resizePanels() {
     })
     
     this.mymap.on('movestart', event=>{
-      let bbox = this.mymap.getBounds()
-      let center = this.mymap.getCenter()
-      let zoomE = this.mymap.getZoom()
-      console.log(bbox)
+      // let bbox = this.mymap.getBounds()
+      // let center = this.mymap.getCenter()
+      // let zoomE = this.mymap.getZoom()
+      // console.log(bbox)
     })
 
 

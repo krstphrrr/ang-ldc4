@@ -15,13 +15,13 @@ export class SummaryTableComponent implements AfterViewInit, OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatTable) table: MatTable<SummaryTableItem>;
   dataSource: SummaryTableDataSource;
-  constructor(dataBus:CustomControlService){}
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['project', 'length'];
+  constructor(private dataBus:CustomControlService){}
 
   ngOnInit() {
-    this.dataSource = new SummaryTableDataSource(this.dataSource.projects);
+    this.dataSource = new SummaryTableDataSource(this.dataBus);
   }
 
   ngAfterViewInit() {

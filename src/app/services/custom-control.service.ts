@@ -1,19 +1,26 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
+
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class CustomControlService {
-  private dataSource = new BehaviorSubject('');
-  currentData = this.dataSource.asObservable()
+  initialState = [{project:"none",length:'0'}]
+
+   dataSource$:Observable<any[]>
+
   constructor(
  
   ) { }
-  
+  getdataSource$(){
+    return this.dataSource$;
+  }
 
   changeData(data){
-    this.dataSource.next(data)
-  }
+    // console.log(data, 'data')
+    this.dataSource$ = data
+
+    }
 }
