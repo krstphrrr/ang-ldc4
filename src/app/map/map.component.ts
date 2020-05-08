@@ -730,18 +730,18 @@ function resizePanels() {
             // create objects for each proj: {'aim': total} , this obj will then be used to create summary table on the fly
             
             // data["features"].reduce((c,{Project: key})=> (c['properties][key]||0)+1,c['properties'])
-            for(let i in data['features']){
-              let each_feature = data['features'][i].properties
+          //   for(let i in data['features']){
+          //     let each_feature = data['features'][i].properties
               
-              // console.log()
-              if(set_proj.has(each_feature['Project'])){
+          //     // console.log()
+          //     if(set_proj.has(each_feature['Project'])){
              
-            } else {
-              set_proj.add(each_feature["Project"])
+          //   } else {
+          //     set_proj.add(each_feature["Project"])
               
-            }
-          }
-            console.log(set_proj, "SET")
+          //   }
+          // }
+          //   console.log(set_proj, "SET")
             /// need to extract features for table
             /// histogram? 
             /// can udf's in sql have unlimited number of 
@@ -873,17 +873,24 @@ function resizePanels() {
           this.socket.emit('drawing', this.moveEnd.coords)
           this.movementSubscription = this.socket.listen('pointssend')
             .subscribe((data:GeoJsonObject)=>{
-              this.resultOutput = ''
-              //marker service goes here, which:
-              // a. creates a layer full of markers from geojson
-              // b. stores layer in the markers property within the service
-              
               this.markers.createMarkers(data)
-              this.markerLayer = this.markers.markers
-              this.markerLayer.addTo(this.mymap)
-
+          this.markerLayer = this.markers.markers
+          this.markerLayer.addTo(this.mymap)
+          
+            if(data["features"].filter(item=>item.properties.Project==='AIM').length!==0){
+              this.aim_proj["project"] = "AIM"
+              this.aim_proj["length"] = data["features"].filter(item=>item.properties.Project==='AIM').length
+              this.projects.push(this.aim_proj)
               
-              this.resultOutput = data['features'].length
+            }
+            if(data["features"].filter(item=>item.properties.Project==='LMF').length!==0){
+              this.lmf_proj["project"] = "LMF"
+              this.lmf_proj["length"] = data["features"].filter(item=>item.properties.Project==='LMF').length
+              this.projects.push(this.lmf_proj)
+            }
+            this.dataBus.changeData(this.projects)
+          this.resultOutput = data['features'].length
+              
           })
       }
       } else {
@@ -904,16 +911,23 @@ function resizePanels() {
           this.socket.emit('drawing', this.moveEnd.coords)
           this.movementSubscription = this.socket.listen('pointssend')
             .subscribe((data:GeoJsonObject)=>{
-              this.resultOutput = ''
-              //marker service goes here, which:
-              // a. creates a layer full of markers from geojson
-              // b. stores layer in the markers property within the service
               this.markers.createMarkers(data)
-              this.markerLayer = this.markers.markers
-              this.markerLayer.addTo(this.mymap)
-              this.resultOutput = data['features'].length
+          this.markerLayer = this.markers.markers
+          this.markerLayer.addTo(this.mymap)
+          
+            if(data["features"].filter(item=>item.properties.Project==='AIM').length!==0){
+              this.aim_proj["project"] = "AIM"
+              this.aim_proj["length"] = data["features"].filter(item=>item.properties.Project==='AIM').length
+              this.projects.push(this.aim_proj)
               
-              // console.log(data['features'].length)
+            }
+            if(data["features"].filter(item=>item.properties.Project==='LMF').length!==0){
+              this.lmf_proj["project"] = "LMF"
+              this.lmf_proj["length"] = data["features"].filter(item=>item.properties.Project==='LMF').length
+              this.projects.push(this.lmf_proj)
+            }
+            this.dataBus.changeData(this.projects)
+          this.resultOutput = data['features'].length
           })
       }
     }
