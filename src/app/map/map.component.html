@@ -49,12 +49,12 @@
  
       <div id="output_container">
         <div class="row">
-          <div class='col-sm' style="padding-top:45px">
-            <p style="padding:0px" *ngIf="resultOutput;else elseBlock">Showing {{ resultOutput }} results...</p>
+          <div class='col-sm' >
+            <p style="padding-top:15px" *ngIf="resultOutput;else elseBlock">Showing {{ resultOutput }} results...</p>
           </div>
-          <div class='col-sm' style="padding:15px">
-            <button  *ngIf="resultOutput" mat-icon-button color="warn" aria-label="Example icon button with a heart icon" (click)="popupTable()">
-              <mat-icon style="padding:0 0 0 0">favorite</mat-icon>
+          <div class='col-sm' >
+            <button  *ngIf="resultOutput"  mat-stroked-button color="primary" (click)="popupTable()">
+              popup
             </button>
           </div>
         </div>
