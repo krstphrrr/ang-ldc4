@@ -83,6 +83,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public projects = []; 
   public aim_proj = {};
   public lmf_proj = {};
+  public dragger = false;
 
 
   constructor(
@@ -176,6 +177,9 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
      this.mymap.on('load', this.onMapLoad_TEST())
      this.mymap.on('draw:deleted',()=>{
+      this.projects = []
+      this.dataBus.changeData(this.projects)
+      
       this.mymap.eachLayer((layer)=>{
         if(layer._radius===5){
          this.mymap.removeLayer(layer)
@@ -690,6 +694,8 @@ function resizePanels() {
     })
      
     if(event.checked===true){
+      this.projects = []
+      this.dataBus.changeData(this.projects)
       console.log('bring publics')
 
       this.mymap.removeLayer(this.allPoints)
@@ -750,6 +756,8 @@ function resizePanels() {
         })
       
     } else {
+      this.projects = []
+      this.dataBus.changeData(this.projects)
       console.log('no publics')
       
       this.mymap.removeLayer(this.allPoints)
@@ -816,7 +824,8 @@ function resizePanels() {
       worldCopyJump: true,
       center:[41.14269416, -108.721814],
       zoom: 5.7,
-      zoomSnap:.3,
+      zoomDelta:10,
+      zoomSnap:0,
       minZoom:5,
       zoomControl:false,
       preferCanvas:true,
@@ -828,7 +837,9 @@ function resizePanels() {
     // this map.on(event, SERVICE.METHOD(EVENT))
     
     this.mymap.on('draw:created',(e)=>{
-      
+      this.projects = []
+      this.dataBus.changeData(this.projects)
+
       this.mymap.eachLayer((layer)=>{
       if(layer===this.allPoints){
         this.mymap.removeLayer(layer)
@@ -867,6 +878,7 @@ function resizePanels() {
       console.log(this.drawnItems)
       let drawingbb = this.drawnItems.toGeoJSON().features[0].geometry.coordinates[0]
       this.moveEnd.coordsArray(drawingbb)
+
       if(this.moveEnd.coords!==''){
         let param = {}
           console.log(this.moveEnd.coords, 'vacio')
@@ -890,6 +902,7 @@ function resizePanels() {
             }
             this.dataBus.changeData(this.projects)
           this.resultOutput = data['features'].length
+          
               
           })
       }
@@ -966,6 +979,15 @@ function resizePanels() {
     }
     
 
+  }
+
+  popupTable(){
+    if(this.dragger==false){
+      this.dragger = true
+    } else {
+      this.dragger= false
+    }
+    console.log('funciona')
   }
 
 }

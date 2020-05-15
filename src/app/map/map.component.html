@@ -48,8 +48,19 @@
 
  
       <div id="output_container">
-      <p *ngIf="resultOutput;else elseBlock">Showing {{ resultOutput }} results...</p>
+        <div class="row">
+          <div class='col-sm' style="padding-top:45px">
+            <p style="padding:0px" *ngIf="resultOutput;else elseBlock">Showing {{ resultOutput }} results...</p>
+          </div>
+          <div class='col-sm' style="padding:15px">
+            <button  *ngIf="resultOutput" mat-icon-button color="warn" aria-label="Example icon button with a heart icon" (click)="popupTable()">
+              <mat-icon style="padding:0 0 0 0">favorite</mat-icon>
+            </button>
+          </div>
+        </div>
       
+      
+
       <app-summary-table *ngIf="resultOutput;">
 
       </app-summary-table>
@@ -76,6 +87,13 @@
 </div>
 <div id="container" #container >
   <div id="map">
+<app-dragpop 
+*ngIf="dragger" 
+class="example-box" 
+cdkDrag style="position: absolute; top:0;left:50%;z-index: 3000;"
+cdkDragBoundary="#container">
+
+</app-dragpop>
 </div>
 
 

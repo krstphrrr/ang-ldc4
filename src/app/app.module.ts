@@ -46,6 +46,7 @@ import { ProfileComponent } from './profile/profile.component';
 // import { AppRoutingModule } from './app-routing.module';
 import { AuthGuard } from './services/auth.guard';
 import { SummaryTableComponent } from './map/summary-table/summary-table.component';
+import { DragpopComponent } from './map/dragpop/dragpop.component';
 
 const appRoutes: Routes = [
   { path: '', 
@@ -90,7 +91,8 @@ const appRoutes: Routes = [
     PlotListComponent,
     LayersComponent,
     ProfileComponent,
-    SummaryTableComponent
+    SummaryTableComponent,
+    DragpopComponent
     
   ],
   imports: [
