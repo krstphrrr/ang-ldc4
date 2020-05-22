@@ -54,3 +54,16 @@ src/assets/exports/ldc-logo-com-01.png
 src/assets/exports/ldc-logo-uhm-01-01.png
 src/assets/exports/ldc-logo-uhm-01.png
 src/assets/exports/1x/Artboard 1.png
+apache2nginx/apache/apache2.conf
+apache2nginx/apache/envvars
+apache2nginx/apache/magic
+apache2nginx/apache/ports.conf
+apache2nginx/apache/conf-available/jornada-ldc2.cnf
+apache2nginx/apache/conf-available/security.conf
+apache2nginx/apache/sites-available/000-default-le-ssl.conf
+apache2nginx/apache/sites-available/000-default.conf
+apache2nginx/apache/sites-available/default-le-ssl.conf
+apache2nginx/apache/sites-available/landscapedatacommons.conf
+apache2nginx/apache/sites-available/new.com.conf
+apache2nginx/apache/temp/default-ssl.conf
+apache2nginx/apache/temp/landscapedatacommons.conf
