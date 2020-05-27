@@ -18,6 +18,9 @@ RUN ng build --prod
 # IMAGE 2: setting up the webserver
 FROM nginx
 
+VOLUME /etc/apache2/ssl.crt:/etc/apache2/ssl.crt
+VOLUME /etc/apache2/ssl.priv:/etc/apache2/ssl.priv
+
 COPY --from=compile-image /opt/ng/dist/ang-ldc4 /usr/share/nginx/html
 
 EXPOSE 80
