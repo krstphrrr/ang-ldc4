@@ -7,10 +7,10 @@ COPY . ./
 
 
 
-# RUN npm install
-# RUN npm install -g @angular/cli
+RUN npm install
+RUN npm install -g @angular/cli
 # # building angular
-# RUN ng build --prod
+RUN ng build --prod
 # commands:
 # docker image build -t nang .
 # docker container run -it --rm -p 4201:4200 nang
@@ -27,7 +27,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 
 # COPY --from=compile-image /opt/ng/dist/ang-ldc4 /usr/share/nginx/html
 
-EXPOSE 81
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 # running standalone container on windows: docker container run --rm -d -v %cd%/apache2nginx/apache:/etc/apache2 --name tst -p 4200:80 ng_test
 # running standalone container on linux: docker container run --rm -d -v etc/apache2:/etc/apache2 --name tst -p 4200:80 ng_test
