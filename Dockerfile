@@ -25,7 +25,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 # VOLUME ./apache2nginx/apache:/etc/apache2
 # VOLUME /etc/apache2/ssl.priv:/etc/apache2/ssl.priv
 
-# COPY --from=compile-image /opt/ng/dist/ang-ldc4 /usr/share/nginx/html
+COPY --from=compile-image /opt/ng/dist/ang-ldc4 /usr/share/nginx/html
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
