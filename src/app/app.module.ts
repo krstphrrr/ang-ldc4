@@ -47,6 +47,9 @@ import { ProfileComponent } from './profile/profile.component';
 import { AuthGuard } from './services/auth.guard';
 import { SummaryTableComponent } from './map/summary-table/summary-table.component';
 import { DragpopComponent } from './map/dragpop/dragpop.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { InterceptorService } from './services/interceptor.service';
+import { AltwoodyComponent } from './altwoody/altwoody.component';
 
 const appRoutes: Routes = [
   { path: '', 
@@ -92,7 +95,8 @@ const appRoutes: Routes = [
     LayersComponent,
     ProfileComponent,
     SummaryTableComponent,
-    DragpopComponent
+    DragpopComponent,
+    AltwoodyComponent
     
   ],
   imports: [
@@ -123,7 +127,13 @@ const appRoutes: Routes = [
     MatSlideToggleModule,
     MatCheckboxModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptorService,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

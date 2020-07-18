@@ -16,12 +16,20 @@ export class AuthService {
       // client_id: "fqdHRFJVJ1XxA4OQRBj4lCGfQ5mTv5Oi", # jacob's auth0
       domain: "dev-mg6fdv6o.auth0.com",
       client_id: "tWyDLZ1uzLeQDGjch7sHvi4ryt2IGQQz",
-      redirect_uri: `${window.location.origin}`
+      redirect_uri: `${window.location.origin}`,
+      // redirect_uri: `http://localhost:5010`,
+      audience: "localhost:5010"
     })
   ) as Observable<Auth0Client>).pipe(
     shareReplay(1), // Every subscription receives the same shared value
     catchError(err => throwError(err))
   );
+  // observable to retrieve the access token and make it available for use
+  getTokenSilently$(options?): Observable<string>{
+    return this.auth0Client$.pipe(
+      concatMap((client:Auth0Client) => from(client.getTokenSilently(options)))
+    )
+  }
   // Define observables for SDK methods that return promises by default
   // For each Auth0 SDK method, first ensure the client instance is ready
   // concatMap: Using the client instance, call SDK method; SDK returns a promise
