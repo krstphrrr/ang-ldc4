@@ -133,7 +133,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   onMapLoad_TEST(){
     this.allPoints = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms?tiled=true', {
-      layers: 'ldc3:geoIndicators',
+      layers: 'ldc3:dataHeader',
       format: 'image/png',
       transparent: true,
       // tiled: true,
