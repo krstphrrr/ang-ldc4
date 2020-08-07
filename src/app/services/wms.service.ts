@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import * as L from 'leaflet'
-import {Observable, of} from 'rxjs'
+import {Observable, of, Subject} from 'rxjs'
 
 @Injectable({
   providedIn: 'root'
 })
 export class wmsService {
+  private subject = new Subject();
   
     public googleHybrid = L.tileLayer('https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
       maxZoom: 20,
@@ -121,7 +122,15 @@ export class wmsService {
   constructor() { }
   public lays = {'hy':this.googleHybrid,'sat':this.googleSatellite, 'st':this.googleStreet, 'terr':this.googleTerrain}
   getLayers(whichkey=null):Observable<any>{
-        return of(this.lays[whichkey])
+    return of(this.lays[whichkey])
+  }
+
+  sendBaselayer(content:string){
+    this.subject.next({data:content})
+  }
+
+  getBaselayer():Observable<any>{
+    return this.subject.asObservable()
   }
 
 }

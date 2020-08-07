@@ -50,6 +50,7 @@ import { DragpopComponent } from './map/dragpop/dragpop.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './services/interceptor.service';
 import { AltwoodyComponent } from './altwoody/altwoody.component';
+import { BaselayersComponent } from './map/baselayers/baselayers.component';
 
 const appRoutes: Routes = [
   { path: '', 
@@ -96,7 +97,8 @@ const appRoutes: Routes = [
     ProfileComponent,
     SummaryTableComponent,
     DragpopComponent,
-    AltwoodyComponent
+    AltwoodyComponent,
+    BaselayersComponent
     
   ],
   imports: [

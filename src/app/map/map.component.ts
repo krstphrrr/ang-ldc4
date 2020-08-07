@@ -8,7 +8,7 @@ import 'leaflet-sidebar-v2'
 import { MarkerService } from '../services/marker.service'
 // import * as $ from 'jquery';
 declare var $: any;
-import { Subject } from 'rxjs';
+import { Subscription } from 'rxjs'
 import { debounceTime, scan } from 'rxjs/operators';
 import * as d3 from 'd3'
 import { socketDataService } from '../services/socketTest.service'
@@ -72,9 +72,11 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public terr;
   public hy;
   public st;
+  public layerList;
+  public initLay;
   public layerCheck;
   public resultOutput;
-  public deactivateMap;
+
   public allPoints;
   public isLocked;
   public extentCoords;
@@ -84,7 +86,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public aim_proj = {};
   public lmf_proj = {};
   public dragger = false;
-
+  subscription:Subscription;
 
   constructor(
     private el:ElementRef,
@@ -98,40 +100,60 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     private dataBus: CustomControlService
 
     ) {
-
+      this.subscription = this.wms.getBaselayer().subscribe(dropdownOption=>{
+        this.applyBaselayer(dropdownOption.data.value)
+      })
 
      }
     
 
   ngOnInit() {
-    // this.dataBus.currentData.subscribe(dat=>{
-    //   console.log(dat, 'dentro de subscribe')
-    //   this.projects.push(dat)
-    // })
-
-  
-
-  ////
-  let southwest = L.latLng([51.0156176,-69.393794])
-  let northeast = L.latLng([27.213765,-131.539653])
-  this.defaultExtent = L.latLngBounds(southwest,northeast)
-  this.deactivateMap = false
-  this.extentCoords = this.defaultExtent
-  let initLay = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
-    maxZoom: 20,
-    subdomains:['mt0','mt1','mt2','mt3']
-   }); 
-   this.getLayers2('sat')
-   this.getLayers2('st')
-   this.getLayers2('terr')
-   this.getLayers2('hy')
-   this.layerCheck = this.layerServ.layer
-   this.initMap(initLay)
-   
+    /* at initializing page:
+    1. set bounding box for map
+    2. set default extent
+    3. set initial google map tile
+    4. get tiles from geoserver (async so pulling them early)
+    5. initialize map
+    */
+    let southwest = L.latLng([51.0156176,-69.393794])
+    let northeast = L.latLng([27.213765,-131.539653])
+    this.defaultExtent = L.latLngBounds(southwest,northeast)
+    
+    this.extentCoords = this.defaultExtent
+    this.initLay = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+      maxZoom: 20,
+      subdomains:['mt0','mt1','mt2','mt3']
+    }); 
+    this.getLayers2('sat')
+    this.getLayers2('st')
+    this.getLayers2('terr')
+    this.getLayers2('hy')
+    this.layerList = {
+      'hy':this.hy,
+      'terr':this.terr,
+      'st':this.st,
+      'sat':this.sat,
+      'ini':this.initLay,
+      [Symbol.iterator]:function*(){
+        let properties = Object.keys(this);
+        for (let i of properties){
+          yield [i, this[i]];
+        }
+      }
+    }
+    this.layerCheck = this.layerServ.layer
+    this.initMap(this.initLay)
+    
 
   }
 
   onMapLoad_TEST(){
+    /*
+    this method
+    1. gets the static tile served by geoserver showing all the points currently on the dataHeader table
+    2. adds it as a layer on the main leaflet map
+    3. brings it to the forefront
+     */
     this.allPoints = L.tileLayer.wms('https://landscapedatacommons.org/geoserver/wms?tiled=true', {
       layers: 'ldc3:dataHeader',
       format: 'image/png',
@@ -166,17 +188,54 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 //           /// arguments?
 //         this.resultOutput = data['features'].length
 //       })
-}
+  }
+  applyBaselayer(choice){
+    /* once the a choice has been made on the baselayer dropdown 
+    subscription, it is detected and this method fires.
+    it takes in a dropdown choice and in turn 
+    fires another method that removes all other layers while adding
+    the chosen one. 
+     */
+    switch(choice){
+      case 'Google Hybrid':
+        this.removeOtherBaselayers('hy')
+        break;
+      case 'Google Terrain':
+        this.removeOtherBaselayers('terr')
+        break;
+      case 'Google Street':
+        this.removeOtherBaselayers('st')
+        break;
+      case 'Google Satellite':
+        this.removeOtherBaselayers('sat')
+        break;
+    }
+  }
+  removeOtherBaselayers(selectedBase){
+    // removes all layers except chosen one
+    for(let option of this.layerList){
+      if(option[0]!==selectedBase){
+        this.mymap.removeLayer(option[1])
+      }
+    }
+    this.mymap.addLayer(this.layerList[selectedBase])
+  }
 
 
 
   ngAfterViewInit():void{
 
-    //// get feature info for WMS layers test
-    // this.mymap.on()
+    /* after the view initializes:
+    1. on leaflet map load, add geoserver tile with dataheader points (static)
+    2. clears project data for sidebar table ('projects')
+    3. clears points currently displayed by finding any point on the layer with a radius of 5 and removing it. 
+    4. re-adds all the points from the layer
+    5. adds sidebar
+    */
 
      this.mymap.on('load', this.onMapLoad_TEST())
      this.mymap.on('draw:deleted',()=>{
+       console.log(this.projects)
       this.projects = []
       this.dataBus.changeData(this.projects)
       
@@ -198,8 +257,13 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       position:'left'
     })
      .addTo(this.mymap)
-    this.drawingControl(this.mymap)
 
+     //
+     /*
+     1. adds drawing controls.
+     2. sets dropdown options
+     */
+    this.drawingControl(this.mymap)
     let states = this.wms.states
     let counties = this.wms.counties
     let surf = this.wms.surf
@@ -230,6 +294,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     layerNames.overlays.keys = d3.keys(overlays);
     layerNames.overlays.values = d3.values(overlays);
 
+    //soon to be deprecated: d3 dom manipulation
     d3.select("#pane_container")
         .insert("div", ":first-child")
         .attr("id", "mapTools")
@@ -253,60 +318,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
                 });;
    
 
-    d3.select("#baselayerSelect")
-      .append("div")
-      .attr("id", "baselayerListDropdown")
-      .attr("class", "layerListDropdown")
-      .on("mouseleave", function() { 
-        d3.select(this)
-          .style("display", "none") 
-        });
-    
-    // console.log(layerNames.baseLayers.keys,layerNames.baseLayers.values, "es mappy")
-    let layerCheck = this.layerCheck
-    if(this.layerCheck && this.layerCheck===true){
-      console.log('layercheck:true')
-      mappy.addLayer(this.hy)
-      this.layerCheck = false
-    }
-    
-    d3.select("#baselayerListDropdown").selectAll("div")
-    .data(layerNames.baseLayers.keys)
-    .enter()
-      .append("div")
-      .attr("class", "layerName")
-      .text((d:any)=> { return d; })
-      .property("value", (d,i)=>{ return i; })
-      .property("title", function(d) { return d; })
-      .on("click", function() { changeBaselayer(this); })
-      .append("span")
-      .attr("class", "fas fa-check fa-pull-right activeOverlay")
-      .style("visibility", function(d,i) { if(i == 1) {return "visible";} else {return "hidden";} });
-      if(this.layerCheck!==true){
-        console.log('layercheck:false')
-        mappy.addLayer(this.hy)
-      }
       
-      function changeBaselayer(tmpDiv) {
-        //***Remove old layer
-        
-        let layerDivs:any = d3.select("#baselayerListDropdown").selectAll("div");
-        // mappy.addLayer(hylayer)
-        layerDivs.nodes().forEach(function(tmpLayer) {
-          // layerVar = false
-          
-          if(d3.select(tmpLayer).select("span").style("visibility") == "visible") {
-            d3.select(tmpLayer).select("span").style("visibility", "hidden");
-            mappy.removeLayer(layerNames.baseLayers.values[d3.select(tmpLayer).property("value")]);
-          }
-        });
     
-        //***Add new layer
-        d3.select(tmpDiv).select("span").style("visibility", "visible");
-        mappy.addLayer(layerNames.baseLayers.values[tmpDiv.value]);
-        layerNames.baseLayers.values[tmpDiv.value].bringToFront();
-        allPoints.bringToFront()       
-      }
       ///////////////////////////////
     d3.select("leaflet-sidebar-content")
     .insert("div", ": first-child")
