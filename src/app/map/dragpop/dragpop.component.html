@@ -1,1 +1,32 @@
-<h3>dragpop works!</h3>
+<mat-accordion>
+  <mat-card>
+    <mat-grid-list cols="2" rowHeight="40px"> 
+      <mat-grid-tile>
+        <mat-card-title class="left-aligned-foced">
+          Legend
+        </mat-card-title>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-icon
+         (click)="closePopup()"
+         class="right-aligned-forced">
+         clear
+        </mat-icon>
+      </mat-grid-tile>
+    </mat-grid-list>
+    
+    <mat-expansion-panel hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{message}}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{message}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <p>{{message}}</p>
+    </mat-expansion-panel>
+
+  </mat-card>
+  
+</mat-accordion>

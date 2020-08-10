@@ -1,0 +1,4 @@
+mat-select, mat-option{
+  user-select: none;
+}
+

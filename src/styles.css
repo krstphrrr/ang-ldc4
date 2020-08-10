@@ -15,6 +15,20 @@
   border-color: black!important;
   background-color: #dddddd
 }
+.mat-form-field{
+  max-width: 165px;
+}
+.mat-form-field-infield{
+  max-width: 165px;
+}
+/* mat-icon {
+  vertical-align: middle;
+} */
+.mat-grid-tile .mat-figure {
+  justify-content: flex-start !important ;
+  align-items: flex-start !important;
+}
+
 
 body { 
   height: 100%; 
@@ -86,7 +100,7 @@ body {
 
 .layerList {
   display: inline-block;
-  float: left;
+  /* float: left; */
   margin: 2px 5px;
   padding: 3px 1px;
 }

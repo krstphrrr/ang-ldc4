@@ -22,6 +22,7 @@
       <div class="row">
       <div id="pane_container" #pane_container>
         <app-baselayers></app-baselayers>
+        <app-overlays></app-overlays>
       </div>
       <br>
     </div>
@@ -88,6 +89,7 @@
 <div id="container" #container >
   <div id="map">
     <app-dragpop 
+      [message] = 'message'
       *ngIf="dragger" 
       class="example-box" 
       cdkDrag style="position: absolute; top:0;left:50%;z-index: 3000;"

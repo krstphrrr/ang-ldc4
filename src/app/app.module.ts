@@ -51,6 +51,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './services/interceptor.service';
 import { AltwoodyComponent } from './altwoody/altwoody.component';
 import { BaselayersComponent } from './map/baselayers/baselayers.component';
+import { OverlaysComponent } from './map/overlays/overlays.component';
 
 const appRoutes: Routes = [
   { path: '', 
@@ -98,7 +99,8 @@ const appRoutes: Routes = [
     SummaryTableComponent,
     DragpopComponent,
     AltwoodyComponent,
-    BaselayersComponent
+    BaselayersComponent,
+    OverlaysComponent
     
   ],
   imports: [

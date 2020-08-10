@@ -1,0 +1,18 @@
+.left-aligned-forced{
+  width: 100%;
+}
+.right-aligned-forced{
+  width: 100%;
+  text-align: right;
+  cursor: pointer;
+}
+
+mat-icon{
+  vertical-align: top;
+
+}
+
+mat-grid-tile, mat-figure {
+  justify-content: flex-start !important ;
+  align-items: flex-start !important;
+}

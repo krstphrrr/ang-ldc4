@@ -6,7 +6,9 @@ import {Observable, of, Subject} from 'rxjs'
   providedIn: 'root'
 })
 export class wmsService {
-  private subject = new Subject();
+    private baselayerTracker = new Subject();
+    private overlayTracker = new Subject();
+    dragtracker = new Subject()
   
     public googleHybrid = L.tileLayer('https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
       maxZoom: 20,
@@ -125,12 +127,33 @@ export class wmsService {
     return of(this.lays[whichkey])
   }
 
+  // change detection on the baselayer dropdown
+
   sendBaselayer(content:string){
-    this.subject.next({data:content})
+    this.baselayerTracker.next({data:content})
   }
 
   getBaselayer():Observable<any>{
-    return this.subject.asObservable()
+    return this.baselayerTracker.asObservable()
+  }
+
+  // change detection on the overlay dropdown
+  sendOverlaylayer(content:string){
+    this.overlayTracker.next({overlay:content})
+  }
+
+  getOverlaylayer():Observable<any>{
+    return this.overlayTracker.asObservable()
+  }
+
+  //change detection on the close button (from the draggable component >>> map )
+
+  sendCloseSignal(){
+    this.dragtracker.next({close:true})
+  }
+
+  getCloseSignal(){
+    return this.dragtracker.asObservable()
   }
 
 }

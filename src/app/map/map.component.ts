@@ -32,7 +32,9 @@ import { SummaryTableComponent } from './summary-table/summary-table.component'
 // }
 
 
-
+interface CloseSignal{
+  close:boolean
+}
 
 
 @Component({
@@ -86,7 +88,10 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public aim_proj = {};
   public lmf_proj = {};
   public dragger = false;
-  subscription:Subscription;
+  public baselayerSubscription:Subscription;
+  public overlaySubscription:Subscription;
+  message:string
+  public dragTracker:Subscription;
 
   constructor(
     private el:ElementRef,
@@ -100,11 +105,28 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     private dataBus: CustomControlService
 
     ) {
-      this.subscription = this.wms.getBaselayer().subscribe(dropdownOption=>{
+      this.baselayerSubscription = this.wms.getBaselayer().subscribe(dropdownOption=>{
         this.applyBaselayer(dropdownOption.data.value)
+      })
+      this.overlaySubscription = this.wms.getOverlaylayer().subscribe(dropdownOption=>{
+        /* when subscription receives change, 
+        1. enable draggable popup (this.dragger = true)
+        2. 
+         */
+        if(this.dragger==false){
+          this.message = dropdownOption.overlay.value
+          this.dragger=true
+        }
+        // console.log(`from dropdown to map. you chose: ${dropdownOption.overlay.value}`)
       })
 
      }
+
+  draggerClose(){
+    if(this.dragger==true){
+      this.dragger=false
+    }
+  }
     
 
   ngOnInit() {
@@ -143,6 +165,13 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     }
     this.layerCheck = this.layerServ.layer
     this.initMap(this.initLay)
+
+    this.dragTracker = this.wms.getCloseSignal().subscribe((closeSignal:CloseSignal)=>{
+      if(closeSignal.close===true){
+        this.dragger = false
+      }
+      console.log(closeSignal)
+    })
     
 
   }
