@@ -1,18 +1,24 @@
-.left-aligned-forced{
-  width: 100%;
+
+.flex-container{
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
 }
-.right-aligned-forced{
-  width: 100%;
+.flex-container>div{
+  width:100%
+}
+.left-div{
+  text-align: left;
+}
+.right-div{
   text-align: right;
-  cursor: pointer;
 }
 
-mat-icon{
-  vertical-align: top;
 
-}
-
-mat-grid-tile, mat-figure {
-  justify-content: flex-start !important ;
-  align-items: flex-start !important;
+.mat-icon.mat-icon-inline {
+  font-size: 24px !important;
+  height: 100%;
+  line-height: inherit;
+  width: 100%;
+  vertical-align: center;
 }

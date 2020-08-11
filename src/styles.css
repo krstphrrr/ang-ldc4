@@ -21,15 +21,11 @@
 .mat-form-field-infield{
   max-width: 165px;
 }
-/* mat-icon {
-  vertical-align: middle;
-} */
-.mat-grid-tile .mat-figure {
-  justify-content: flex-start !important ;
-  align-items: flex-start !important;
+
+
+.iconHover{
+  cursor: pointer;
 }
-
-
 body { 
   height: 100%; 
   width: 100%;

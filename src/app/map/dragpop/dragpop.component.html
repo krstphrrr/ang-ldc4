@@ -1,20 +1,19 @@
 <mat-accordion>
   <mat-card>
-    <mat-grid-list cols="2" rowHeight="40px"> 
-      <mat-grid-tile>
-        <mat-card-title class="left-aligned-foced">
+    <div class="flex-container">
+      <div class="left-div">
+        <mat-card-title class="flex-item">
           Legend
-        </mat-card-title>
-      </mat-grid-tile>
-      <mat-grid-tile>
+        </mat-card-title></div>
+          <div class="right-div">
         <mat-icon
-         (click)="closePopup()"
-         class="right-aligned-forced">
-         clear
-        </mat-icon>
-      </mat-grid-tile>
-    </mat-grid-list>
-    
+           (click)="closePopup()"
+           class="iconHover">
+           clear
+          </mat-icon>
+        </div>
+  
+    </div>
     <mat-expansion-panel hideToggle>
       <mat-expansion-panel-header>
         <mat-panel-title>
