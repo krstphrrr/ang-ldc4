@@ -7,7 +7,7 @@ import { wmsService } from '../../services/wms.service'
   styleUrls: ['./overlays.component.css']
 })
 export class OverlaysComponent implements OnInit {
-  selectedValue = ''
+  
   layers = [
     'US States',
     'US Counties',

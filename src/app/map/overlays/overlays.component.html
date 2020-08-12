@@ -2,14 +2,13 @@
   <mat-label>Available Overlays</mat-label>
   <mat-select
   placeholder="select"
-  [(ngModel)]="selectedValue"
+  
   name="itemSelect" 
   (selectionChange)="sendOverlay($event)"
   disableRipple
   multiple>
     <mat-option 
-    *ngFor="let layer of layers" 
-    [ngClass]="{'checkmark':layer==selectedValue}"
+    *ngFor="let layer of layers"
     [value]="layer">
       {{layer}}
     </mat-option>
