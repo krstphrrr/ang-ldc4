@@ -14,17 +14,106 @@
         </div>
   
     </div>
-    <mat-expansion-panel hideToggle>
-      <mat-expansion-panel-header>
+    <!-- caret arrows: https://stackoverflow.com/a/47033495 -->
+    <div
+      cdkDropList
+      [cdkDropListData]="overlayArray"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+    <mat-expansion-panel 
+    *ngFor="let overlay of overlayArray"
+    [expanded]="overlay.open"
+    cdkDrag
+    cdkDragLockAxis="y">
+      <mat-expansion-panel-header> 
         <mat-panel-title>
-          {{message}}
+          {{overlay.name}}
         </mat-panel-title>
         <mat-panel-description>
-          {{message}}
+          <!-- <mat-icon>{{caretIcon  ? 'keyboard_arrow_up':'keyboard_arrow_down'}}</mat-icon> -->
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <p>{{message}}</p>
+<!-- US STATES -->
+      <div *ngIf="overlay.name==='US States'">
+        <mat-card class="inner-card">
+          <!-- justified image -->
+          <img class="card-image" mat-card-image src="https://landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:tl_2017_us_state_wgs84" alt="US States">
+        </mat-card>
+        <div cdkDragHandle>
+          <mat-slider>
+          </mat-slider>
+        </div>
+      </div>
+<!-- US COUNTIES -->
+      <div *ngIf="overlay.name==='US Counties'">
+        <mat-card class="inner-card">
+          <!-- justified image -->
+          <img class="card-image" mat-card-image src="https://landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:tl_2017_us_county_wgs84" alt="US Counties">
+        </mat-card>
+        <div cdkDragHandle>
+          <mat-slider>
+          </mat-slider>
+        </div>
+      </div>
+<!-- MANAGEMENT AGENCIES -->
+      <div *ngIf="overlay.name==='Management Agency'">
+        <mat-card class="management-card">
+          <!-- justified image -->
+          
+          <img class="management-image" mat-card-image src="https://landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:surface_mgt_agency_wgs84" alt="Management Agency">
+        
+        </mat-card>
+        <div cdkDragHandle>
+          <mat-slider>
+          </mat-slider>
+        </div>
+      </div>
+
+      <div *ngIf="overlay.name==='LRR/MLRA'">
+        <mat-card class="lrr-card">
+          <!-- justified image -->
+          <img class="lrr-image" mat-card-image src="https://landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:mlra_v42_wgs84" alt="LRR/MLRA">
+        </mat-card>
+        <div cdkDragHandle>
+          <mat-slider>
+          </mat-slider>
+        </div>
+      </div>
+      
+      <div *ngIf="overlay.name==='STATSGO'">
+        <mat-card class="inner-card">
+          <!-- justified image -->
+          <img class="card-image" mat-card-image src="https://landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:statsgo_wgs84" alt="STATSGO">
+        </mat-card>
+        <div cdkDragHandle>
+          <mat-slider>
+          </mat-slider>
+        </div>
+      </div>
+
+      <div *ngIf="overlay.name==='HUC-6'">
+        <mat-card class="inner-card">
+          <!-- justified image -->
+          <img class="card-image" mat-card-image src="https://landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:wbdhu6_wgs84" alt="HUC-6">
+        </mat-card>
+        <div cdkDragHandle>
+          <mat-slider>
+          </mat-slider>
+        </div>
+      </div>
+
+      <div *ngIf="overlay.name==='HUC-8'">
+        <mat-card class="inner-card">
+          <!-- justified image -->
+          <img class="card-image" mat-card-image src="https://landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:wbdhu8_wgs84" alt="HUC-8">
+        </mat-card>
+        <div cdkDragHandle>
+          <mat-slider>
+          </mat-slider>
+        </div>
+      </div>
     </mat-expansion-panel>
+  </div>
 
   </mat-card>
   

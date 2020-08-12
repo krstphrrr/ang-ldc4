@@ -32,6 +32,7 @@ import { Routes, RouterModule } from '@angular/router'
 import { CallbackComponent } from './callback/callback.component'
 import { MatButtonToggleModule } from '@angular/material/button-toggle'
 import { MatIconModule } from '@angular/material/icon'
+import {MatSliderModule} from '@angular/material/slider';
 
 import { DragDropModule } from '@angular/cdk/drag-drop'
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -129,7 +130,8 @@ const appRoutes: Routes = [
     OverlayModule,
     MatMenuModule,
     MatSlideToggleModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatSliderModule
   ],
   providers: [
     {

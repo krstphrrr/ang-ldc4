@@ -1,5 +1,5 @@
 
-import { Component, OnInit, AfterViewInit, AfterViewChecked, ViewChild, ElementRef, Renderer2, Directive } from '@angular/core';
+import { Component, OnInit, AfterViewInit, AfterViewChecked, ViewChild, ElementRef, Renderer2, QueryList, ContentChildren } from '@angular/core';
 import * as L from 'leaflet'
 import {Map, latLng, Canvas, MapOptions, LeafletEvent, TileLayer} from 'leaflet'
 // import  '../../plugins/L.Control.Sidebar.js'
@@ -25,7 +25,7 @@ import { MapLoadService } from '../services/mapLoad.service'
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { SummaryTableComponent } from './summary-table/summary-table.component'
-
+import { DragpopComponent } from './dragpop/dragpop.component'
 // interface Project {
 //   project: string;
 //   length: string;
@@ -45,6 +45,8 @@ interface CloseSignal{
 })
 
 export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
+  @ContentChildren( DragpopComponent, { descendants: true } ) dragHandles: QueryList<DragpopComponent>;
+  
   @ViewChild('container') 
   private test2Div: ElementRef;
   @ViewChild('pane_container') 
@@ -113,8 +115,12 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         1. enable draggable popup (this.dragger = true)
         2. 
          */
+        // console.log(this.dragger)
         if(this.dragger==false){
+          //sending initial value to child component 
           this.message = dropdownOption.overlay.value
+          
+
           this.dragger=true
         }
         // console.log(`from dropdown to map. you chose: ${dropdownOption.overlay.value}`)
@@ -167,9 +173,10 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     this.initMap(this.initLay)
 
     this.dragTracker = this.wms.getCloseSignal().subscribe((closeSignal:CloseSignal)=>{
-      if(closeSignal.close===true){
-        this.dragger = false
-      }
+      // if(closeSignal.close===true){
+      //   this.dragger = false
+      // }
+      this.draggerClose()
       console.log(closeSignal)
     })
     

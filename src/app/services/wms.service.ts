@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as L from 'leaflet'
-import {Observable, of, Subject} from 'rxjs'
+import {Observable, of, Subject, AsyncSubject} from 'rxjs'
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +8,8 @@ import {Observable, of, Subject} from 'rxjs'
 export class wmsService {
     private baselayerTracker = new Subject();
     private overlayTracker = new Subject();
-    dragtracker = new Subject()
+    private dragtracker = new Subject();
+    private map2child = new Subject();
   
     public googleHybrid = L.tileLayer('https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
       maxZoom: 20,
@@ -154,6 +155,14 @@ export class wmsService {
 
   getCloseSignal(){
     return this.dragtracker.asObservable()
+  }
+
+  sendOverlay2Child(content){
+    this.map2child.next({data:content})
+  }
+
+  getOverlayChild(){
+    return this.map2child.asObservable()
   }
 
 }
