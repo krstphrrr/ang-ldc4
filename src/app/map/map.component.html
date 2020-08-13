@@ -92,10 +92,15 @@
       [message] = 'message'
       *ngIf="dragger" 
       class="example-box" 
-      cdkDrag 
-      [cdkDragData]="container"
+      cdkDrag
+      cdkDragBoundary="#container"
+      
       style="position: absolute; top:0;left:50%;z-index: 3000;"
-      cdkDragBoundary="#container">
+      >
+      <ng-container>
+        <ng-content select="[slot=drag-handle]">
+        </ng-content>
+    </ng-container>
 
     </app-dragpop>
 </div>

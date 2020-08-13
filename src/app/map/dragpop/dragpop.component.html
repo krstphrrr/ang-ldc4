@@ -1,8 +1,11 @@
-<mat-accordion>
+<div>
+  
+  <mat-accordion>
   <mat-card>
     <div class="flex-container">
       <div class="left-div">
-        <mat-card-title class="flex-item">
+ 
+        <mat-card-title class="flex-item" cdkDragHandle>
           Legend
         </mat-card-title></div>
           <div class="right-div">
@@ -14,7 +17,7 @@
         </div>
   
     </div>
-    <!-- caret arrows: https://stackoverflow.com/a/47033495 -->
+    
     <div
       cdkDropList
       [cdkDropListData]="overlayArray"
@@ -26,7 +29,7 @@
     cdkDrag
     cdkDragLockAxis="y">
       <mat-expansion-panel-header> 
-        <mat-panel-title>
+        <mat-panel-title cdkDragHandle>
           {{overlay.name}}
         </mat-panel-title>
         <mat-panel-description>
@@ -39,7 +42,7 @@
           <!-- justified image -->
           <img class="card-image" mat-card-image src="https://landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:tl_2017_us_state_wgs84" alt="US States">
         </mat-card>
-        <div cdkDragHandle>
+        <div >
           <mat-slider>
           </mat-slider>
         </div>
@@ -50,7 +53,7 @@
           <!-- justified image -->
           <img class="card-image" mat-card-image src="https://landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:tl_2017_us_county_wgs84" alt="US Counties">
         </mat-card>
-        <div cdkDragHandle>
+        <div >
           <mat-slider>
           </mat-slider>
         </div>
@@ -63,7 +66,7 @@
           <img class="management-image" mat-card-image src="https://landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:surface_mgt_agency_wgs84" alt="Management Agency">
         
         </mat-card>
-        <div cdkDragHandle>
+        <div >
           <mat-slider>
           </mat-slider>
         </div>
@@ -74,7 +77,7 @@
           <!-- justified image -->
           <img class="lrr-image" mat-card-image src="https://landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:mlra_v42_wgs84" alt="LRR/MLRA">
         </mat-card>
-        <div cdkDragHandle>
+        <div >
           <mat-slider>
           </mat-slider>
         </div>
@@ -85,7 +88,7 @@
           <!-- justified image -->
           <img class="card-image" mat-card-image src="https://landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:statsgo_wgs84" alt="STATSGO">
         </mat-card>
-        <div cdkDragHandle>
+        <div >
           <mat-slider>
           </mat-slider>
         </div>
@@ -96,7 +99,7 @@
           <!-- justified image -->
           <img class="card-image" mat-card-image src="https://landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:wbdhu6_wgs84" alt="HUC-6">
         </mat-card>
-        <div cdkDragHandle>
+        <div >
           <mat-slider>
           </mat-slider>
         </div>
@@ -107,7 +110,7 @@
           <!-- justified image -->
           <img class="card-image" mat-card-image src="https://landscapedatacommons.org/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=30&HEIGHT=30&LAYER=ldc2:wbdhu8_wgs84" alt="HUC-8">
         </mat-card>
-        <div cdkDragHandle>
+        <div >
           <mat-slider>
           </mat-slider>
         </div>
@@ -118,3 +121,4 @@
   </mat-card>
   
 </mat-accordion>
+</div>

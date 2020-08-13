@@ -2,6 +2,12 @@
 @import '~@fortawesome/fontawesome-free/css/all.min.css';
 @import '@angular/material/prebuilt-themes/deeppurple-amber';
 /* You can add global styles to this file, and also import other style files */
+#container{
+  position: absolute;
+  width: 100vw;
+  height:90%;
+  top:50px;
+}
 .mainMenu {
   padding: 6px 8px;
   /* font: Comic, sans-serif; */
