@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge, of } from 'rxjs';
 import { CustomControlService } from '../../services/custom-control.service';
-import { OnInit } from '@angular/core';
+import { OnInit, Directive } from '@angular/core';
 
 // TODO: Replace this with your own data model type
 export interface SummaryTableItem {
@@ -26,6 +26,7 @@ export interface SummaryTableItem {
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
+@Directive()
 export class SummaryTableDataSource extends DataSource<SummaryTableItem> implements OnInit {
   data
   
