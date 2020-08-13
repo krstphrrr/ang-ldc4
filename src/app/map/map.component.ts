@@ -8,6 +8,7 @@ import 'leaflet-sidebar-v2'
 import { MarkerService } from '../services/marker.service'
 // import * as $ from 'jquery';
 declare var $: any;
+// import {sidebar} from '../../plugins/L.Control.Sidebar.js'
 import { Subscription } from 'rxjs'
 import { debounceTime, scan } from 'rxjs/operators';
 import * as d3 from 'd3'
