@@ -34,6 +34,7 @@ export class HeaderComponent {
 
       }
       if(feature==="about"){
+        console.log(feature)
         this.about.saveOption(feature)
       }
       if(feature==="partners"){

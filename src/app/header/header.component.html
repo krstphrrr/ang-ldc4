@@ -20,11 +20,14 @@
       
       
           <li ngbDropdown class="nav-item d-inline-block">
-            <a ngbDropdownToggle  class="nav-link" id="dropdown1">About</a>
-              <div class="dropdown-menu" ngbDropdownMenu>
-                <a ngbDropdownItem routerLink="/about" (click)="onSelect('about')" class="nav-link">About</a>
-                <a ngbDropdownItem routerLink="/about" (click)="onSelect('partners')" class="nav-link">Partners</a>
-              </div>
+            <a ngbDropdownToggle  class="nav-link" id="dropdown1" [matMenuTriggerFor]="menu">About</a>
+            <mat-menu #menu="matMenu">
+              <a mat-menu-item routerLink="/about" (click)="onSelect('about')" class="nav-link">About</a>
+              <a mat-menu-item routerLink="/about" (click)="onSelect('partners')" class="nav-link">Partners</a>
+            </mat-menu>
+              <!-- <div class="dropdown-menu" ngbDropdownMenu> -->
+
+              <!-- </div> -->
           </li>
       
         <li class="nav-item">

@@ -99,33 +99,9 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public baselayerSubscription:Subscription;
   public overlaySubscription:Subscription;
   message:string
-  public freeDrawLayer_
-  public dragTracker:Subscription;
-  enableMapDraw_:boolean = false
-  // draw = new EventEmitter<Object>()
-  EventedControl
-  newControl_
-  newControl = L.Control.extend({
-    options:{
-      position: "topleft"
-    },
-    onAdd: function(a){
-   
-      let img 
-      img = L.DomUtil.create('img')
-      img.src='../../assets/folder-logo.png'
-      img.style.width = '50px'
-      L.DomEvent.addListener(img,'click',this.handleClick_)
-    return img
-    },
-    handleClick_(){
-        this.enableMapDraw_= !this.enableMapDraw_
-        // this.draw.emit(this.enableMapDraw_)
 
-        console.log(this.enableMapDraw_, this.draw)
-    
-    }
-  })
+  public dragTracker:Subscription;
+  
 
   constructor(
     private el:ElementRef,
@@ -221,35 +197,6 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       console.log(closeSignal)
     })
 
-    //////////////// drawing control 
-    // console.log(this.draw)
-    if(this.enableMapDraw_){
-      
-    }
-    this.newControl && (
-    this.EventedControl = this.newControl.include(L.Evented.prototype),
-    
-    // this.freeDrawLayer_ = new FreeDraw,
-    // this.freeDrawLayer_.on("markers", function(a){
-    //   console.log(this.newControl)
-      // console.log(a.latLngs)
-      // console.log(a.latlngs.length)
-      // a && a.latLngs && a.latLngs.length && (this.trigger())
-      // this.$el.removeClass("isDrawing")
-    // }, this),
-    // this.mymap.addLayer(this.freeDrawLayer_),
-
-
-    this.newControl_ = new this.EventedControl,
-    this.mymap.addControl(this.newControl_),
-    this.newControl_.on("l", function(){
-      console.log(this.$el)
-      // let a = this.$el.hasClass("isDrawing")
-    })
-    )
-    
-
-    ////////////////////////////////
 
   }
 
@@ -368,72 +315,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       position:'left'
     })
      .addTo(this.mymap)
-     
-     
-    
-     //
-     /*
-     1. adds drawing controls.
-     2. sets dropdown options
-     */
-    // this.drawingControl(this.mymap)
-    // console.log(L.easyButton())
-    // let newControl = L.Control.extend({
-    //   // includes:L.Evented.prototype ,
-    //   options:{
-    //     position: "topleft"
-    //   },
-
-
-      /*
-      onAdd: function(a) {
-        this.$container_ = $(templates.fourSq.map.controls.draw.control());
-        this.$container_.click(fourSq.bind(this.handleClick_, this));
-        this.$container_.dblclick(function(a) {
-            a.preventDefault();
-            a.stopPropagation()
-        });
-        return this.getContainer()
-    },
-    getContainer: function() {
-        return this.$container_.get(0)
-    },
-    handleClick_: function() {
-        this.trigger(fourSq.explore.DrawControl.Events.CLICK)
-    }
-});
-
-  3.
-  fourSq.explore.DrawControl.Events = {
-    CLICK: "CLICK"
-};
-      */
-      // onAdd: function(a){
-     
-      //   let img 
-      //   img = L.DomUtil.create('img')
-      //   img.src='../../assets/folder-logo.png'
-      //   img.style.width = '50px'
-      //   L.DomEvent.addListener(img,'click',this.handleClick_)
-      // return img
-      // },
-      // handleClick_(){
-      //   console.log(newControl)
-      // }
-      // getContainer: function(){
-      //   return $container.get(0)
-      // }
-    // })
-    // newControl.include({
-    //   Events:{
-    //     CLICK:"click"
-    //   }
-    // })
-
-    
-
-    
-    // this.free().addTo(this.mymap)
+    this.drawingControl(this.mymap)
 
     let states = this.wms.states
     let counties = this.wms.counties
@@ -825,124 +707,6 @@ function resizePanels() {
     }
     
   }
-
-  // button = L.easyButton({
-  //   states:[{
-  //     stateName:'freeDraw',
-  //     icon: '<img alt="draw lines" src="../../assets/folder-logo.png"/>',
-  //     title: 'draw test',
-  //     onClick: function(control){
-  //       // let drawnItems = new L.FeatureGroup()
-  //       const freeDraw = new FreeDraw({
-  //         concavePolygon: false,
-  //         mergePolygons: false,
-  //         mode:ALL
-  //       })
-
-  //       this.mymap.addLayer(freeDraw)
-  //       freeDraw.on('markers', event=>{
-  //         console.log(event)
-  //       })
-  //       // freeDraw.mode(ALL)
-  //       // control.state('freeDraw')
-  //       // console.log(freeDraw)
-  //       // activeState=control.state()
-
-  //     }
-  //   }]
-  // })
-  /*
-  1. 
-  fourSq.explore.DrawControl = function(a, b) {}
-
-  2. 
-  fourSq.explore.DrawControl = fourSq.map.EventedControl.extend({
-    options: {
-        position: "topleft"
-    },
-    onAdd: function(a) {
-        this.$container_ = $(templates.fourSq.map.controls.draw.control());
-        this.$container_.click(fourSq.bind(this.handleClick_, this));
-        this.$container_.dblclick(function(a) {
-            a.preventDefault();
-            a.stopPropagation()
-        });
-        return this.getContainer()
-    },
-    getContainer: function() {
-        return this.$container_.get(0)
-    },
-    handleClick_: function() {
-        this.trigger(fourSq.explore.DrawControl.Events.CLICK)
-    }
-});
-
-  3.
-  fourSq.explore.DrawControl.Events = {
-    CLICK: "CLICK"
-};
-  4.
-  this.enableMapDraw_ && (this.freeDrawLayer_ = new L.FreeDraw,
-        this.freeDrawLayer_.on("markers", function(a) {
-            a && a.latLngs && a.latLngs.length && (this.trigger(fourSq.explore.MapView.Events.REQUEST_REQUERY_FOR_POLYGON, a.latLngs[0]),
-            this.$el.removeClass("isDrawing"))
-        }, this),
-        this.map_.addLayer(this.freeDrawLayer_),
-        this.drawControl_ = new fourSq.explore.DrawControl,
-        this.map_.addControl(this.drawControl_),
-        this.drawControl_.on(fourSq.explore.DrawControl.Events.CLICK, function() {
-            var a = this.$el.hasClass("isDrawing") ? L.FreeDraw.MODES.VIEW : L.FreeDraw.MODES.CREATE;
-            this.removePolygon();
-            this.freeDrawLayer_.setMode(a);
-            this.$el.toggleClass("isDrawing")
-        }, this));
-        var a, b;
-  
-  */
-  
- 
-  
-  // drawingControl2(mapObject){
-  //   let drawnItems = new L.FeatureGroup()
-  //   const freeDraw = new FreeDraw({
-  //     mode: CREATE | DELETE
-  //   })
-    
-  //   mapObject.addControl(freeDraw)
-  // }
-  // freeControl= L.Control.extend({
-  //   options:{
-  //     position:"topleft"
-  //   },
-  //   onAdd: function(map){
-  //     let img 
-  //     img = L.DomUtil.create('img')
-
-  //     img.src='../../assets/folder-logo.png'
-  //     img.style.width = '50px'
-  //     let freeDraw = new FreeDraw()
-  //     L.DomEvent.addListener(img,'click',function (e){
-  //       console.log(this.freeDraw)
-  //       // map.addLayer(this.freeDraw)
-  //       // this.freeDraw.on('markers', event=>{
-  //       //   console.log(event)
-  //       // })
-
-      
-  //   })
-  //     return img
-      
-  //   },
-    
-  //   onRemove: function(map){
-  //   }
-  // })
-  // free = function(){
-  //   return new this.freeControl()
-  // }
-  // onClick(){
-  //   console.log("CLICK")
-  // }
 
   drawingControl(mapObject){
     let drawnItems = new L.FeatureGroup()
