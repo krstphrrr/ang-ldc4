@@ -14,7 +14,9 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "allowedCommonJsDependencies": [
-               "lodash"
+               "socket.io-client",
+               "debug",
+               "socket.io-parser"
             ],
             "outputPath": "dist/ang-ldc4",
             "index": "src/index.html",
@@ -39,6 +41,7 @@
             ],
             "scripts": [
               "node_modules/leaflet/dist/leaflet.js",
+              
               "node_modules/leaflet-draw/dist/leaflet.draw.js",
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/@popperjs/core/dist/umd/popper.min.js",
@@ -46,7 +49,8 @@
               "node_modules/@fortawesome/fontawesome-free/js/fontawesome.min.js",
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/jquery-ui-dist/jquery-ui.min.js",
-              "node_modules/@turf/turf/turf.min.js"
+              "node_modules/@turf/turf/turf.min.js",
+              "node_modules/leaflet-easybutton/src/easy-button.js"
             ]
           },
           "configurations": {

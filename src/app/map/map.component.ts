@@ -1,6 +1,9 @@
 
-import { Component, OnInit, AfterViewInit, AfterViewChecked, ViewChild, ElementRef, Renderer2, QueryList, ContentChildren } from '@angular/core';
+import { Component, OnInit, AfterViewInit, AfterViewChecked, ViewChild, ElementRef, Renderer2, QueryList, ContentChildren, EventEmitter } from '@angular/core';
 import * as L from 'leaflet'
+// declare const L:any 
+import 'leaflet'
+import 'leaflet-easybutton'
 import {Map, latLng, Canvas, MapOptions, LeafletEvent, TileLayer} from 'leaflet'
 // import  '../../plugins/L.Control.Sidebar.js'
 import { ThemePalette } from '@angular/material/core'
@@ -10,12 +13,13 @@ import { MarkerService } from '../services/marker.service'
 declare var $: any;
 // import {sidebar} from '../../plugins/L.Control.Sidebar.js'
 import { Subscription } from 'rxjs'
-import { debounceTime, scan } from 'rxjs/operators';
+import { debounceTime, scan, map } from 'rxjs/operators';
 import * as d3 from 'd3'
 import { socketDataService } from '../services/socketTest.service'
 import { wmsService } from '../services/wms.service'
 
 import 'leaflet-draw'
+import FreeDraw, {CREATE,EDIT,DELETE, ALL} from 'leaflet-freedraw'
 import { GeoJsonObject } from 'geojson';
 import { PanelComponent } from './controls/panel/panel/panel.component';
 import { MoveEndService } from '../services/move-end.service'
@@ -53,6 +57,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   @ViewChild('pane_container') 
   private paneDiv: ElementRef;
   // private mymap;
+  
   public color: ThemePalette = "accent";
   public checked = false;
   public mymap
@@ -94,7 +99,33 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public baselayerSubscription:Subscription;
   public overlaySubscription:Subscription;
   message:string
+  public freeDrawLayer_
   public dragTracker:Subscription;
+  enableMapDraw_:boolean = false
+  // draw = new EventEmitter<Object>()
+  EventedControl
+  newControl_
+  newControl = L.Control.extend({
+    options:{
+      position: "topleft"
+    },
+    onAdd: function(a){
+   
+      let img 
+      img = L.DomUtil.create('img')
+      img.src='../../assets/folder-logo.png'
+      img.style.width = '50px'
+      L.DomEvent.addListener(img,'click',this.handleClick_)
+    return img
+    },
+    handleClick_(){
+        this.enableMapDraw_= !this.enableMapDraw_
+        // this.draw.emit(this.enableMapDraw_)
+
+        console.log(this.enableMapDraw_, this.draw)
+    
+    }
+  })
 
   constructor(
     private el:ElementRef,
@@ -123,6 +154,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
           
 
           this.dragger=true
+
+          
         }
         // console.log(`from dropdown to map. you chose: ${dropdownOption.overlay.value}`)
       })
@@ -134,7 +167,13 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       this.dragger=false
     }
   }
-    
+  
+  
+  // this.newControl.include({
+  //   Events:{
+  //     CLICK:"click"
+  //   }
+  // })
 
   ngOnInit() {
     /* at initializing page:
@@ -144,6 +183,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     4. get tiles from geoserver (async so pulling them early)
     5. initialize map
     */
+    
     let southwest = L.latLng([51.0156176,-69.393794])
     let northeast = L.latLng([27.213765,-131.539653])
     this.defaultExtent = L.latLngBounds(southwest,northeast)
@@ -180,7 +220,36 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       this.draggerClose()
       console.log(closeSignal)
     })
+
+    //////////////// drawing control 
+    // console.log(this.draw)
+    if(this.enableMapDraw_){
+      
+    }
+    this.newControl && (
+    this.EventedControl = this.newControl.include(L.Evented.prototype),
     
+    // this.freeDrawLayer_ = new FreeDraw,
+    // this.freeDrawLayer_.on("markers", function(a){
+    //   console.log(this.newControl)
+      // console.log(a.latLngs)
+      // console.log(a.latlngs.length)
+      // a && a.latLngs && a.latLngs.length && (this.trigger())
+      // this.$el.removeClass("isDrawing")
+    // }, this),
+    // this.mymap.addLayer(this.freeDrawLayer_),
+
+
+    this.newControl_ = new this.EventedControl,
+    this.mymap.addControl(this.newControl_),
+    this.newControl_.on("l", function(){
+      console.log(this.$el)
+      // let a = this.$el.hasClass("isDrawing")
+    })
+    )
+    
+
+    ////////////////////////////////
 
   }
 
@@ -257,6 +326,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     }
     this.mymap.addLayer(this.layerList[selectedBase])
   }
+  // newControl = function(a,b){}
 
 
 
@@ -284,6 +354,10 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       })
       this.mymap.addLayer(this.allPoints)
      })
+    //  let eb = {easyButton}
+    //  console.log(L.easyButton)
+     
+    // this.button.addTo(this.mymap)
      
     
     
@@ -294,13 +368,73 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       position:'left'
     })
      .addTo(this.mymap)
-
+     
+     
+    
      //
      /*
      1. adds drawing controls.
      2. sets dropdown options
      */
-    this.drawingControl(this.mymap)
+    // this.drawingControl(this.mymap)
+    // console.log(L.easyButton())
+    // let newControl = L.Control.extend({
+    //   // includes:L.Evented.prototype ,
+    //   options:{
+    //     position: "topleft"
+    //   },
+
+
+      /*
+      onAdd: function(a) {
+        this.$container_ = $(templates.fourSq.map.controls.draw.control());
+        this.$container_.click(fourSq.bind(this.handleClick_, this));
+        this.$container_.dblclick(function(a) {
+            a.preventDefault();
+            a.stopPropagation()
+        });
+        return this.getContainer()
+    },
+    getContainer: function() {
+        return this.$container_.get(0)
+    },
+    handleClick_: function() {
+        this.trigger(fourSq.explore.DrawControl.Events.CLICK)
+    }
+});
+
+  3.
+  fourSq.explore.DrawControl.Events = {
+    CLICK: "CLICK"
+};
+      */
+      // onAdd: function(a){
+     
+      //   let img 
+      //   img = L.DomUtil.create('img')
+      //   img.src='../../assets/folder-logo.png'
+      //   img.style.width = '50px'
+      //   L.DomEvent.addListener(img,'click',this.handleClick_)
+      // return img
+      // },
+      // handleClick_(){
+      //   console.log(newControl)
+      // }
+      // getContainer: function(){
+      //   return $container.get(0)
+      // }
+    // })
+    // newControl.include({
+    //   Events:{
+    //     CLICK:"click"
+    //   }
+    // })
+
+    
+
+    
+    // this.free().addTo(this.mymap)
+
     let states = this.wms.states
     let counties = this.wms.counties
     let surf = this.wms.surf
@@ -691,6 +825,124 @@ function resizePanels() {
     }
     
   }
+
+  // button = L.easyButton({
+  //   states:[{
+  //     stateName:'freeDraw',
+  //     icon: '<img alt="draw lines" src="../../assets/folder-logo.png"/>',
+  //     title: 'draw test',
+  //     onClick: function(control){
+  //       // let drawnItems = new L.FeatureGroup()
+  //       const freeDraw = new FreeDraw({
+  //         concavePolygon: false,
+  //         mergePolygons: false,
+  //         mode:ALL
+  //       })
+
+  //       this.mymap.addLayer(freeDraw)
+  //       freeDraw.on('markers', event=>{
+  //         console.log(event)
+  //       })
+  //       // freeDraw.mode(ALL)
+  //       // control.state('freeDraw')
+  //       // console.log(freeDraw)
+  //       // activeState=control.state()
+
+  //     }
+  //   }]
+  // })
+  /*
+  1. 
+  fourSq.explore.DrawControl = function(a, b) {}
+
+  2. 
+  fourSq.explore.DrawControl = fourSq.map.EventedControl.extend({
+    options: {
+        position: "topleft"
+    },
+    onAdd: function(a) {
+        this.$container_ = $(templates.fourSq.map.controls.draw.control());
+        this.$container_.click(fourSq.bind(this.handleClick_, this));
+        this.$container_.dblclick(function(a) {
+            a.preventDefault();
+            a.stopPropagation()
+        });
+        return this.getContainer()
+    },
+    getContainer: function() {
+        return this.$container_.get(0)
+    },
+    handleClick_: function() {
+        this.trigger(fourSq.explore.DrawControl.Events.CLICK)
+    }
+});
+
+  3.
+  fourSq.explore.DrawControl.Events = {
+    CLICK: "CLICK"
+};
+  4.
+  this.enableMapDraw_ && (this.freeDrawLayer_ = new L.FreeDraw,
+        this.freeDrawLayer_.on("markers", function(a) {
+            a && a.latLngs && a.latLngs.length && (this.trigger(fourSq.explore.MapView.Events.REQUEST_REQUERY_FOR_POLYGON, a.latLngs[0]),
+            this.$el.removeClass("isDrawing"))
+        }, this),
+        this.map_.addLayer(this.freeDrawLayer_),
+        this.drawControl_ = new fourSq.explore.DrawControl,
+        this.map_.addControl(this.drawControl_),
+        this.drawControl_.on(fourSq.explore.DrawControl.Events.CLICK, function() {
+            var a = this.$el.hasClass("isDrawing") ? L.FreeDraw.MODES.VIEW : L.FreeDraw.MODES.CREATE;
+            this.removePolygon();
+            this.freeDrawLayer_.setMode(a);
+            this.$el.toggleClass("isDrawing")
+        }, this));
+        var a, b;
+  
+  */
+  
+ 
+  
+  // drawingControl2(mapObject){
+  //   let drawnItems = new L.FeatureGroup()
+  //   const freeDraw = new FreeDraw({
+  //     mode: CREATE | DELETE
+  //   })
+    
+  //   mapObject.addControl(freeDraw)
+  // }
+  // freeControl= L.Control.extend({
+  //   options:{
+  //     position:"topleft"
+  //   },
+  //   onAdd: function(map){
+  //     let img 
+  //     img = L.DomUtil.create('img')
+
+  //     img.src='../../assets/folder-logo.png'
+  //     img.style.width = '50px'
+  //     let freeDraw = new FreeDraw()
+  //     L.DomEvent.addListener(img,'click',function (e){
+  //       console.log(this.freeDraw)
+  //       // map.addLayer(this.freeDraw)
+  //       // this.freeDraw.on('markers', event=>{
+  //       //   console.log(event)
+  //       // })
+
+      
+  //   })
+  //     return img
+      
+  //   },
+    
+  //   onRemove: function(map){
+  //   }
+  // })
+  // free = function(){
+  //   return new this.freeControl()
+  // }
+  // onClick(){
+  //   console.log("CLICK")
+  // }
 
   drawingControl(mapObject){
     let drawnItems = new L.FeatureGroup()
