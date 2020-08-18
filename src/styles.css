@@ -6,7 +6,7 @@
   position: absolute;
   width: 100vw;
   height:90%;
-  top:50px;
+  /* top:100px; */
 }
 .mainMenu {
   padding: 6px 8px;
@@ -31,6 +31,9 @@
 
 .iconHover{
   cursor: pointer;
+}
+.actual_content{
+  top:100px
 }
 
 
