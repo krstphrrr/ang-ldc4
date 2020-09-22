@@ -1,6 +1,28 @@
 version: '3'
 services:
-  node:
-    image: ng_test 
+  # node:
+  #   image: ng_test 
+  #   ports:
+  #     - 4200:4200
+  dima_api:
+    image: dima_api 
+    ports: 
+      - "5005:5005"
+
+  dima_check:
+    image: dima_check 
+    ports: 
+      - "4201:80"
+
+  main_api:
+    image: api2
+    ports: 
+      - "5002:5002"
+    env_file: 
+      - /home/kris/apiv2/node.env 
+  nri_api:
+    image: nri_api
     ports:
-      - 4200:4200
+      - "5010:5010"
+    env_file: 
+      - /home/kris/nri_api/.env
