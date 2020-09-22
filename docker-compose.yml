@@ -26,3 +26,9 @@ services:
       - "5010:5010"
     env_file: 
       - /home/kris/nri_api/.env
+# 
+# sudo docker stack deploy --compose-file docker-compose.yml api_services
+# to check stack:
+## sudo docker stack ls 
+# to check individual services: 
+## sudo docker service ls
