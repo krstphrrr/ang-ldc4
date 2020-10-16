@@ -20,3 +20,8 @@
   font-size: large;
 }
 
+::ng-deep snack-bar-container {
+  margin-top: 70px !important;
+  color: black !important;
+  background-color: beige !important;
+}

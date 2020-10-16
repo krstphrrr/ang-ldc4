@@ -31,6 +31,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { SummaryTableComponent } from './summary-table/summary-table.component'
 import { DragpopComponent } from './dragpop/dragpop.component'
+
 // interface Project {
 //   project: string;
 //   length: string;

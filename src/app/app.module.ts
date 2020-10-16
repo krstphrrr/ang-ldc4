@@ -33,7 +33,7 @@ import { CallbackComponent } from './callback/callback.component'
 import { MatButtonToggleModule } from '@angular/material/button-toggle'
 import { MatIconModule } from '@angular/material/icon'
 import {MatSliderModule} from '@angular/material/slider';
-
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { DragDropModule } from '@angular/cdk/drag-drop'
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { PlotsComponent } from './map/plots/plots.component';
@@ -53,6 +53,7 @@ import { InterceptorService } from './services/interceptor.service';
 import { AltwoodyComponent } from './altwoody/altwoody.component';
 import { BaselayersComponent } from './map/baselayers/baselayers.component';
 import { OverlaysComponent } from './map/overlays/overlays.component';
+
 
 const appRoutes: Routes = [
   { path: '', 
@@ -131,7 +132,10 @@ const appRoutes: Routes = [
     MatMenuModule,
     MatSlideToggleModule,
     MatCheckboxModule,
-    MatSliderModule
+    MatSliderModule,
+    MatButtonToggleModule,
+    MatSnackBarModule
+
   ],
   providers: [
     {
