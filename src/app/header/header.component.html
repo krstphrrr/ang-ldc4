@@ -31,7 +31,7 @@
           </li>
       
         <li class="nav-item">
-            <a routerLink="/files" (click)="onSelect('folder')" class="nav-link">
+            <a routerLink="/" (click)="onSelect('folder')" class="nav-link">
               <img src="/assets/folder-logo.png" alt="" class="img-responsive" style="max-height:20px">
             </a>
       </li>
@@ -40,7 +40,7 @@
             <img src="/assets/usr-logo.png" 
                  alt="" 
                  class="img-responsive" 
-                 style="max-height:20px"/>
+                 style="max-height:20px"/> 
           </a>
           <a ngbDropdownToggle class="nav-link" *ngIf="auth.loggedIn">
             <img src="/assets/usr-logo.png" 
