@@ -26,6 +26,13 @@ services:
       - "5010:5010"
     env_file: 
       - /home/kris/nri_api/.env
+      
+  met_api:
+    image: met_api 
+    ports:
+      - "5013:5013"
+    env_file: 
+      - /home/kris/met_api/.env
 # 
 # sudo docker stack deploy --compose-file docker-compose.yml api_services
 # to check stack:
