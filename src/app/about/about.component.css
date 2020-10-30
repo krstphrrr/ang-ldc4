@@ -41,9 +41,11 @@ a{
 }
 #entry-about{
   display:block;
-  overflow:hidden;
+  height:700px;
   padding:0;
-  margin-bottom:36px;
+  /* margin-bottom:36px; */
+  overscroll-behavior-y: auto;
+  overflow-y: overlay;
 }
 #entry-partners{
   display:block;
@@ -59,4 +61,13 @@ a{
   clear:both;
   padding-top:8px;
   word-wrap: break-word;
+}
+
+#img-container{
+  margin:0;
+  width:90%;
+  margin-top:10%;
+}
+#text_p{
+  margin-right: 1em;
 }

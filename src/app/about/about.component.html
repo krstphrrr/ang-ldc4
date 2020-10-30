@@ -4,7 +4,8 @@
       <div id="templateForContent">
           <div id="container-text" [ngSwitch]="isAbout">
             <div id="entry-about" *ngSwitchCase="'about'"> 
-              <p>
+              
+              <p id="text_p">
                 The Landscape Data Commons is an inter-agency monitoring 
                 data repository and portal, led by the USDA-ARS at the 
                 Jornada Experimental Range, that connects standardized 
@@ -24,6 +25,7 @@
               <p>
                 To get involved, contact Sarah McCord (<a href="sarah.mccord@usda.gov">sarah.mccord@usda.gov</a>) or Nicholas Webb (<a href="sarah.mccord@usda.gov">nwebb@nmsu.edu</a>).
               </p>
+              <img id="img-container" src="assets\LDC_diagram_2020-10-30.jpg">
             </div>
             <div id="entry-partners" *ngSwitchCase="'partners'">
               <h2 class="entry-title">Partner Programs</h2>
