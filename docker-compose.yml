@@ -33,6 +33,13 @@ services:
       - "5013:5013"
     env_file: 
       - /home/kris/met_api/.env
+      
+  aero_api:
+    image: aero_api
+    ports:
+      - "5015:5015"
+    env_file: 
+      - /home/kris/aero_api/.env
 # 
 # sudo docker stack deploy --compose-file docker-compose.yml api_services
 # to check stack:
