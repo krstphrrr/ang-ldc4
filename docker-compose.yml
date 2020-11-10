@@ -19,7 +19,7 @@ services:
     ports: 
       - "5002:5002"
     env_file: 
-      - /home/kris/apiv2/node.env 
+      - /home/kris/main_api/node.env 
   nri_api:
     image: nri_api
     ports:
