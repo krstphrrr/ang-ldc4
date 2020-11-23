@@ -102,6 +102,7 @@ export class SummaryTableDataSource extends DataSource<SummaryTableItem> impleme
       switch (this.sort.active) {
         case 'project': return compare(a.project, b.project, isAsc);
         case 'id': return compare(+a.length, +b.length, isAsc);
+        
         default: return 0;
       }
     });

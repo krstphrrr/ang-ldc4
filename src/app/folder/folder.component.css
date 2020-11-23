@@ -1,0 +1,27 @@
+.chart-wrapper {
+    width: 500px;
+    height: 500px;
+    position: absolute;
+  }
+
+  #output_container{
+    position:absolute;
+    top:50%;
+    width:80%;
+  }
+
+  .main-container {
+    max-width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100vh;
+    overflow-y: auto;
+    position:absolute;
+  }
+
+.container1{
+  height: 20vh;
+  overflow: auto;
+  max-width: auto;
+
+}

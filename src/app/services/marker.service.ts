@@ -39,7 +39,8 @@ export class MarkerService {
             // console.log(feature)
             let label = 
               String("ID: ") + String(feature.id) +"<br>"+
-              String("Public: ")+ String(feature.properties.Public)+"<br>"
+              String("Public: ")+ String(feature.properties.isPublic)+"<br>"+
+              String("Project: ")+ String(feature.properties.source)+"<br>"
             switch(feature.properties.Public){
               case true:
                 m.fillOpacity = 1;

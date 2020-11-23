@@ -17,7 +17,10 @@ export class AppComponent {
   constructor(
 
   ){}
-
+  // isDisplay = false;
+  // toggleShow(){
+  //   this.isDisplay = !this.isDisplay;
+  // }
  
   
 }

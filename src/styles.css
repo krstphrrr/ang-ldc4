@@ -1,6 +1,8 @@
 @import "leaflet-sidebar-v2/css/leaflet-sidebar.min.css";
 @import '~@fortawesome/fontawesome-free/css/all.min.css';
 @import '@angular/material/prebuilt-themes/deeppurple-amber';
+@import "~bootstrap/dist/css/bootstrap.css";
+@import "~font-awesome/css/font-awesome.css";
 /* You can add global styles to this file, and also import other style files */
 #container{
   position: absolute;
@@ -25,6 +27,10 @@
   max-width: 165px;
 }
 .mat-form-field-infield{
+  max-width: 165px;
+}
+
+.eco-search{
   max-width: 165px;
 }
 
@@ -644,6 +650,11 @@ body {
   padding: 5px;
   background: radial-gradient(black, steelblue);
 } */
+
+/* .container{
+  margin-top:5%;
+} */
+
 
 #legendImgDiv h6 {
   margin: 0;

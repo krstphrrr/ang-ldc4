@@ -1,3 +1,1441 @@
+<html>
+<head>
+    <title></title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="datacontroller.js"></script>
+</head>
+<body>
 
-  <p>files works!</p>
 
+
+ <!-- <div class="row">
+  <div class="col-md-12"> -->
+      <!---will create button with ternary operator and click function--->
+      <!-- <button (click)="onclicksp_2()" type="button" class="btn  btn-danger"> -->
+        <!-- {{ReadMore?"Read More":"Read Less"}} -->
+        <!-- Read More -->
+      <!-- </button> -->
+
+      <!--will create if condition my default it will
+        b hide on click it will toggle--->
+      <!-- <ng-container *ngIf="visible">
+          <div class="bg-white shadow-sm p-3">
+              <h4>Hello World</h4>
+              <p>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse tempore aut molestiae, unde non soluta! A, nesciunt. Earum facere totam error, nam placeat, quia, veritatis aspernatur voluptate vitae fugit odit.
+              </p>
+          </div>
+      </ng-container> -->
+  <!-- </div>
+</div> -->
+
+
+
+    <div class="container-fluid main-container" #scrollframe>
+      
+    <div class="fluid-row" id="header">
+      <h1 class="title toc-ignore">Ecological Site Summaries for External Data Users</h1>
+      <h4 class="subtitle">Using Assessment, Inventory, and Monitoring Data</h4>
+      <!-- <h4 class="author">A Reporting Tool by The Jornada/ New Mexico State University</h4> -->
+      A Reporting Tool by The Jornada/ New Mexico State University
+    </div>
+
+    
+      <!-- <form id="ecoid">
+        <input type="text" name="ecosideid"/>
+        <input type="button" id="searchid" onclick="idsearch()" value="Search"/>
+      </form> -->
+
+      <div class="md-form mt-0">
+        <input class="form-control" name="ecoinfo"  type="text" placeholder="Search by Ecological Site ID" aria-label="Search">
+        <!-- <input type="button" id="searchid" onclick="idsearch()" value="Search"/> -->
+      </div>
+
+      <button (click)="speciescov()" type="button" class="btn  btn-primary">Species Cover Summaries</button>
+      <button (click)="groundcover()" type="button" class="btn  btn-primary">Ground Cover Summaries</button>
+      <button (click)="vegheight()" type="button" class="btn  btn-primary">Vegetation Height</button>
+      <button (click)="canopygap()" type="button" class="btn  btn-primary">Canopy Gap</button>
+      <button (click)="soilstability()" type="button" class="btn  btn-primary">Soil Stability</button>
+      
+      
+      
+      
+      <ng-container *ngIf="visible_species">
+        <div class="bg-white shadow-sm p-3">
+          <p>
+            Percent cover summaries use data from Line-point intercept (LPI) method to determine average cover of individual species, as well as summaries by structure and functional group cover, noxious versus non-noxious cover, woody vs. non-woody cover, and cover by Sage-Grouse group. From the AIM data, we can make some simple figures showing cover values. These figures, along with the summary tables, can quickly be incorporated into any documents where this data is used (i.e. NEPA documents for grazing permit renewals, shrub treatments, etc).
+          </p>
+      <button (click)="onclicksp_1()" type="button" class="btn  btn-primary">Figures</button>
+      <button (click)="onclicksp_2()" type="button" class="btn  btn-primary">Summary Tables</button>
+      <button (click)="onclicksp_3()" type="button" class="btn  btn-primary">Trace Species</button>
+      <button (click)="visible_species=false" type="button" class="btn  btn-danger">Close</button>
+      </div>
+      </ng-container>
+
+      <ng-container *ngIf="visiblesp_1">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_1()" type="button" class="btn  btn-primary">Cover by Functional Group</button>
+          <button (click)="onclicksp_1_2()" type="button" class="btn  btn-primary">Cover by Noxious, Non-Noxious Species</button>
+          <button (click)="onclicksp_1_3()" type="button" class="btn  btn-primary">Cover by Species</button>
+          <button (click)="onclicksp_1_4()" type="button" class="btn  btn-primary">Sage-Grouse Indicators</button>
+          <button (click)="visiblesp_1=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="visiblesp_1_1">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_1_1()" type="button" class="btn  btn-primary">Graminoid</button>
+          <button (click)="onclicksp_1_1_2()" type="button" class="btn  btn-primary">Forb</button>
+          <button (click)="onclicksp_1_1_3()" type="button" class="btn  btn-primary">Sub Shrub</button>
+          <button (click)="onclicksp_1_1_4()" type="button" class="btn  btn-primary">Shrub</button>
+          <button (click)="onclicksp_1_1_5()" type="button" class="btn  btn-primary">Tree</button>
+          <button (click)="onclicksp_1_1_6()" type="button" class="btn  btn-primary">Succulent</button>
+          <button (click)="visiblesp_1_1=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="visiblesp_1_1_1">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_1_1_i()" type="button" class="btn  btn-primary">Interactive</button>
+          <button (click)="onclicksp_1_1_1_s()" type="button" class="btn  btn-primary">Static</button>
+          <button (click)="visiblesp_1_1_1=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="visiblesp_1_1_2">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_1_2_i()" type="button" class="btn  btn-primary">Interactive</button>
+          <button (click)="onclicksp_1_1_2_s()" type="button" class="btn  btn-primary">Static</button>
+          <button (click)="visiblesp_1_1_2=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="visiblesp_1_1_3">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_1_3_i()" type="button" class="btn  btn-primary">Interactive</button>
+          <button (click)="onclicksp_1_1_3_s()" type="button" class="btn  btn-primary">Static</button>
+          <button (click)="visiblesp_1_1_3=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="visiblesp_1_1_4">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_1_4_i()" type="button" class="btn  btn-primary">Interactive</button>
+          <button (click)="onclicksp_1_1_4_s()" type="button" class="btn  btn-primary">Static</button>
+          <button (click)="visiblesp_1_1_4=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="visiblesp_1_1_5">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_1_5_i()" type="button" class="btn  btn-primary">Interactive</button>
+          <button (click)="onclicksp_1_1_5_s()" type="button" class="btn  btn-primary">Static</button>
+          <button (click)="visiblesp_1_1_5=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="visiblesp_1_1_6">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_1_6_i()" type="button" class="btn  btn-primary">Interactive</button>
+          <button (click)="onclicksp_1_1_6_s()" type="button" class="btn  btn-primary">Static</button>
+          <button (click)="visiblesp_1_1_6=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="visiblesp_1_2">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_2_i()" type="button" class="btn  btn-primary">Interactive</button>
+          <button (click)="onclicksp_1_2_s()" type="button" class="btn  btn-primary">Static</button>
+          <button (click)="visiblesp_1_2=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+
+
+      <ng-container *ngIf="visiblesp_1_3">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_3_1()" type="button" class="btn  btn-primary">Graminoid, Annual</button>
+          <button (click)="onclicksp_1_3_2()" type="button" class="btn  btn-primary">Graminoid, Perennial</button>
+          <button (click)="onclicksp_1_3_3()" type="button" class="btn  btn-primary">Forb, Annual</button>
+          <button (click)="onclicksp_1_3_4()" type="button" class="btn  btn-primary">Forb, Perennial</button>
+          <button (click)="onclicksp_1_3_5()" type="button" class="btn  btn-primary">Sub Shrub</button>
+          <button (click)="onclicksp_1_3_6()" type="button" class="btn  btn-primary">Shrub</button>
+          <button (click)="onclicksp_1_3_7()" type="button" class="btn  btn-primary">Tree</button>
+          <button (click)="onclicksp_1_3_8()" type="button" class="btn  btn-primary">Succulent</button>
+          <button (click)="visiblesp_1_3=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+
+<!-- ############ -->
+
+      <ng-container *ngIf="visiblesp_1_3_1">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_3_1_i()" type="button" class="btn  btn-primary">Interactive</button>
+          <button (click)="onclicksp_1_3_1_s()" type="button" class="btn  btn-primary">Static</button>
+          <button (click)="visiblesp_1_3_1=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="visiblesp_1_3_2">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_3_2_i()" type="button" class="btn  btn-primary">Interactive</button>
+          <button (click)="onclicksp_1_3_2_s()" type="button" class="btn  btn-primary">Static</button>
+          <button (click)="visiblesp_1_3_2=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="visiblesp_1_3_3">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_3_3_i()" type="button" class="btn  btn-primary">Interactive</button>
+          <button (click)="onclicksp_1_3_3_s()" type="button" class="btn  btn-primary">Static</button>
+          <button (click)="visiblesp_1_3_3=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="visiblesp_1_3_4">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_3_4_i()" type="button" class="btn  btn-primary">Interactive</button>
+          <button (click)="onclicksp_1_3_4_s()" type="button" class="btn  btn-primary">Static</button>
+          <button (click)="visiblesp_1_3_4=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="visiblesp_1_3_5">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_3_5_i()" type="button" class="btn  btn-primary">Interactive</button>
+          <button (click)="onclicksp_1_3_5_s()" type="button" class="btn  btn-primary">Static</button>
+          <button (click)="visiblesp_1_3_5=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="visiblesp_1_3_6">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_3_6_i()" type="button" class="btn  btn-primary">Interactive</button>
+          <button (click)="onclicksp_1_3_6_s()" type="button" class="btn  btn-primary">Static</button>
+          <button (click)="visiblesp_1_3_6=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="visiblesp_1_3_7">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_3_7_i()" type="button" class="btn  btn-primary">Interactive</button>
+          <button (click)="onclicksp_1_3_7_s()" type="button" class="btn  btn-primary">Static</button>
+          <button (click)="visiblesp_1_3_7=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="visiblesp_1_3_8">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_3_8_i()" type="button" class="btn  btn-primary">Interactive</button>
+          <button (click)="onclicksp_1_3_8_s()" type="button" class="btn  btn-primary">Static</button>
+          <button (click)="visiblesp_1_3_8=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+
+
+
+
+
+
+
+
+
+
+
+      <ng-container *ngIf="visiblesp_1_4">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_4_1()" type="button" class="btn  btn-primary">By Sage-Grouse Group</button>
+          <button (click)="onclicksp_1_4_2()" type="button" class="btn  btn-primary">Preferred Forbs</button>
+          <button (click)="onclicksp_1_4_3()" type="button" class="btn  btn-primary">Sagebrush</button>
+          <button (click)="visiblesp_1_4=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="visiblesp_1_4_1">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_4_1_i()" type="button" class="btn  btn-primary">Interactive</button>
+          <button (click)="onclicksp_1_4_1_s()" type="button" class="btn  btn-primary">Static</button>
+          <button (click)="visiblesp_1_4_1=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="visiblesp_1_4_2">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_4_2_i()" type="button" class="btn  btn-primary">Interactive</button>
+          <button (click)="onclicksp_1_4_2_s()" type="button" class="btn  btn-primary">Static</button>
+          <button (click)="visiblesp_1_4_2=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="visiblesp_1_4_3">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_1_4_3_i()" type="button" class="btn  btn-primary">Interactive</button>
+          <button (click)="onclicksp_1_4_3_s()" type="button" class="btn  btn-primary">Static</button>
+          <button (click)="visiblesp_1_4_3=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+        </ng-container>
+
+
+
+
+
+<!-- ############### -->
+
+      <ng-container *ngIf="visiblesp_2">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_2_1()" type="button" class="btn  btn-primary">Percent cover by Species</button>
+          <button (click)="onclicksp_2_2()" type="button" class="btn  btn-primary">Percent cover by SFG</button>
+          <button (click)="onclicksp_2_3()" type="button" class="btn  btn-primary">Percent cover,Noxious vs Non_Noxious</button>
+          <button (click)="onclicksp_2_4()" type="button" class="btn  btn-primary">Percent cover,Woody vs Non-Woody</button>
+          <button (click)="onclicksp_2_5()" type="button" class="btn  btn-primary">Percent cover,Sage-Grouse Group</button>
+          <button (click)="onclicksp_2_6()" type="button" class="btn  btn-primary">Percent cover,Preferred Forbs</button>
+          <button (click)="visiblesp_2=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+
+      </ng-container>
+      
+      <ng-container *ngIf="visiblesp_2_1">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_2_1_1()" type="button" class="btn  btn-primary">By Plot</button>
+          <button (click)="onclicksp_2_1_2()" type="button" class="btn  btn-primary">Ecological Site</button>
+          <button (click)="visiblesp_2_1=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="visiblesp_2_2">
+      <div class="bg-white shadow-sm p-3">
+        <button (click)="onclicksp_2_2_1()" type="button" class="btn  btn-primary">By Plot</button>
+        <button (click)="onclicksp_2_2_2()" type="button" class="btn  btn-primary">Ecological Site</button>
+        <button (click)="visiblesp_2_2=false" type="button" class="btn  btn-danger">Close</button>
+      </div>
+  </ng-container>
+  <ng-container *ngIf="visiblesp_2_3">
+    <div class="bg-white shadow-sm p-3">
+      <button (click)="onclicksp_2_3_1()" type="button" class="btn  btn-primary">By Plot</button>
+      <button (click)="onclicksp_2_3_2()" type="button" class="btn  btn-primary">Ecological Site</button>
+      <button (click)="visiblesp_2_3=false" type="button" class="btn  btn-danger">Close</button>
+    </div>
+</ng-container>
+<ng-container *ngIf="visiblesp_2_4">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclicksp_2_4_1()" type="button" class="btn  btn-primary">By Plot</button>
+    <button (click)="onclicksp_2_4_2()" type="button" class="btn  btn-primary">Ecological Site</button>
+    <button (click)="visiblesp_2_4=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+<ng-container *ngIf="visiblesp_2_5">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclicksp_2_5_1()" type="button" class="btn  btn-primary">By Plot</button>
+    <button (click)="onclicksp_2_5_2()" type="button" class="btn  btn-primary">Ecological Site</button>
+    <button (click)="visiblesp_2_5=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+      <ng-container *ngIf="visiblesp_2_6">
+        <div class="bg-white shadow-sm p-3">
+          <button (click)="onclicksp_2_6_1()" type="button" class="btn  btn-primary">By Plot</button>
+          <button (click)="onclicksp_2_6_2()" type="button" class="btn  btn-primary">Ecological Site</button>
+          <button (click)="visiblesp_2_6=false" type="button" class="btn  btn-danger">Close</button>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="visiblesp_3">
+      <div class="bg-white shadow-sm p-3">
+        <button (click)="onclicksp_3_1()" type="button" class="btn  btn-primary">By Plot</button>
+        <button (click)="onclicksp_3_2()" type="button" class="btn  btn-primary">Ecological Site</button>
+        <button (click)="visiblesp_3=false" type="button" class="btn  btn-danger">Close</button>
+      </div>
+    </ng-container>
+
+    
+      <ng-container *ngIf="visiblesp_2_1_1">
+      <button (click)="visiblesp_2_1=false" type="button" class="btn  btn-danger">Close Table</button>
+      <nav class="navbar">
+        <input class="form-control" type="text" name="Duration" [(ngModel)]="Duration" (ngModelChange)="search()"
+        placeholder="Enter Duration to search">
+      </nav>
+      
+      <div class="container-fluid container1">
+        <div class="full-width-div">
+      <table class="table table-bordered" ng-show="isHidden">
+        <thead>
+          <tr>
+            <!-- <th (click)=sort('species')>Species&nbsp;<i class="fa fa-sort"></i></th> -->
+            <th>Species</th>
+            <th>Primary Key</th>
+            <th>Plot ID</th>
+            <th>AH_SpeciesCover</th>
+            <th>AH_SpeciesCover_n</th>
+            <th>GrowthHabit</th>
+            <th>GrowthHabitSub</th>
+            <th>Duration</th>
+            <th>Noxious</th>
+            <th>SG_Group</th>
+            <th>DBKey</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let data of estdata">
+           <!-- | paginate{itemsPerPage:3,currentPage:p}; ">  -->
+
+          <!-- </tr> | orderBy: Key"> -->
+            <td>{{data.species}}</td>
+            <td>{{data.PrimaryKey}}</td>
+            <td>{{data.PlotID}}</td>
+            <td>{{data.AH_SpeciesCover}}</td>
+            <td>{{data.AH_SpeciesCover_n}}</td>
+            <td>{{data.GrowthHabit}}</td>
+            <td>{{data.GrowthHabitSub}}</td>
+            <td>{{data.Duration}}</td>
+            <td>{{data.Noxious}}</td>
+            <td>{{data.SG_Group}}</td>
+            <td>{{data.DBKey}}</td>
+          </tr>
+        </tbody>
+        <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+      </table>
+    </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="visiblesp_2_1_2">
+    <button (click)="visiblesp_2_1_2=false" type="button" class="btn  btn-danger">Close Table</button>
+    <nav class="navbar">
+      <input class="form-control" type="text" name="Duration" [(ngModel)]="Duration" (ngModelChange)="search()"
+      placeholder="Enter Duration to search">
+    </nav>
+    
+    <div class="container-fluid container1">
+      <div class="full-width-div">
+    <table class="table table-bordered" ng-show="isHidden">
+      <thead>
+        <tr>
+          <!-- <th (click)=sort('species')>Species&nbsp;<i class="fa fa-sort"></i></th> -->
+          <th>Species</th>
+          <th>ScientificName</th>
+          <th>AveragePercentCover</th>
+          <th>StandardDeviation</th>
+          <th>MinCover</th>
+          <th>MaxCover</th>
+          <th>n</th>
+          <th>GrowthHabit</th>
+          <th>GrowthHabitSub</th>
+          <th>Duration</th>
+          <th>Noxious</th>
+          <th>CommonName</th>
+          <th>SG_Group</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let data of estdata">
+         <!-- | paginate{itemsPerPage:3,currentPage:p}; ">  -->
+
+        <!-- </tr> | orderBy: Key"> -->
+          <td>{{data.species}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>{{data.GrowthHabit}}</td>
+          <td>{{data.GrowthHabitSub}}</td>
+          <td>{{data.Duration}}</td>
+          <td>{{data.Noxious}}</td>
+          <td></td>
+          <td>{{data.SG_Group}}</td>
+        </tr>
+      </tbody>
+      <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+    </table>
+  </div>
+  </div>
+</ng-container>
+
+<!-- #############  -->
+
+  <ng-container *ngIf="visiblesp_2_2_1">
+    <button (click)="visiblesp_2_2_1=false" type="button" class="btn  btn-danger">Close Table</button>
+    <nav class="navbar">
+      <input class="form-control" type="text" name="Duration" [(ngModel)]="Duration" (ngModelChange)="search()"
+      placeholder="Enter Duration to search">
+    </nav>
+    
+    <div class="container-fluid container1">
+      <div class="full-width-div">
+    <table class="table table-bordered" ng-show="isHidden">
+      <thead>
+        <tr>
+          <!-- <th (click)=sort('species')>Species&nbsp;<i class="fa fa-sort"></i></th> -->
+
+          <th>PrimaryKey</th>
+          <th>Plot ID</th>
+          <th>GrowthHabitSub</th>
+          <th>Duration</th>
+          <th>Percent</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let data of estdata">
+         <!-- | paginate{itemsPerPage:3,currentPage:p}; ">  -->
+
+        <!-- </tr> | orderBy: Key"> -->
+        
+          <td>{{data.PrimaryKey}}</td>
+          <td>{{data.PlotID}}</td>
+          <td>{{data.GrowthHabitSub}}</td>
+          <td>{{data.Duration}}</td>
+          <td></td>
+        </tr>
+      </tbody>
+      <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+    </table>
+  </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="visiblesp_2_2_2">
+  <button (click)="visiblesp_2_2_2=false" type="button" class="btn  btn-danger">Close Table</button>
+  <nav class="navbar">
+    <input class="form-control" type="text" name="Duration" [(ngModel)]="Duration" (ngModelChange)="search()"
+    placeholder="Enter Duration to search">
+  </nav>
+  
+  <div class="container-fluid container1">
+    <div class="full-width-div">
+  <table class="table table-bordered" ng-show="isHidden">
+    <thead>
+      <tr>
+        <!-- <th (click)=sort('species')>Species&nbsp;<i class="fa fa-sort"></i></th> -->
+
+        <th>GrowthHabitSub</th>
+        <th>Duration</th>
+        <th>AveragePercentCover</th>
+        <th>StandardDeviation</th>
+        <th>MinCover</th>
+        <th>MaxCover</th>
+        <th>n</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let data of estdata">
+       <!-- | paginate{itemsPerPage:3,currentPage:p}; ">  -->
+
+      <!-- </tr> | orderBy: Key"> -->
+      
+        <td>{{data.GrowthHabitSub}}</td>
+        <td>{{data.Duration}}</td>
+        <td>{{data.AveragePercentCover}}</td>
+        <td>{{data.StandardDeviation_cm}}</td>
+        <td>{{data.MinCover}}</td>
+        <td>{{data.MaxCover}}</td>
+        <td>n</td>
+      </tr>
+    </tbody>
+    <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+  </table>
+</div>
+</div>
+</ng-container>
+    
+
+<ng-container *ngIf="visiblesp_2_3_1">
+  <button (click)="visiblesp_2_3_1=false" type="button" class="btn  btn-danger">Close Table</button>
+  <nav class="navbar">
+    <input class="form-control" type="text" name="Duration" [(ngModel)]="Duration" (ngModelChange)="search()"
+    placeholder="Enter Duration to search">
+  </nav>
+  
+  <div class="container-fluid container1">
+    <div class="full-width-div">
+  <table class="table table-bordered" ng-show="isHidden">
+    <thead>
+      <tr>
+        <!-- <th (click)=sort('species')>Species&nbsp;<i class="fa fa-sort"></i></th> -->
+
+        <th>Noxious</th>
+        <th>PrimaryKey</th>
+        <th>PlotID</th>
+        <th>Percent</th>
+  
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let data of estdata">
+       <!-- | paginate{itemsPerPage:3,currentPage:p}; ">  -->
+
+      <!-- </tr> | orderBy: Key"> -->
+      
+        <td>{{data.Noxious}}</td>
+        <td>{{data.PrimaryKey}}</td>
+        <td>{{data.PlotID}}</td>
+        <td></td>
+      </tr>
+    </tbody>
+    <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+  </table>
+</div>
+</div>
+</ng-container>
+
+<ng-container *ngIf="visiblesp_2_3_2">
+  <button (click)="visiblesp_2_3_2=false" type="button" class="btn  btn-danger">Close Table</button>
+  <nav class="navbar">
+    <input class="form-control" type="text" name="Duration" [(ngModel)]="Duration" (ngModelChange)="search()"
+    placeholder="Enter Duration to search">
+  </nav>
+  
+  <div class="container-fluid container1">
+    <div class="full-width-div">
+  <table class="table table-bordered" ng-show="isHidden">
+    <thead>
+      <tr>
+        <!-- <th (click)=sort('species')>Species&nbsp;<i class="fa fa-sort"></i></th> -->
+
+        <th>Noxious</th>
+        <th>AveragePercentCover</th>
+        <th>StandardDeviation</th>
+        <th>MinCover</th>
+        <th>MaxCover</th>
+        <th>n</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let data of estdata">
+       <!-- | paginate{itemsPerPage:3,currentPage:p}; ">  -->
+
+      <!-- </tr> | orderBy: Key"> -->
+      
+        <td>{{data.Noxious}}</td>
+        <td>{{data.AveragePercentCover}}</td>
+        <td>{{data.StandardDeviation}}</td>
+        <td>{{data.MinCover}}</td>
+        <td>{{data.MaxCover}}</td>
+        <td></td>
+      </tr>
+    </tbody>
+    <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+  </table>
+</div>
+</div>
+</ng-container>
+
+
+
+<ng-container *ngIf="visiblesp_2_4_1">
+  <button (click)="visiblesp_2_4_1=false" type="button" class="btn  btn-danger">Close Table</button>
+  <nav class="navbar">
+    <input class="form-control" type="text" name="Duration" [(ngModel)]="Duration" (ngModelChange)="search()"
+    placeholder="Enter Duration to search">
+  </nav>
+  
+  <div class="container-fluid container1">
+    <div class="full-width-div">
+  <table class="table table-bordered" ng-show="isHidden">
+    <thead>
+      <tr>
+        <!-- <th (click)=sort('species')>Species&nbsp;<i class="fa fa-sort"></i></th> -->
+
+        <th>GrowthHabit</th>
+        <th>PrimaryKey</th>
+        <th>PlotID</th>
+        <th>Percent</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let data of estdata">
+       <!-- | paginate{itemsPerPage:3,currentPage:p}; ">  -->
+
+      <!-- </tr> | orderBy: Key"> -->
+      
+        <td>{{data.GrowthHabit}}</td>
+        <td>{{data.PrimaryKey}}</td>
+        <td>{{data.PlotID}}</td>
+        <td></td>
+      </tr>
+    </tbody>
+    <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+  </table>
+</div>
+</div>
+</ng-container>
+
+<ng-container *ngIf="visiblesp_2_4_2">
+  <button (click)="visiblesp_2_4_2=false" type="button" class="btn  btn-danger">Close Table</button>
+  <nav class="navbar">
+    <input class="form-control" type="text" name="Duration" [(ngModel)]="Duration" (ngModelChange)="search()"
+    placeholder="Enter Duration to search">
+  </nav>
+  
+  <div class="container-fluid container1">
+    <div class="full-width-div">
+  <table class="table table-bordered" ng-show="isHidden">
+    <thead>
+      <tr>
+        <!-- <th (click)=sort('species')>Species&nbsp;<i class="fa fa-sort"></i></th> -->
+
+        <th>GrowthHabit</th>
+        <th>AveragePercentCover</th>
+        <th>StandardDeviation</th>
+        <th>MinCover</th>
+        <th>MaxCover</th>
+        <th>n</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let data of estdata">
+       <!-- | paginate{itemsPerPage:3,currentPage:p}; ">  -->
+
+      <!-- </tr> | orderBy: Key"> -->
+      
+        <td>{{data.GrowthHabit}}</td>
+        <td>{{data.AveragePercentCover}}</td>
+        <td>{{data.StandardDeviation}}</td>
+        <td>{{data.MinCover}}</td>
+        <td>{{data.MaxCover}}</td>
+        <td></td>
+      </tr>
+    </tbody>
+    <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+  </table>
+</div>
+</div>
+</ng-container>
+
+<ng-container *ngIf="visiblesp_2_5_1">
+  <button (click)="visiblesp_2_5_1=false" type="button" class="btn  btn-danger">Close Table</button>
+  <nav class="navbar">
+    <input class="form-control" type="text" name="Duration" [(ngModel)]="Duration" (ngModelChange)="search()"
+    placeholder="Enter Duration to search">
+  </nav>
+  
+  <div class="container-fluid container1">
+    <div class="full-width-div">
+  <table class="table table-bordered" ng-show="isHidden">
+    <thead>
+      <tr>
+        <!-- <th (click)=sort('species')>Species&nbsp;<i class="fa fa-sort"></i></th> -->
+
+        <th>SG_Group</th>
+        <th>PrimaryKey</th>
+        <th>PlotID</th>
+        <th>Percent</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let data of estdata">
+       <!-- | paginate{itemsPerPage:3,currentPage:p}; ">  -->
+
+      <!-- </tr> | orderBy: Key"> -->
+      
+        <td>{{data.SG_Group}}</td>
+        <td>{{data.PrimaryKey}}</td>
+        <td>{{data.PlotID}}</td>
+        <td></td>
+      </tr>
+    </tbody>
+    <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+  </table>
+</div>
+</div>
+</ng-container>
+
+<ng-container *ngIf="visiblesp_2_5_2">
+  <button (click)="visiblesp_2_5_2=false" type="button" class="btn  btn-danger">Close Table</button>
+  <nav class="navbar">
+    <input class="form-control" type="text" name="Duration" [(ngModel)]="Duration" (ngModelChange)="search()"
+    placeholder="Enter Duration to search">
+  </nav>
+  
+  <div class="container-fluid container1">
+    <div class="full-width-div">
+  <table class="table table-bordered" ng-show="isHidden">
+    <thead>
+      <tr>
+        <!-- <th (click)=sort('species')>Species&nbsp;<i class="fa fa-sort"></i></th> -->
+
+        <th>SG_Group</th>
+        <th>AveragePercentCover</th>
+        <th>StandardDeviation</th>
+        <th>MinCover</th>
+        <th>MaxCover</th>
+        <th>n</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let data of estdata">
+       <!-- | paginate{itemsPerPage:3,currentPage:p}; ">  -->
+
+      <!-- </tr> | orderBy: Key"> -->
+      
+        <td>{{data.SG_Group}}</td>
+        <td>{{data.AveragePercentCover}}</td>
+        <td>{{data.StandardDeviation}}</td>
+        <td>{{data.MinCover}}</td>
+        <td>{{data.MaxCover}}</td>
+        <td></td>
+      </tr>
+    </tbody>
+    <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+  </table>
+</div>
+</div>
+</ng-container>
+
+
+<ng-container *ngIf="visiblesp_2_6_1">
+  <button (click)="visiblesp_2_6_1=false" type="button" class="btn  btn-danger">Close Table</button>
+  <nav class="navbar">
+    <input class="form-control" type="text" name="Duration" [(ngModel)]="Duration" (ngModelChange)="search()"
+    placeholder="Enter Duration to search">
+  </nav>
+  
+  <div class="container-fluid container1">
+    <div class="full-width-div">
+  <table class="table table-bordered" ng-show="isHidden">
+    <thead>
+      <tr>
+        <!-- <th (click)=sort('species')>Species&nbsp;<i class="fa fa-sort"></i></th> -->
+
+        <th>Species</th>
+        <th>PrimaryKey</th>
+        <th>PlotID</th>
+        <th>Percent</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let data of estdata">
+       <!-- | paginate{itemsPerPage:3,currentPage:p}; ">  -->
+
+      <!-- </tr> | orderBy: Key"> -->
+      
+        <td>{{data.species}}</td>
+        <td>{{data.PrimaryKey}}</td>
+        <td>{{data.PlotID}}</td>
+        <td></td>
+      </tr>
+    </tbody>
+    <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+  </table>
+</div>
+</div>
+</ng-container>
+
+<ng-container *ngIf="visiblesp_2_6_2">
+  <button (click)="visiblesp_2_6_2=false" type="button" class="btn  btn-danger">Close Table</button>
+  <nav class="navbar">
+    <input class="form-control" type="text" name="Duration" [(ngModel)]="Duration" (ngModelChange)="search()"
+    placeholder="Enter Duration to search">
+  </nav>
+  
+  <div class="container-fluid container1">
+    <div class="full-width-div">
+  <table class="table table-bordered" ng-show="isHidden">
+    <thead>
+      <tr>
+        <!-- <th (click)=sort('species')>Species&nbsp;<i class="fa fa-sort"></i></th> -->
+
+        <th>Species</th>
+        <th>AveragePercentCover</th>
+        <th>StandardDeviation</th>
+        <th>MinCover</th>
+        <th>MaxCover</th>
+        <th>n</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let data of estdata">
+       <!-- | paginate{itemsPerPage:3,currentPage:p}; ">  -->
+
+      <!-- </tr> | orderBy: Key"> -->
+      
+        <td>{{data.species}}</td>
+        <td>{{data.AveragePercentCover}}</td>
+        <td>{{data.StandardDeviation}}</td>
+        <td>{{data.MinCover}}</td>
+        <td>{{data.MaxCover}}</td>
+        <td></td>
+      </tr>
+    </tbody>
+    <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+  </table>
+</div>
+</div>
+</ng-container>
+
+
+<ng-container *ngIf="visiblesp_3_1">
+  <button (click)="visiblesp_3_1=false" type="button" class="btn  btn-danger">Close Table</button>
+  <nav class="navbar">
+    <input class="form-control" type="text" name="Duration" [(ngModel)]="Duration" (ngModelChange)="search()"
+    placeholder="Enter Duration to search">
+  </nav>
+  
+  <div class="container-fluid container1">
+    <div class="full-width-div">
+  <table class="table table-bordered" ng-show="isHidden">
+    <thead>
+      <tr>
+        <!-- <th (click)=sort('species')>Species&nbsp;<i class="fa fa-sort"></i></th> -->
+
+        <th>Species</th>
+        <th>ScientificName</th>
+        <th>GrowthHabit</th>
+        <th>GrowthHabitSub</th>
+        <th>Duration</th>
+        <th>Noxious</th>
+        <th>SG_Group</th>
+        <th>PrimaryKey</th>
+        <th>PlotID</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let data of estdata">
+       <!-- | paginate{itemsPerPage:3,currentPage:p}; ">  -->
+
+      <!-- </tr> | orderBy: Key"> -->
+      
+        <td>{{data.species}}</td>
+        <td>{{data.ScientificName}}</td>
+        <td>{{data.GrowthHabit}}</td>
+        <td>{{data.GrowthHabitSub}}</td>
+        <td>{{data.Duration}}</td>
+        <td>{{data.Noxious}}</td>
+        <td>{{data.SG_Group}}</td>
+        <td>{{data.PrimaryKey}}</td>
+        <td>{{data.PlotID}}</td>
+      </tr>
+    </tbody>
+    <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+  </table>
+</div>
+</div>
+</ng-container>
+
+<ng-container *ngIf="visiblesp_3_2">
+  <button (click)="visiblesp_3_2=false" type="button" class="btn  btn-danger">Close Table</button>
+  <nav class="navbar">
+    <input class="form-control" type="text" name="Duration" [(ngModel)]="Duration" (ngModelChange)="search()"
+    placeholder="Enter Duration to search">
+  </nav>
+  
+  <div class="container-fluid container1">
+    <div class="full-width-div">
+  <table class="table table-bordered" ng-show="isHidden">
+    <thead>
+      <tr>
+        <!-- <th (click)=sort('species')>Species&nbsp;<i class="fa fa-sort"></i></th> -->
+
+        <th>Species</th>
+        <th>ScientificName</th>
+        <th>Family</th>
+        <th>GrowthHabit</th>
+        <th>GrowthHabitSub</th>
+        <th>Duration</th>
+        <th>Noxious</th>
+        <th>SG_Group</th>
+        <th>SynonymOf</th>
+        <th>CommonName</th>
+        <th>Notes</th>
+        <th>UpdatedSpeciesCode</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let data of estdata">
+       <!-- | paginate{itemsPerPage:3,currentPage:p}; ">  -->
+
+      <!-- </tr> | orderBy: Key"> -->
+      
+        <td>{{data.species}}</td>
+        <td>{{data.ScientificName}}</td>
+        <td>{{data.Family}}</td>
+        <td>{{data.GrowthHabit}}</td>
+        <td>{{data.GrowthHabitSub}}</td>
+        <td>{{data.Duration}}</td>
+        <td>{{data.Noxious}}</td>
+        <td>{{data.SG_Group}}</td>
+        <td>{{data.SynonymOf}}</td>
+        <td>{{data.CommonName}}</td>
+        <td>{{data.Notes}}</td>
+        <td>{{data.UpdatedSpeciesCode}}</td>
+      </tr>
+    </tbody>
+    <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+  </table>
+</div>
+</div>
+</ng-container>
+
+<ng-container *ngIf="visible_ground">
+  <div class="bg-white shadow-sm p-3">
+    <p>
+      In addition to species-specific indicators, we can summarize ground cover indicators to get percent cover values for bare ground, total rock, total litter, and total foliar. Additional indicators that can be included here are Lichen (“LC”) , Moss (“M”) , Duff (“D”), and/or Cyanobacteria (“CY”). These calculations are informative for assessing the status of the ecological site as a whole, susceptibility to erosion, and/or cross-walking AIM data to <a href="https://www.landscapetoolbox.org/manuals/iirhv5/">Rangeland Health Assessments</a> when used in conjunction with species specific calculations.
+    </p>
+<button (click)="onclickg_1()" type="button" class="btn  btn-primary">Figures</button>
+<button (click)="onclickg_2()" type="button" class="btn  btn-primary">Summary Tables</button>
+<button (click)="visible_ground=false" type="button" class="btn  btn-danger">Close</button>
+</div>
+</ng-container>
+
+
+<ng-container *ngIf="visibleg_1">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickg_1_1()" type="button" class="btn  btn-primary">Interactive</button>
+    <button (click)="onclickg_1_2()" type="button" class="btn  btn-primary">Static</button>
+    <button (click)="visibleg_1=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+<ng-container *ngIf="visibleg_2">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickg_2_1()" type="button" class="btn  btn-primary">By Plot</button>
+    <button (click)="onclickg_2_2()" type="button" class="btn  btn-primary">Ecological Site</button>
+    <button (click)="visibleg_2=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="visibleg_2_1">
+  <button (click)="visibleg_2_1=false" type="button" class="btn  btn-danger">Close Table</button>
+  <div class="bg-white shadow-sm p-3">
+    <div class="container-fluid container1">
+      <div class="full-width-div">
+    <table class="table table-bordered" ng-show="isHidden">
+      <thead>
+        <tr>
+          <th>PlotID</th>
+          <th>PrimaryKey</th>
+          <th>Indicator</th>
+          <th>Percent</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let data of estdata">
+          <td>{{data.PlotID}}</td>
+          <td>{{data.PrimaryKey}}</td>
+          <td>{{data.Indicator}}</td>
+          <td>{{data.Percent}}</td>
+        </tr>
+      </tbody>
+      <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+    </table>
+  </div>
+  </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="visibleg_2_2">
+  <button (click)="visibleg_2_2=false" type="button" class="btn  btn-danger">Close Table</button>
+  <div class="bg-white shadow-sm p-3">
+    <div class="container-fluid container1">
+      <div class="full-width-div">
+    <table class="table table-bordered" ng-show="isHidden">
+      <thead>
+        <tr>
+          <th>Indicator</th>
+          <th>Average</th>
+          <th>StandardDeviation</th>
+          <th>Low</th>
+          <th>High</th>
+          <th>n</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let data of estdata">
+          <td>{{data.Indicator}}</td>
+          <td>{{data.Average}}</td>
+          <td>{{data.StandardDeviation}}</td>
+          <td>{{data.Low}}</td>
+          <td>{{data.High}}</td>
+          <td>{{data.n}}</td>
+        </tr>
+      </tbody>
+      <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+    </table>
+  </div>
+  </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="visible_veg">
+  <div class="bg-white shadow-sm p-3">
+    <p>
+      Looking at height data in conjunction with canopy gap data helps inform the vegetation structure across a site.
+    </p>
+    <button (click)="onclickveg_1()" type="button" class="btn  btn-primary">Height Figures</button>
+    <button (click)="onclickveg_2()" type="button" class="btn  btn-primary">Height Summary Tables</button>
+    <button (click)="visible_veg=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="visible_veg_1">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickveg_1_1()" type="button" class="btn  btn-primary">By Functional Group</button>
+    <button (click)="onclickveg_1_2()" type="button" class="btn  btn-primary">By Species</button>
+    <button (click)="onclickveg_1_3()" type="button" class="btn  btn-primary">Sagebrush</button>
+    <button (click)="visible_veg_1=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="visible_veg_1_2">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickveg_1_2_1()" type="button" class="btn  btn-primary">Gramanoid, Annual</button>
+    <button (click)="onclickveg_1_2_2()" type="button" class="btn  btn-primary">Gramanoid, Perennial</button>
+    <button (click)="onclickveg_1_2_3()" type="button" class="btn  btn-primary">Forb, Annual</button>
+    <button (click)="onclickveg_1_2_4()" type="button" class="btn  btn-primary">Forb, perennial</button>
+    <button (click)="onclickveg_1_2_5()" type="button" class="btn  btn-primary">SubShrub</button>
+    <button (click)="onclickveg_1_2_6()" type="button" class="btn  btn-primary">Shrub</button>
+    <button (click)="onclickveg_1_2_7()" type="button" class="btn  btn-primary">Tree</button>
+    <button (click)="onclickveg_1_2_8()" type="button" class="btn  btn-primary">Succulent</button>
+    <button (click)="visible_veg_1_2=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="visible_veg_1_1">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickveg_1_1()" type="button" class="btn  btn-primary">Interactive</button>
+    <button (click)="onclickveg_1_2()" type="button" class="btn  btn-primary">Static</button>
+    <button (click)="visible_veg_1_1=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="visible_veg_1_3">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickveg_1_1()" type="button" class="btn  btn-primary">Interactive</button>
+    <button (click)="onclickveg_1_2()" type="button" class="btn  btn-primary">Static</button>
+    <button (click)="visible_veg_1_3=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+<!-- ###########  -->
+
+<ng-container *ngIf="visible_veg_1_2_1">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickveg_1_1()" type="button" class="btn  btn-primary">Interactive</button>
+    <button (click)="onclickveg_1_2()" type="button" class="btn  btn-primary">Static</button>
+    <button (click)="visible_veg_1_2_1=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+<ng-container *ngIf="visible_veg_1_2_2">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickveg_1_1()" type="button" class="btn  btn-primary">Interactive</button>
+    <button (click)="onclickveg_1_2()" type="button" class="btn  btn-primary">Static</button>
+    <button (click)="visible_veg_1_2_2=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+<ng-container *ngIf="visible_veg_1_2_3">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickveg_1_1()" type="button" class="btn  btn-primary">Interactive</button>
+    <button (click)="onclickveg_1_2()" type="button" class="btn  btn-primary">Static</button>
+    <button (click)="visible_veg_1_2_3=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+<ng-container *ngIf="visible_veg_1_2_4">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickveg_1_1()" type="button" class="btn  btn-primary">Interactive</button>
+    <button (click)="onclickveg_1_2()" type="button" class="btn  btn-primary">Static</button>
+    <button (click)="visible_veg_1_2_4=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+<ng-container *ngIf="visible_veg_1_2_5">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickveg_1_1()" type="button" class="btn  btn-primary">Interactive</button>
+    <button (click)="onclickveg_1_2()" type="button" class="btn  btn-primary">Static</button>
+    <button (click)="visible_veg_1_2_5=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+<ng-container *ngIf="visible_veg_1_2_6">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickveg_1_1()" type="button" class="btn  btn-primary">Interactive</button>
+    <button (click)="onclickveg_1_2()" type="button" class="btn  btn-primary">Static</button>
+    <button (click)="visible_veg_1_2_6=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+<ng-container *ngIf="visible_veg_1_2_7">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickveg_1_1()" type="button" class="btn  btn-primary">Interactive</button>
+    <button (click)="onclickveg_1_2()" type="button" class="btn  btn-primary">Static</button>
+    <button (click)="visible_veg_1_2_7=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+<ng-container *ngIf="visible_veg_1_2_8">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickveg_1_1()" type="button" class="btn  btn-primary">Interactive</button>
+    <button (click)="onclickveg_1_2()" type="button" class="btn  btn-primary">Static</button>
+    <button (click)="visible_veg_1_2_8=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="visible_veg_2">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickveg_2_1()" type="button" class="btn  btn-primary">Functional Group</button>
+    <button (click)="onclickveg_2_2()" type="button" class="btn  btn-primary">Species</button>
+    <button (click)="onclickveg_2_3()" type="button" class="btn  btn-primary">Sagebrush</button>
+    <button (click)="visible_veg_2=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="visible_veg_2_1">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickveg_2_1_1()" type="button" class="btn  btn-primary">By Plot</button>
+    <button (click)="onclickveg_2_1_2()" type="button" class="btn  btn-primary">Ecological Site</button>
+    <button (click)="visible_veg_2_1=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+<ng-container *ngIf="visible_veg_2_2">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickveg_2_2_1()" type="button" class="btn  btn-primary">By Plot</button>
+    <button (click)="onclickveg_2_2_2()" type="button" class="btn  btn-primary">Ecological Site</button>
+    <button (click)="visible_veg_2_2=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+<ng-container *ngIf="visible_veg_2_3">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickveg_2_3_1()" type="button" class="btn  btn-primary">By Plot</button>
+    <button (click)="onclickveg_2_3_2()" type="button" class="btn  btn-primary">Ecological Site</button>
+    <button (click)="visible_veg_2_3=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="visible_canopy">
+  <div class="bg-white shadow-sm p-3">
+    <p>
+      Canopy gap intercept can inform us about potential wind erosion, weed invasion, and wildlife habitat. When combined with vegetation height measurements, gap measurements can inform us about vegetation structure (see p. 41 in the <a href="https://www.landscapetoolbox.org/wp-content/uploads/2016/02/MMGSSE_20170614.pdf"> Monitoring Manual</a> for methods). Canopy gap, bare soil, and vegetation heights can also be used to determine thresholds at which vegetation structure may lead to a shift in ecological states.
+    </p>
+    <button (click)="onclickcanopy_1()" type="button" class="btn  btn-primary">Canopy Gap Size Class Figure</button>
+    <button (click)="onclickcanopy_2()" type="button" class="btn  btn-primary">Canopy Gap Size Class Summary Table</button>
+    <button (click)="visible_canopy=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+<ng-container *ngIf="visible_can_1">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickcanopy_1_1()" type="button" class="btn  btn-primary">Interactive</button>
+    <button (click)="onclickcanopy_1_2()" type="button" class="btn  btn-primary">Static</button>
+    <button (click)="visible_can_1=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+<ng-container *ngIf="visible_can_2">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclickcanopy_2_1()" type="button" class="btn  btn-primary">By Plot</button>
+    <button (click)="onclickcanopy_2_2()" type="button" class="btn  btn-primary">Ecological Site</button>
+    <button (click)="visible_can_2=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+
+
+
+<ng-container *ngIf="visible_can_2_1">
+  <button (click)="visible_can_2_1=false" type="button" class="btn  btn-danger">Close Table</button>
+  <div class="bg-white shadow-sm p-3">
+    <div class="container-fluid container1">
+      <div class="full-width-div">
+    <table class="table table-bordered" ng-show="isHidden">
+      <thead>
+        <tr>
+          <th>PlotID</th>
+          <th>PrimaryKey</th>
+          <th>Gap_Class_cm</th>
+          <th>Percent_Cover</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let data of estdata">
+          <td>{{data.PlotID}}</td>
+          <td>{{data.PrimaryKey}}</td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+      <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+    </table>
+  </div>
+  </div>
+  </div>
+</ng-container>
+<ng-container *ngIf="visible_can_2_2">
+  <button (click)="visible_can_2_2=false" type="button" class="btn  btn-danger">Close Table</button>
+  <div class="bg-white shadow-sm p-3">
+    <div class="container-fluid container1">
+      <div class="full-width-div">
+    <table class="table table-bordered" ng-show="isHidden">
+      <thead>
+        <tr>
+          <th>Gap_Class_cm</th>
+          <th>AveragePercentCover</th>
+          <th>StandardDeviation</th>
+          <th>MinPercentCover</th>
+          <th>MaxPercentCover</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let data of estdata">
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+      <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+    </table>
+  </div>
+  </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="visible_soil">
+  <div class="bg-white shadow-sm p-3">
+    <p>Soil stability provides information on soil structure development and resistance to erosion. The soil stability test measures the soil’s stability when exposed to rapid wetting, and reflects soil biotic integrity (see page 47 in the <a href="https://www.landscapetoolbox.org/wp-content/uploads/2016/02/MMGSSE_20170614.pdf"> Monitoring Manual</a>.)</p>
+    <button (click)="onclicksoil_1()" type="button" class="btn  btn-primary">Soil Stability Summary Figure</button>
+    <button (click)="onclicksoil_2()" type="button" class="btn  btn-primary">Soil Stability Summary table</button>
+    <button (click)="onclicksoil_3()" type="button" class="btn  btn-primary">Data Exploration</button>
+    <button (click)="visible_soil=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+<ng-container *ngIf="visible_soil_1">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclicksoil_1_1()" type="button" class="btn  btn-primary">Interactive</button>
+    <button (click)="onclicksoil_1_2()" type="button" class="btn  btn-primary">Static</button>
+    <button (click)="visible_soil_1=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="visible_soil_2">
+  <div class="bg-white shadow-sm p-3">
+    <button (click)="onclicksoil_2_1()" type="button" class="btn  btn-primary">By Plot</button>
+    <button (click)="onclicksoil_2_2()" type="button" class="btn  btn-primary">Ecological Site</button>
+    <button (click)="visible_soil_2=false" type="button" class="btn  btn-danger">Close</button>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="visible_soil_2_1">
+  <button (click)="visible_soil_2_1=false" type="button" class="btn  btn-danger">Close Table</button>
+  <div class="bg-white shadow-sm p-3">
+    <div class="container-fluid container1">
+      <div class="full-width-div">
+    <table class="table table-bordered" ng-show="isHidden">
+      <thead>
+        <tr>
+          <th>PlotID</th>
+          <th>PrimaryKey</th>
+          <th>veg</th>
+          <th>rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let data of estdata">
+          <td>{{data.PlotID}}</td>
+          <td>{{data.PrimaryKey}}</td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+      <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+    </table>
+  </div>
+  </div>
+  </div>
+</ng-container>
+<ng-container *ngIf="visible_soil_2_2">
+  <button (click)="visible_soil_2_2=false" type="button" class="btn  btn-danger">Close Table</button>
+  <div class="bg-white shadow-sm p-3">
+    <div class="container-fluid container1">
+      <div class="full-width-div">
+    <table class="table table-bordered" ng-show="isHidden">
+      <thead>
+        <tr>
+          <th>Veg</th>
+          <th>AverageSoilStability</th>
+          <th>StandardDeviation</th>
+          <th>MinSoilStability</th>
+          <th>MaxSoilStability</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let data of estdata">
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+      <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+    </table>
+  </div>
+  </div>
+  </div>
+</ng-container>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--       
+      <nav class="navbar">
+        <input class="form-control" type="text" name="GrowthHabitSub" [(ngModel)]="GrowthHabitSub" (ngModelChange)="searchghs()"
+        placeholder="Enter GrowthHabitSub to search">
+      </nav> -->
+      <!-- <div class="container-fluid container1">
+        <div class="full-width-div">
+      <table class="table table-bordered" ng-show="isHidden">
+        <thead>
+          <tr>
+            <th>GrowthHabitSub</th>
+            <th>Duration</th>
+            <th>Plot ID</th>
+            <th>PrimaryKey</th>
+            <th>PlotID</th>
+            <th>AverageHeight_cm</th>
+            <th>StandardDeviation_cm</th>
+            <th>MinHeight_cm</th>
+            <th>MaxHeight_cm</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let data of estdata">
+
+            <td>{{data.GrowthHabitSub}}</td>
+            <td>{{data.Duration}}</td>
+            <td>{{data.PrimaryKey}}</td>
+            <td>{{data.PlotID}}</td>
+            <td>{{data.AverageHeight_cm}}</td>
+            <td>{{data.StandardDeviation_cm}}</td>
+            <td>{{data.MinHeight_cm}}</td>
+            <td>{{data.MaxHeight_cm}}</td>
+            <td>{{data.Noxious}}</td>
+          </tr>
+        </tbody>
+        <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+      </table>
+    </div>
+    </div> -->
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+    
+</body>
+</html>

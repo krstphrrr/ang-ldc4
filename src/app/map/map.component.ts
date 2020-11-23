@@ -12,7 +12,7 @@ import { MarkerService } from '../services/marker.service'
 // import * as $ from 'jquery';
 declare var $: any;
 // import {sidebar} from '../../plugins/L.Control.Sidebar.js'
-import { Subscription } from 'rxjs'
+import { Subscription, from } from 'rxjs'
 import { debounceTime, scan, map } from 'rxjs/operators';
 import * as d3 from 'd3'
 import { socketDataService } from '../services/socketTest.service'
@@ -31,6 +31,9 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { SummaryTableComponent } from './summary-table/summary-table.component'
 import { DragpopComponent } from './dragpop/dragpop.component'
+import { isTemplateExpression } from 'typescript';
+import {MapfetchService} from './mapfetch.service'
+import { PlotlyModule } from 'angular-plotly.js';
 // interface Project {
 //   project: string;
 //   length: string;
@@ -96,6 +99,25 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public aim_proj = {};
   public lmf_proj = {};
   public dragger = false;
+
+  public indicators = [];
+  public Growthhabitsub: Array<any> = ['Graminiod','Forb','Sub Shrub','Shrub','Tree','Succulent'];
+  public perunnial_d = [];
+  public annual_d = [];
+  public forb_cover = [];
+  public graminiod_cover_annual = [];
+  public gramanoid_len;
+  public graminiod_cover_perrenial = [];
+  public subshrub_cover = [];
+  public shrub_cover = [];
+  public tree_cover = [];
+  public succulent_cover = []; 
+
+
+
+
+
+
   public baselayerSubscription:Subscription;
   public overlaySubscription:Subscription;
   message:string
@@ -112,7 +134,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     private layerServ: LayerService,
     private moveEnd: MoveEndService,
     private mapLoad: MapLoadService,
-    private dataBus: CustomControlService
+    private dataBus: CustomControlService,
+    private mapFetchService: MapfetchService
 
     ) {
       this.baselayerSubscription = this.wms.getBaselayer().subscribe(dropdownOption=>{
@@ -136,6 +159,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         // console.log(`from dropdown to map. you chose: ${dropdownOption.overlay.value}`)
       })
 
+      // this.myService.myMethod(this.Growthhabitsub);
+
      }
 
   draggerClose(){
@@ -144,12 +169,21 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     }
   }
   
-  
-  // this.newControl.include({
-  //   Events:{
-  //     CLICK:"click"
-  //   }
-  // })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 
   ngOnInit() {
     /* at initializing page:
@@ -188,6 +222,9 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     }
     this.layerCheck = this.layerServ.layer
     this.initMap(this.initLay)
+
+  
+
 
     this.dragTracker = this.wms.getCloseSignal().subscribe((closeSignal:CloseSignal)=>{
       // if(closeSignal.close===true){
@@ -954,11 +991,35 @@ function resizePanels() {
               this.markers.createMarkers(data)
           this.markerLayer = this.markers.markers
           this.markerLayer.addTo(this.mymap)
-          
+          //this.mapFetchService.setUserData(data);
+          if(data["features"].filter(item=>item.properties.GrowthHabit==='Graminiod').length!<3){
+            
+            
+            this.gramanoid_len = data["features"].filter(item=>item.properties.Project==='Graminiod').length
+
+            for(var i = 0; i < this.gramanoid_len; i++) {
+              var obj = data[i];
+
+              // console.log(obj.id);
+              this.graminiod_cover_annual.push(item=>item.properties.Ah_speciescover)
+
+            }
+            this.mapFetchService.myMethod(this.graminiod_cover_annual);
+
+
+            this.mapFetchService.setUserData(this.graminiod_cover_annual);
+
+            
+          }
+
+
+
+
             if(data["features"].filter(item=>item.properties.Project==='AIM').length!==0){
               this.aim_proj["project"] = "AIM"
               this.aim_proj["length"] = data["features"].filter(item=>item.properties.Project==='AIM').length
               this.projects.push(this.aim_proj)
+              //this.mapFetchService.setUserData(this.aim_proj);
               
             }
             if(data["features"].filter(item=>item.properties.Project==='LMF').length!==0){
@@ -1011,6 +1072,15 @@ function resizePanels() {
       }
     }
 
+
+
+
+
+
+
+
+    
+
     })
     
     this.mymap.on('movestart', event=>{
@@ -1048,6 +1118,12 @@ function resizePanels() {
   }
 
   popupTable(){
+
+
+
+
+
+    
     if(this.dragger==false){
       this.dragger = true
     } else {
