@@ -1,5 +1,5 @@
 export class Estdata {
-    species:string;
+    Species:string;
     PrimaryKey:String;
     PlotID:string;
     AH_SpeciesCover:number;
@@ -10,8 +10,12 @@ export class Estdata {
     Noxious:string;
     SG_Group:string;
     DBKey:string;
-    constructor(species,PrimaryKey,PlotID,AH_SpeciesCover,AH_SpeciesCover_n,GrowthHabit,GrowthHabitSub,Duration,Noxious,SG_Group,DBKey){
-        this.species=species;
+    Hgt_Species_Avg:string;
+    Hgt_Species_Avg_n:string;
+
+
+    constructor(Species,PrimaryKey,PlotID,AH_SpeciesCover,AH_SpeciesCover_n,GrowthHabit,GrowthHabitSub,Duration,Noxious,SG_Group,DBKey,Hgt_Species_Avg,Hgt_Species_Avg_n){
+        this.Species=Species;
         this.PrimaryKey=PrimaryKey;
         this.PlotID=PlotID;
         this.AH_SpeciesCover=AH_SpeciesCover;
@@ -22,6 +26,8 @@ export class Estdata {
         this.Noxious=Noxious;
         this.SG_Group=SG_Group;
         this.DBKey=DBKey;
+        this.Hgt_Species_Avg=Hgt_Species_Avg;
+        this.Hgt_Species_Avg_n=Hgt_Species_Avg_n;
 
     }
 }

@@ -11,11 +11,13 @@ import 'leaflet-sidebar-v2'
 
 
 declare var $: any;
+
 import 'leaflet-draw'
 import { count } from 'rxjs/operators';
 import { json } from 'd3';
 import { Estdata } from '../estdata';
 import { EstGroundService } from '../services/est-ground.service';
+import { PlotlyViaWindowModule } from 'angular-plotly.js';
 
 
 export class folder {
@@ -51,7 +53,7 @@ var x;
 
 
 })
-// @HostListener('window:scroll', ['$event'])
+
 
 export class FolderComponent implements OnInit {
 
@@ -215,9 +217,12 @@ visible_soil_2:boolean = false
 visible_soil_2_1:boolean = false
 visible_soil_2_2:boolean = false
 visible_soil_3:boolean = false
+ecoid:string
 
 idsearch(): void{
-  this.da.sendMessage('R042XB014NM')
+  this.da.getdata(this.ecoid).subscribe((Response) => {
+    this.estdata = Response;
+  });
 }
 
 onclicksp_1()
@@ -1086,12 +1091,9 @@ ngOnInit() {
 
  window.addEventListener('scroll',this.scrollEvent,true);
   
- this.da.getdata().subscribe((Response) => {
-  this.estdata = Response;
-});
+ 
 }
  
-
 
 
 
@@ -1127,6 +1129,11 @@ search(){
    }
 
  }
+
+
+
+
+
 
 searchghs()
 {
@@ -1181,6 +1188,79 @@ searchghs()
 
 
 
+// var xData = ['Carmelo<br>Anthony', 'Dwyane<br>Wade',
+//       'Deron<br>Williams', 'Brook<br>Lopez',
+//       'Damian<br>Lillard', 'David<br>West',
+//       'Blake<br>Griffin', 'David<br>Lee',
+//       'Demar<br>Derozan'];
+
+// function getrandom(num , mul) {
+//     var value = [ ];
+//     for ( i = 0; i <= num; i++ ) {
+//         var rand = Math.random() * mul;
+//         value.push(rand);
+//     }
+//     return value;
+// }
+
+// var yData = [
+//         getrandom(30 ,10),
+//         getrandom(30, 20),
+//         getrandom(30, 25),
+//         getrandom(30, 40),
+//         getrandom(30, 45),
+//         getrandom(30, 30),
+//         getrandom(30, 20),
+//         getrandom(30, 15),
+//         getrandom(30, 43),
+//     ];
+// var colors = ['rgba(93, 164, 214, 0.5)', 'rgba(255, 144, 14, 0.5)', 'rgba(44, 160, 101, 0.5)', 'rgba(255, 65, 54, 0.5)', 'rgba(207, 114, 255, 0.5)', 'rgba(127, 96, 0, 0.5)', 'rgba(255, 140, 184, 0.5)', 'rgba(79, 90, 117, 0.5)', 'rgba(222, 223, 0, 0.5)'];
+
+// var data = [];
+
+// for ( var i = 0; i < xData.length; i ++ ) {
+//     var result = {
+//         type: 'box',
+//         y: yData[i],
+//         name: xData[i],
+//         boxpoints: 'all',
+//         jitter: 0.5,
+//         whiskerwidth: 0.2,
+//         fillcolor: 'cls',
+//         marker: {
+//             size: 2
+//         },
+//         line: {
+//             width: 1
+//         }
+//     };
+//     data.push(result);
+// };
+// layout:json 
+// layout = {
+//     title: 'Points Scored by the Top 9 Scoring NBA Players in 2012',
+//     yaxis: {
+//         autorange: true,
+//         showgrid: true,
+//         zeroline: true,
+//         dtick: 5,
+//         gridcolor: 'rgb(255, 255, 255)',
+//         gridwidth: 1,
+//         zerolinecolor: 'rgb(255, 255, 255)',
+//         zerolinewidth: 2
+//     },
+//     margin: {
+//         l: 40,
+//         r: 30,
+//         b: 80,
+//         t: 100
+//     },
+//     paper_bgcolor: 'rgb(243, 243, 243)',
+//     plot_bgcolor: 'rgb(243, 243, 243)',
+//     showlegend: false
+// };
+
+// PlotlyViaWindowModule.newPlot('myDiv', data, layout);
 
 
 

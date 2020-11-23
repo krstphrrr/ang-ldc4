@@ -20,8 +20,14 @@
   }
 
 .container1{
-  height: 20vh;
+  height: 50vh;
   overflow: auto;
   max-width: auto;
 
+}
+
+.divider{
+  width:5px;
+  height:auto;
+  display:inline-block;
 }

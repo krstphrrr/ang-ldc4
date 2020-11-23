@@ -9,27 +9,6 @@
 
 
 
- <!-- <div class="row">
-  <div class="col-md-12"> -->
-      <!---will create button with ternary operator and click function--->
-      <!-- <button (click)="onclicksp_2()" type="button" class="btn  btn-danger"> -->
-        <!-- {{ReadMore?"Read More":"Read Less"}} -->
-        <!-- Read More -->
-      <!-- </button> -->
-
-      <!--will create if condition my default it will
-        b hide on click it will toggle--->
-      <!-- <ng-container *ngIf="visible">
-          <div class="bg-white shadow-sm p-3">
-              <h4>Hello World</h4>
-              <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse tempore aut molestiae, unde non soluta! A, nesciunt. Earum facere totam error, nam placeat, quia, veritatis aspernatur voluptate vitae fugit odit.
-              </p>
-          </div>
-      </ng-container> -->
-  <!-- </div>
-</div> -->
-
 
 
     <div class="container-fluid main-container" #scrollframe>
@@ -48,14 +27,19 @@
       </form> -->
 
       <div class="md-form mt-0">
-        <input class="form-control" name="ecoinfo"  type="text" placeholder="Search by Ecological Site ID" aria-label="Search">
+        <input (input)="ecoid=$event.target.value" class="form-control" name="ecoinfo"  type="text" placeholder="Search by Ecological Site ID" aria-label="Search">
         <!-- <input type="button" id="searchid" onclick="idsearch()" value="Search"/> -->
+        <button (click)="idsearch()" type="button" class="btn  btn-danger">Search</button>
       </div>
-
+    
       <button (click)="speciescov()" type="button" class="btn  btn-primary">Species Cover Summaries</button>
+      <div class="divider"></div>
       <button (click)="groundcover()" type="button" class="btn  btn-primary">Ground Cover Summaries</button>
+      <div class="divider"></div>
       <button (click)="vegheight()" type="button" class="btn  btn-primary">Vegetation Height</button>
+      <div class="divider"></div>
       <button (click)="canopygap()" type="button" class="btn  btn-primary">Canopy Gap</button>
+      <div class="divider"></div>
       <button (click)="soilstability()" type="button" class="btn  btn-primary">Soil Stability</button>
       
       
@@ -101,6 +85,14 @@
           <button (click)="visiblesp_1_1_1=false" type="button" class="btn  btn-danger">Close</button>
         </div>
       </ng-container>
+      <ng-container *ngIf="visiblesp_1_1_1_i">
+        <div class="bg-white shadow-sm p-3">
+        <div id="myDiv" #Graph></div>
+        </div>
+      </ng-container>
+
+
+
       <ng-container *ngIf="visiblesp_1_1_2">
         <div class="bg-white shadow-sm p-3">
           <button (click)="onclicksp_1_1_2_i()" type="button" class="btn  btn-primary">Interactive</button>
@@ -331,7 +323,7 @@
 
     
       <ng-container *ngIf="visiblesp_2_1_1">
-      <button (click)="visiblesp_2_1=false" type="button" class="btn  btn-danger">Close Table</button>
+      <button (click)="visiblesp_2_1_1=false" type="button" class="btn  btn-danger">Close Table</button>
       <nav class="navbar">
         <input class="form-control" type="text" name="Duration" [(ngModel)]="Duration" (ngModelChange)="search()"
         placeholder="Enter Duration to search">
@@ -361,7 +353,7 @@
            <!-- | paginate{itemsPerPage:3,currentPage:p}; ">  -->
 
           <!-- </tr> | orderBy: Key"> -->
-            <td>{{data.species}}</td>
+            <td>{{data.Species}}</td>
             <td>{{data.PrimaryKey}}</td>
             <td>{{data.PlotID}}</td>
             <td>{{data.AH_SpeciesCover}}</td>
@@ -413,7 +405,7 @@
          <!-- | paginate{itemsPerPage:3,currentPage:p}; ">  -->
 
         <!-- </tr> | orderBy: Key"> -->
-          <td>{{data.species}}</td>
+          <td>{{data.Species}}</td>
           <td></td>
           <td></td>
           <td></td>
@@ -792,7 +784,7 @@
 
       <!-- </tr> | orderBy: Key"> -->
       
-        <td>{{data.species}}</td>
+        <td>{{data.Species}}</td>
         <td>{{data.PrimaryKey}}</td>
         <td>{{data.PlotID}}</td>
         <td></td>
@@ -832,7 +824,7 @@
 
       <!-- </tr> | orderBy: Key"> -->
       
-        <td>{{data.species}}</td>
+        <td>{{data.Species}}</td>
         <td>{{data.AveragePercentCover}}</td>
         <td>{{data.StandardDeviation}}</td>
         <td>{{data.MinCover}}</td>
@@ -878,7 +870,7 @@
 
       <!-- </tr> | orderBy: Key"> -->
       
-        <td>{{data.species}}</td>
+        <td>{{data.Species}}</td>
         <td>{{data.ScientificName}}</td>
         <td>{{data.GrowthHabit}}</td>
         <td>{{data.GrowthHabitSub}}</td>
@@ -929,7 +921,7 @@
 
       <!-- </tr> | orderBy: Key"> -->
       
-        <td>{{data.species}}</td>
+        <td>{{data.Species}}</td>
         <td>{{data.ScientificName}}</td>
         <td>{{data.Family}}</td>
         <td>{{data.GrowthHabit}}</td>
@@ -1162,6 +1154,251 @@
     <button (click)="visible_veg_2_1=false" type="button" class="btn  btn-danger">Close</button>
   </div>
 </ng-container>
+
+<ng-container *ngIf="visible_veg_2_1_1">
+  <button (click)="visible_veg_2_1_1=false" type="button" class="btn  btn-danger">Close Table</button>
+  <div class="bg-white shadow-sm p-3">
+    <div class="container-fluid container1">
+      <div class="full-width-div">
+    <table class="table table-bordered" ng-show="isHidden">
+      <thead>
+        <tr>
+          <th>GrowthHabitSub</th>
+          <th>Duration</th>
+          <th>PrimaryKey</th>
+          <th>PlotID</th>
+          <th>AverageHeight_cm</th>
+          <th>StandardDeviation_cm</th>
+          <th>MinHeight_cm</th>
+          <th>MaxHeight_cm</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let data of estdata">
+          <td>{{data.GrowthHabitSub}}</td>
+          <td>{{data.Duration}}</td>
+          <td>{{data.PrimaryKey}}</td>
+          <td>{{data.PlotID}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+      <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+    </table>
+  </div>
+  </div>
+  </div>
+</ng-container>
+<ng-container *ngIf="visible_veg_2_1_2">
+  <button (click)="visible_veg_2_1_2=false" type="button" class="btn  btn-danger">Close Table</button>
+  <div class="bg-white shadow-sm p-3">
+    <div class="container-fluid container1">
+      <div class="full-width-div">
+    <table class="table table-bordered" ng-show="isHidden">
+      <thead>
+        <tr>
+          <th>GrowthHabitSub</th>
+          <th>Duration</th>
+          <th>AverageHeight_cm</th>
+          <th>StandardDeviation_cm</th>
+          <th>MinHeight_cm</th>
+          <th>MaxHeight_cm</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let data of estdata">
+          <td>{{data.GrowthHabitSub}}</td>
+          <td>{{data.Duration}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+      <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+    </table>
+  </div>
+  </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="visible_veg_2_2_1">
+  <button (click)="visible_veg_2_2_1=false" type="button" class="btn  btn-danger">Close Table</button>
+  <div class="bg-white shadow-sm p-3">
+    <div class="container-fluid container1">
+      <div class="full-width-div">
+    <table class="table table-bordered" ng-show="isHidden">
+      <thead>
+        <tr>
+          <th>Species</th>
+          <th>ScientificName</th>
+          <th>CommonName</th>
+          <th>GrowthHabitSub</th>
+          <th>Duration</th>
+          <th>PlotID</th>
+          <th>PrimaryKey</th>
+          <th>Hgt_Species_Avg</th>
+          <th>Hgt_Species_Avg_n</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let data of estdata">
+          <td>{{data.Species}}</td>
+          <td></td>
+          <td></td>
+          <td>{{data.GrowthHabitSub}}</td>
+          <td>{{data.Duration}}</td>
+          <td>{{data.PlotID}}</td>
+          <td>{{data.PrimaryKey}}</td>
+          <td>{{data.Hgt_Species_Avg}}</td>
+          <td>{{data.Hgt_Species_Avg_n}}</td>
+        </tr>
+      </tbody>
+      <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+    </table>
+  </div>
+  </div>
+  </div>
+</ng-container>
+<ng-container *ngIf="visible_veg_2_2_2">
+  <button (click)="visible_veg_2_2_2=false" type="button" class="btn  btn-danger">Close Table</button>
+  <div class="bg-white shadow-sm p-3">
+    <div class="container-fluid container1">
+      <div class="full-width-div">
+    <table class="table table-bordered" ng-show="isHidden">
+      <thead>
+        <tr>
+          <th>Species</th>
+          <th>ScientificName</th>
+          <th>CommonName</th>
+          <th>GrowthHabitSub</th>
+          <th>Duration</th>
+          <th>AverageHeight_cm</th>
+          <th>StandardDeviation_cm</th>
+          <th>MinHeight_cm</th>
+          <th>MaxHeight_cm</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let data of estdata">
+          <td>{{data.Species}}</td>
+          <td></td>
+          <td></td>
+          <td>{{data.GrowthHabitSub}}</td>
+          <td>{{data.Duration}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+      <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+    </table>
+  </div>
+  </div>
+  </div>
+</ng-container>
+<ng-container *ngIf="visible_veg_2_3_1">
+  <button (click)="visible_veg_2_3_1=false" type="button" class="btn  btn-danger">Close Table</button>
+  <div class="bg-white shadow-sm p-3">
+    <div class="container-fluid container1">
+      <div class="full-width-div">
+    <table class="table table-bordered" ng-show="isHidden">
+      <thead>
+        <tr>
+          <th>Species</th>
+          <th>ScientificName</th>
+          <th>CommonName</th>
+          <th>GrowthHabitSub</th>
+          <th>Duration</th>
+          <th>PlotID</th>
+          <th>PrimaryKey</th>
+          <th>Hgt_Species_Avg</th>
+          <th>Hgt_Species_Avg_n</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let data of estdata">
+          <td>{{data.Species}}</td>
+          <td></td>
+          <td></td>
+          <td>{{data.GrowthHabitSub}}</td>
+          <td>{{data.Duration}}</td>
+          <td>{{data.PlotID}}</td>
+          <td>{{data.PrimaryKey}}</td>
+          <td>{{data.Hgt_Species_Avg}}</td>
+          <td>{{data.Hgt_Species_Avg_n}}</td>
+        </tr>
+      </tbody>
+      <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+    </table>
+  </div>
+  </div>
+  </div>
+</ng-container>
+<ng-container *ngIf="visible_veg_2_3_2">
+  <button (click)="visible_veg_2_3_2=false" type="button" class="btn  btn-danger">Close Table</button>
+  <div class="bg-white shadow-sm p-3">
+    <div class="container-fluid container1">
+      <div class="full-width-div">
+    <table class="table table-bordered" ng-show="isHidden">
+      <thead>
+        <tr>
+          <th>Species</th>
+          <th>ScientificName</th>
+          <th>CommonName</th>
+          <th>GrowthHabitSub</th>
+          <th>Duration</th>
+          <th>AverageHeight_cm</th>
+          <th>StandardDeviation_cm</th>
+          <th>MinHeight_cm</th>
+          <th>MaxHeight_cm</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let data of estdata">
+          <td>{{data.Species}}</td>
+          <td></td>
+          <td></td>
+          <td>{{data.GrowthHabitSub}}</td>
+          <td>{{data.Duration}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+      <pagination-controls (pageChange) = "p = $event"></pagination-controls>
+    </table>
+  </div>
+  </div>
+  </div>
+</ng-container>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <ng-container *ngIf="visible_veg_2_2">
   <div class="bg-white shadow-sm p-3">
     <button (click)="onclickveg_2_2_1()" type="button" class="btn  btn-primary">By Plot</button>
@@ -1367,49 +1604,6 @@
 
 
 
-
-
-
-
-<!--       
-      <nav class="navbar">
-        <input class="form-control" type="text" name="GrowthHabitSub" [(ngModel)]="GrowthHabitSub" (ngModelChange)="searchghs()"
-        placeholder="Enter GrowthHabitSub to search">
-      </nav> -->
-      <!-- <div class="container-fluid container1">
-        <div class="full-width-div">
-      <table class="table table-bordered" ng-show="isHidden">
-        <thead>
-          <tr>
-            <th>GrowthHabitSub</th>
-            <th>Duration</th>
-            <th>Plot ID</th>
-            <th>PrimaryKey</th>
-            <th>PlotID</th>
-            <th>AverageHeight_cm</th>
-            <th>StandardDeviation_cm</th>
-            <th>MinHeight_cm</th>
-            <th>MaxHeight_cm</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor = "let data of estdata">
-
-            <td>{{data.GrowthHabitSub}}</td>
-            <td>{{data.Duration}}</td>
-            <td>{{data.PrimaryKey}}</td>
-            <td>{{data.PlotID}}</td>
-            <td>{{data.AverageHeight_cm}}</td>
-            <td>{{data.StandardDeviation_cm}}</td>
-            <td>{{data.MinHeight_cm}}</td>
-            <td>{{data.MaxHeight_cm}}</td>
-            <td>{{data.Noxious}}</td>
-          </tr>
-        </tbody>
-        <pagination-controls (pageChange) = "p = $event"></pagination-controls>
-      </table>
-    </div>
-    </div> -->
 
 
 

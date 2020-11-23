@@ -38,6 +38,7 @@
     "@types/leaflet-draw": "^1.0.3",
     "angular-material": "^1.2.1",
     "angular-plotly.js": "^3.0.0",
+    "angular-touch": "^1.8.2",
     "auth0-js": "^9.13.4",
     "bootstrap": "^4.5.3",
     "chart.js": "^2.9.3",
