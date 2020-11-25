@@ -47,10 +47,13 @@ export class HeaderComponent {
 
       }
       if(feature==="about"){
-        console.log(feature)
+        // console.log(feature)
         this.about.saveOption(feature)
       }
       if(feature==="partners"){
+        this.about.saveOption(feature)
+      }
+      if(feature==="development"){
         this.about.saveOption(feature)
       }
       this.featureSelected.emit(feature)
