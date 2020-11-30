@@ -18,7 +18,16 @@ import { json } from 'd3';
 import { Estdata } from '../estdata';
 import { EstGroundService } from '../services/est-ground.service';
 import { PlotlyViaWindowModule } from 'angular-plotly.js';
+import {Plotly} from 'plotly.js'
+import { from } from 'rxjs';
 
+
+// ,,,,,,,,,,,,,,,,,,,
+
+
+
+
+// ,,,,,,,,,,,,,,,,,,,,
 
 export class folder {
 
@@ -56,10 +65,20 @@ var x;
 
 
 export class FolderComponent implements OnInit {
-
+// type estdata = any[] | any;
 estdata:Estdata[] = [];
 Duration:any;
 GrowthHabitSub:any;
+Species:any;
+PrimaryKey:any;
+GrowthHabit:any;
+Noxious:any;
+SG_Group:any;
+DBKey:any;
+
+
+
+PlotID:any;
 p:number = 1;
 public ss;
 // ecoid = 'R042XB014NM';
@@ -217,11 +236,14 @@ visible_soil_2:boolean = false
 visible_soil_2_1:boolean = false
 visible_soil_2_2:boolean = false
 visible_soil_3:boolean = false
+
 ecoid:string
+estsize:BigInteger
 
 idsearch(): void{
   this.da.getdata(this.ecoid).subscribe((Response) => {
     this.estdata = Response;
+
   });
 }
 
@@ -678,6 +700,11 @@ onclicksp_2_1()
 onclicksp_2_1_1(){
   this.visiblesp_2_1_1 = !this.visiblesp_2_1_1
   this.visiblesp_2_1_2 = false
+// ,,,,,,,,,,,
+  // var grouped = this.estdata.mapValues(_.groupBy(cars, 'make'),
+  //                         clist => clist.map(car => _.omit(car, 'make')));
+
+
 }
 
 onclicksp_2_1_2(){
@@ -1063,7 +1090,39 @@ onclicksoil_3(){
   this.visible_soil_3 = !this.visible_soil_3
 }
 
+// ,,,,,,,,,,,,,,,,,,,,
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ,,,,,,,,,,,,,,,,,,,,,,,
 
 
 
@@ -1120,11 +1179,11 @@ searchecoid(){
 
 
 search(){
-   if(this.Duration == ""){
+   if(this.PrimaryKey == ""){
      this.ngOnInit();
    }else{
      this.estdata = this.estdata.filter(res =>{
-       return res.Duration.toLocaleLowerCase().match(this.Duration.toLocaleLowerCase());
+       return res.PrimaryKey.toLocaleLowerCase().match(this.PrimaryKey.toLocaleLowerCase());
      });
    }
 
@@ -1145,6 +1204,94 @@ searchghs()
     });
   }
 }
+
+
+search_sp()
+{
+  if(this.Species == ""){
+    this.ngOnInit();
+  }else{
+    this.estdata = this.estdata.filter(res =>{
+      return res.Species.toLocaleLowerCase().match(this.Species.toLocaleLowerCase());
+    });
+  }
+}
+
+search_plot()
+{
+  if(this.PlotID == ""){
+    this.ngOnInit();
+  }else{
+    this.estdata = this.estdata.filter(res =>{
+      return res.PlotID.toLocaleLowerCase().match(this.PlotID.toLocaleLowerCase());
+    });
+  }
+}
+
+search_gh()
+{
+  if(this.GrowthHabit == ""){
+    this.ngOnInit();
+  }else{
+    this.estdata = this.estdata.filter(res =>{
+      return res.GrowthHabit.toLocaleLowerCase().match(this.GrowthHabit.toLocaleLowerCase());
+    });
+  }
+}
+
+search_d()
+{
+  if(this.Duration == ""){
+    this.ngOnInit();
+  }else{
+    this.estdata = this.estdata.filter(res =>{
+      return res.Duration.toLocaleLowerCase().match(this.Duration.toLocaleLowerCase());
+    });
+  }
+}
+
+search_nox()
+{
+  if(this.Noxious == ""){
+    this.ngOnInit();
+  }else{
+    this.estdata = this.estdata.filter(res =>{
+      return res.Noxious.toLocaleLowerCase().match(this.Noxious.toLocaleLowerCase());
+    });
+  }
+}
+
+search_sg()
+{
+  if(this.SG_Group == ""){
+    this.ngOnInit();
+  }else{
+    this.estdata = this.estdata.filter(res =>{
+      return res.SG_Group.toLocaleLowerCase().match(this.SG_Group.toLocaleLowerCase());
+    });
+  }
+}
+
+search_dbk()
+{
+  if(this.DBKey == ""){
+    this.ngOnInit();
+  }else{
+    this.estdata = this.estdata.filter(res =>{
+      return res.DBKey.toLocaleLowerCase().match(this.DBKey.toLocaleLowerCase());
+    });
+  }
+}
+
+
+
+
+
+
+
+
+
+
 
 
  key: string = 'species';
@@ -1187,152 +1334,4 @@ searchghs()
 
 
 
-
-// var xData = ['Carmelo<br>Anthony', 'Dwyane<br>Wade',
-//       'Deron<br>Williams', 'Brook<br>Lopez',
-//       'Damian<br>Lillard', 'David<br>West',
-//       'Blake<br>Griffin', 'David<br>Lee',
-//       'Demar<br>Derozan'];
-
-// function getrandom(num , mul) {
-//     var value = [ ];
-//     for ( i = 0; i <= num; i++ ) {
-//         var rand = Math.random() * mul;
-//         value.push(rand);
-//     }
-//     return value;
-// }
-
-// var yData = [
-//         getrandom(30 ,10),
-//         getrandom(30, 20),
-//         getrandom(30, 25),
-//         getrandom(30, 40),
-//         getrandom(30, 45),
-//         getrandom(30, 30),
-//         getrandom(30, 20),
-//         getrandom(30, 15),
-//         getrandom(30, 43),
-//     ];
-// var colors = ['rgba(93, 164, 214, 0.5)', 'rgba(255, 144, 14, 0.5)', 'rgba(44, 160, 101, 0.5)', 'rgba(255, 65, 54, 0.5)', 'rgba(207, 114, 255, 0.5)', 'rgba(127, 96, 0, 0.5)', 'rgba(255, 140, 184, 0.5)', 'rgba(79, 90, 117, 0.5)', 'rgba(222, 223, 0, 0.5)'];
-
-// var data = [];
-
-// for ( var i = 0; i < xData.length; i ++ ) {
-//     var result = {
-//         type: 'box',
-//         y: yData[i],
-//         name: xData[i],
-//         boxpoints: 'all',
-//         jitter: 0.5,
-//         whiskerwidth: 0.2,
-//         fillcolor: 'cls',
-//         marker: {
-//             size: 2
-//         },
-//         line: {
-//             width: 1
-//         }
-//     };
-//     data.push(result);
-// };
-// layout:json 
-// layout = {
-//     title: 'Points Scored by the Top 9 Scoring NBA Players in 2012',
-//     yaxis: {
-//         autorange: true,
-//         showgrid: true,
-//         zeroline: true,
-//         dtick: 5,
-//         gridcolor: 'rgb(255, 255, 255)',
-//         gridwidth: 1,
-//         zerolinecolor: 'rgb(255, 255, 255)',
-//         zerolinewidth: 2
-//     },
-//     margin: {
-//         l: 40,
-//         r: 30,
-//         b: 80,
-//         t: 100
-//     },
-//     paper_bgcolor: 'rgb(243, 243, 243)',
-//     plot_bgcolor: 'rgb(243, 243, 243)',
-//     showlegend: false
-// };
-
-// PlotlyViaWindowModule.newPlot('myDiv', data, layout);
-
-
-
-
-
-
-
-
-// getdatas()
-// { 
-  // var x;
-  // document.getElementById("searchid").onclick = function find(){
-  //   x = document.forms["ecoid"]["ecosideid"].value;
-  // }
-  // this.httpClient.get<any>('https://api.landscapedatacommons.org/api/geoindicators?EcologicalSiteId=R042XB014NM').subscribe(
-  //   response => {
-  //     console.log(response);
-  //     //this.dataapi = response;
-  //     var responser = JSON.parse(JSON.stringify(response[0]));
-  //     document.getElementById("EcologicalSiteId").innerHTML = responser.EcologicalSiteId;
-      
-    
-  //     //alert(response);
-      
-  //     // var s=[];
-  //     // var a = JSON.parse(JSON.stringify(response));
-  //   //   a.forEach(x => {
-  //   //     Object.keys(x).forEach(function(k) {
-  //   //       if(k === 'AH_GrassCover'){
-          
-  //   //         s.push(x[k]);
-  //   //         //console.log(s[0]);
-  //   //         for (var i in s)
-  //   //         {
-  //   //           // console.log(" "+s[i]);
-  //   //           ss[i] = s[i];
-  //   //         }
-  //   //       } 
-  //   //     });
-  //   // });
-  //   }
-  // );
-
-// }
-
-
-
-// private readonly boxPlotData: ChartData = {
-//   labels: ['Graminiod','Forb','Sub Shrub'],//,'Shrub','Tree','Succulent'],
-//   datasets: [{
-//     label: '',
-//     backgroundColor: 'steelblue',
-//     data: <any[]>[
-  
-//       Array.from({length: 100}).map(() => Math.random()),
-//       Array.from({length: 100}).map(() => Math.random()),
-//       Array.from({length: 100}).map(() => Math.random() * 0.6 + 0.2) //,
-//       // Array.from({length: 100}).map(() => Math.random()),
-//       // Array.from({length: 100}).map(() => Math.random()),
-//       // Array.from({length: 100}).map(() => Math.random() * 0.6 + 0.2),
-//       // Array.from({length: 100}).map(() => Math.random())
-//     ]
-//   }]
-// };
-
-// private build() {
-//   this.ngZone.runOutsideAngular(() => {
-//     const node: HTMLElement = this.elementRef.nativeElement;
-//     this.chart = new Chart(node.querySelector('canvas'), {
-//       type: 'boxplot',
-//       data: this.boxPlotData
-//     });
-//   });
-// }
 

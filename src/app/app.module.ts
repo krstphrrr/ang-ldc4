@@ -59,8 +59,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { Ng2OrderModule } from 'ng2-order-pipe';
-// import * as PlotlyJS from 'plotly.js/dist/plotly.js';
-// import { PlotlyModule } from 'angular-plotly.js';
+import * as PlotlyJS from 'plotly.js/dist/plotly.js';
+import { PlotlyModule } from 'angular-plotly.js';
 import { PlotlyViaWindowModule } from 'angular-plotly.js';
 // PlotlyModule.plotlyjs = PlotlyJS;
 import { from } from 'rxjs';
@@ -152,6 +152,7 @@ const appRoutes: Routes = [
     Ng2SearchPipeModule,
     Ng2OrderModule,
     PlotlyViaWindowModule
+    // PlotlyModule
   ],
   providers: [
     {
