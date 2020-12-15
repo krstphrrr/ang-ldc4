@@ -45,6 +45,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ProfileComponent } from './profile/profile.component';
 // import { AppRoutingModule } from './app-routing.module';
+import { ScrollingModule } from '@angular/cdk/scrolling'
 import { AuthGuard } from './services/auth.guard';
 import { SummaryTableComponent } from './map/summary-table/summary-table.component';
 import { DragpopComponent } from './map/dragpop/dragpop.component';
@@ -134,7 +135,8 @@ const appRoutes: Routes = [
     MatCheckboxModule,
     MatSliderModule,
     MatButtonToggleModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    ScrollingModule
 
   ],
   providers: [

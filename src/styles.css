@@ -24,7 +24,9 @@
   background-color: #dddddd
 }
 .mat-form-field{
-  max-width: 165px;
+  max-width: 150px;
+  margin-right:5px;
+  margin-left:5px;
 }
 .mat-form-field-infield{
   max-width: 165px;
