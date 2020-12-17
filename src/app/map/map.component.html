@@ -22,7 +22,7 @@
       <div class="row">
       <div id="pane_container" #pane_container>
         <!-- <div class="col-1"> -->
-          <app-baselayers style=""></app-baselayers>
+          <app-baselayers ></app-baselayers>
         <!-- </div> -->
         <!-- <div class="col-1"> -->
           <app-overlays></app-overlays>
@@ -48,6 +48,11 @@
             <div class="col-sm">
               
               <mat-checkbox [checked]="checked" (change)="lockExtent($event)">Lock extent</mat-checkbox>
+            </div>
+            <div class='col-sm' >
+              <button  mat-stroked-button color="primary" (click)="popupTable2()">
+                test table
+              </button>
             </div>
         </div>
       </form>
@@ -109,6 +114,12 @@
     </ng-container>
 
     </app-dragpop>
+    <app-popup-for-table
+    *ngIf="tablepopup"
+    class="table-popup"
+    style="position: absolute; top:0;left:50%;z-index: 3000;">
+
+    </app-popup-for-table>
 </div>
 
 

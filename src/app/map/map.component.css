@@ -31,3 +31,10 @@
 .example-box:active {
   box-shadow:none;
 } 
+
+.table-popup{
+  max-width:430px;
+  max-height:500px;
+  justify-content: center;
+  box-shadow: none;
+}

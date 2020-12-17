@@ -98,12 +98,14 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public aim_proj = {};
   public lmf_proj = {};
   public dragger = false;
+  public tablepopup = false;
   public baselayerSubscription:Subscription;
   public overlaySubscription:Subscription;
+  public tabledataSubscription:Subscription;
   message:string
 
   public dragTracker:Subscription;
-  
+  public popupTracker:Subscription;
 
   constructor(
     private el:ElementRef,
@@ -144,6 +146,13 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         }
         // console.log(`from dropdown to map. you chose: ${dropdownOption.overlay.value}`)
       })
+      this.tabledataSubscription = this.tabledata.getdataSource$().subscribe(openpop=>{
+        console.log(openpop)
+        if(this.tablepopup==false){
+          this.tablepopup=true
+        }
+      }
+      )
 
      }
 
@@ -199,6 +208,11 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       //   this.dragger = false
       // }
       this.draggerClose()
+      console.log(closeSignal)
+    })
+
+    this.popupTracker = this.tabledata.getCloseSignal().subscribe((closeSignal:CloseSignal)=>{
+      this.tablepopupClose()
       console.log(closeSignal)
     })
 
@@ -402,6 +416,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
                 }
                 
                 this.dataBus.changeData(this.projects)
+                this.popupTable2()
+                this.tabledata.changeData(data)
               this.resultOutput = data['features'].length
               // console.log(this.projects)
               // console.log(this.resultOutput)
@@ -451,6 +467,12 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   draggerClose(){
     if(this.dragger==true){
       this.dragger=false
+    }
+  }
+
+  tablepopupClose(){
+    if(this.tablepopup==true){
+      this.tablepopup=false
     }
   }
   
@@ -711,6 +733,15 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       this.dragger = true
     } else {
       this.dragger= false
+    }
+    console.log('funciona')
+  }
+
+  popupTable2(){
+    if(this.tablepopup==false){
+      this.tablepopup = true
+    } else {
+      this.tablepopup= false
     }
     console.log('funciona')
   }

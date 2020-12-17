@@ -54,6 +54,8 @@ import { InterceptorService } from './services/interceptor.service';
 import { AltwoodyComponent } from './altwoody/altwoody.component';
 import { BaselayersComponent } from './map/baselayers/baselayers.component';
 import { OverlaysComponent } from './map/overlays/overlays.component';
+import { PopupForTableComponent } from './popup_for_table/popup-for-table/popup-for-table.component';
+import { TableComponent } from './popup_for_table/table/table.component';
 
 
 const appRoutes: Routes = [
@@ -103,7 +105,9 @@ const appRoutes: Routes = [
     DragpopComponent,
     AltwoodyComponent,
     BaselayersComponent,
-    OverlaysComponent
+    OverlaysComponent,
+    PopupForTableComponent,
+    TableComponent
     
   ],
   imports: [
