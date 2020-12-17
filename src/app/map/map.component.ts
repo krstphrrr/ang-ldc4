@@ -31,6 +31,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { SummaryTableComponent } from './summary-table/summary-table.component'
 import { DragpopComponent } from './dragpop/dragpop.component'
+import {TabledataService} from '../services/tabledata.service'
 
 // interface Project {
 //   project: string;
@@ -113,7 +114,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     private layerServ: LayerService,
     private moveEnd: MoveEndService,
     private mapLoad: MapLoadService,
-    private dataBus: CustomControlService
+    private dataBus: CustomControlService,
+    private tabledata: TabledataService
 
     ) {
       /*
@@ -283,7 +285,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     2. MAP EVENT HANDLERS
     
     */
-   this.mymap = L.map('map', {
+    this.mymap = L.map('map', {
                   maxZoom: 15,
                   inertiaDeceleration: 10000,
                   attributionControl: false,
@@ -299,7 +301,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
                   layers:[(initLayer?initLayer:this.sat)]
   })
 
-   this.mymap.on('draw:created',(e)=>{
+    this.mymap.on('draw:created',(e)=>{
         
         // clear data on map movement
         this.projects = []
@@ -332,6 +334,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
           // console.log(this.drawnItems)
           let drawingbb = this.drawnItems.toGeoJSON().features[0].geometry.coordinates[0]
           this.moveEnd.coordsArray(drawingbb)
+          console.log(this.moveEnd)
 
           if(this.moveEnd.coords!==''){
             let param = {}
@@ -354,7 +357,9 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
                   this.lmf_proj["length"] = data["features"].filter(item=>item.properties.Project==='LMF').length
                   this.projects.push(this.lmf_proj)
                 }
+                // console.log(data)
                 this.dataBus.changeData(this.projects)
+                this.tabledata.changeData(data)
                 this.resultOutput = data['features'].length
               })
             }
@@ -379,7 +384,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
               this.socket.emit('drawing', this.moveEnd.coords)
               this.movementSubscription = this.socket.listen('pointssend')
                 .subscribe((data:GeoJsonObject)=>{
-                  console.log(data)
+                  
                   this.markers.createMarkers(data)
               this.markerLayer = this.markers.markers
               this.markerLayer.addTo(this.mymap)
@@ -398,15 +403,15 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
                 
                 this.dataBus.changeData(this.projects)
               this.resultOutput = data['features'].length
-              console.log(this.projects)
-              console.log(this.resultOutput)
+              // console.log(this.projects)
+              // console.log(this.resultOutput)
               })
           }
       }
 
   })
 
-    this.allPoints=L.featureGroup()
+    // this.allPoints=L.featureGroup()
 
     
     /* invalidate size debouncemoveend 
