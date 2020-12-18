@@ -5,22 +5,26 @@
 */
 
 import { Injectable } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TabledataService {
   private dataTracker = new Subject()
-  private dataSource$ = new Subject()
-  // dataSource$:Observable<any[]>
+  deleteSignal = new Subject()
+  
+  private dataS = new BehaviorSubject<any[]>([])
+  dataSource$:Observable<any[]>= this.dataS.asObservable()
 
   constructor() { }
 
   getdataSource$(){
-    return this.dataSource$.asObservable()
+    // if(this.dataSource$)
+    return this.dataSource$
   }
   sendCloseSignal(){
+    this.dataS.complete()
     this.dataTracker.next({close:true})
   }
 
@@ -29,7 +33,26 @@ export class TabledataService {
   }
   //getting data and storing it on data source
   changeData(data){
-    console.log(data, 'data')
-    this.dataSource$.next(data)
+    this.dataS.next(data)
+    // this.dataSource$ = new Bej((observer)=>{
+    //   observer.next(data)
+    // })
+    // this.dataSource$=data
     }
+  clearData(){
+    this.dataS.next([])
+  }
+
+  getUnsub(){
+    return this.deleteSignal.asObservable()
+  }
+  unsubSignal(signal){
+    this.deleteSignal.next(signal)
+  }
+
+
 }
+
+
+// 21-1
+// turf / / projections

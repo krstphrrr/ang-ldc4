@@ -19,8 +19,7 @@ export class CustomControlService {
   }
 
   changeData(data){
-    
-    console.log(data, 'data')
+
     this.dataSource$ = data
     }
 }
