@@ -52,85 +52,81 @@ interface CloseSignal{
 })
 
 export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
-  @ContentChildren( DragpopComponent, { descendants: true } ) dragHandles: QueryList<DragpopComponent>;
-  
-  @ViewChild('container') 
-  private test2Div: ElementRef;
-  @ViewChild('pane_container') 
-  private paneDiv: ElementRef;
-  // private mymap;
-  
+  // placeholders 
+ 
+  //sidebar and popup
   public color: ThemePalette = "accent";
   public checked = false;
-  public mymap
+  public mymap;
   public ctlSidebar;
-  public initLayers;
-
-  public isCollapsed = false;
-  public mrkr=false;
-  public markerLayer
-  public tmpPoints;
-  public movementSubscription;
-  public myCanvas:Canvas;
-  public Public = true;
-  public mapContainer;
-
-  public drawnItems;
-
-  public tmpName;
-  public infoObj = {"tl_2017_us_state_wgs84": "US States", "tl_2017_us_county_wgs84": "US Counties", "surface_mgt_agency_wgs84": "Management Agency", "mlra_v42_wgs84": "LRR/MLRA", "statsgo_wgs84": "STATSGO", "wbdhu6_wgs84": "HUC-6", "wbdhu8_wgs84": "HUC-8"};
-  public infoIDField = {"tl_2017_us_state_wgs84": "name", "tl_2017_us_county_wgs84": "name", "surface_mgt_agency_wgs84": "admin_agen", "mlra_v42_wgs84": "mlra_name", "statsgo_wgs84": "mukey", "wbdhu6_wgs84": "name", "wbdhu8_wgs84": "name"};
-  public sat;
-  public terr;
-  public hy;
-  public st;
-  public layerList;
-  public initLay;
-  public layerCheck;
-  public resultOutput;
-
-  public allPoints;
-  public isLocked;
   public extentCoords;
   public defaultExtent;
   public rect;
   public projects = []; 
   public aim_proj = {};
   public lmf_proj = {};
+  public resultOutput;
+  public message:string
+
+  //table popu
+  tableCols = []
+  tableData:{}[] = []
+  subscription:Subscription;
+
+  //leaflet draw
+  public markerLayer  
+  public myCanvas:Canvas;
+  public Public = true;
+  public drawnItems;
+  public allPoints;
+  public layers2delete;
+  
+  //wms layers
+  public sat; //
+  public terr;
+  public hy;
+  public st;
+  public layerList;
+  public initLay;
+
+  
+ 
+  // boolean clickevents
   public dragger = false;
   public tablepopup = false;
+
+  //subscriptions (keeping track of frequent updates)
+  public backendSubscription:Subscription; // 
   public baselayerSubscription:Subscription;
   public overlaySubscription:Subscription;
   public tabledataSubscription:Subscription;
   public unsubscribeSubscription:Subscription;
-  message:string
-
   public dragTracker:Subscription;
   public popupTracker:Subscription;
 
   constructor(
-    private el:ElementRef,
-    private renderer: Renderer2,
-    private markers: MarkerService,
-    private socket: socketDataService,
-    private wms: wmsService,
-    private layerServ: LayerService,
-    private moveEnd: MoveEndService,
-    private mapLoad: MapLoadService,
+    // service - dependency injections
+    private markers: MarkerService, // creates style for each marker
+    private socket: socketDataService, // socket connection to backend
+    private wms: wmsService, // makes wms layers available by pulling from apache
+    private extentCalculator: MoveEndService,
     private dataBus: CustomControlService,
     private tabledata: TabledataService
 
     ) {
+      
       /*
       Constructor subscriptions:
       - baselayer subs: keeps track of changes in baselayer dropdown
       - overlay subs: keeps track of changes in overlay dropdown
       
       */
-      this.movementSubscription = this.socket.listen('pointssend').subscribe(data=>{
+      this.backendSubscription = this.socket.listen('pointssend').subscribe(data=>{
         this.backendGet(data)
       })
       this.baselayerSubscription = this.wms.getBaselayer().subscribe(dropdownOption=>{
+        // console.log(dropdownOption)
+        // console.log(this.layerList)
         this.applyBaselayer(dropdownOption.data.value)
       })
       this.overlaySubscription = this.wms.getOverlaylayer().subscribe(dropdownOption=>{
@@ -142,17 +138,19 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         if(this.dragger==false){
           //sending initial value to child component 
           this.message = dropdownOption.overlay.value
-          
-
           this.dragger=true
-
-          
         }
         // console.log(`from dropdown to map. you chose: ${dropdownOption.overlay.value}`)
       })
       
-      this.tabledataSubscription = this.tabledata.dataSource$.subscribe(openpop=>{
-        // console.log(openpop, "open close popo")
+      this.tabledataSubscription = this.tabledata.dataSource$.subscribe(data=>{
+        this.tableData = []
+        this.tableCols = []
+        // console.log(data)
+        if(Object.keys(data).length!==0){
+          console.log(data, "open close popo")
+        }
+        
         // if(this.tablepopup===false){
         //   this.tablepopup=true
         // }
@@ -171,10 +169,15 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       })
   
       this.popupTracker = this.tabledata.getCloseSignal().subscribe((closeSignal:CloseSignal)=>{
+        // on table popup close, reestablish all layers
         this.tablepopupClose()
-        console.log(closeSignal)
+        this.mymap.eachLayer((layer)=>{
+          if(layer===this.layers2delete || layer._radius===5){
+           this.mymap.removeLayer(layer)
+          }
+        })
+        this.mymap.addLayer(this.allPoints)
       })
-
      }
 
    /* LIFECYCLE HOOKS FOR MAP COMPONENT
@@ -184,6 +187,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
    */
   ngOnInit(){
+   
     // this.tabledata.changeData('')
     /* at initializing page:
     1. set bounding box for map
@@ -205,6 +209,10 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     this.getLayers2('st')
     this.getLayers2('terr')
     this.getLayers2('hy')
+    this.initLay = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+      maxZoom: 20,
+      subdomains:['mt0','mt1','mt2','mt3']
+    }); 
     this.layerList = {
       'hy':this.hy,
       'terr':this.terr,
@@ -218,16 +226,9 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         }
       }
     }
-    this.layerCheck = this.layerServ.layer
     //4.
-    this.initLay = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
-      maxZoom: 20,
-      subdomains:['mt0','mt1','mt2','mt3']
-    }); 
-    this.initMap(this.initLay)
-
     
-
+    this.initMap(this.initLay)
 
   }
 
@@ -242,21 +243,11 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     */
 
     this.mymap.on('load', this.onMapLoad_TEST())
-    this.mymap.on('draw:deleted',()=>{
+    this.mymap.on('draw:deleted',(e)=>{
+      // console.log(e.layers)
+      // this.layers2delete = e.layers
       // this.tabledata.unsubSignal("delete")
-      this.tabledata.sendCloseSignal()
-
-      this.projects = []
-      
-      this.dataBus.changeData(this.projects)
-      
-      this.mymap.eachLayer((layer)=>{
-        if(layer._radius===5){
-         this.mymap.removeLayer(layer)
-         
-        }
-      })
-      this.mymap.addLayer(this.allPoints)
+      this.onDrawingDeleted()
     })
 
     this.ctlSidebar = L.control.sidebar({
@@ -266,20 +257,17 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       position:'left'
     })
     .addTo(this.mymap)
-    
+
     this.drawingControl(this.mymap)
-
-    
-
   }
 
   ngAfterViewChecked(){
   }
 
   ngOnDestroy(){
-    // this.tabledataSubscription.unsubscribe()
-    if(this.movementSubscription){
-      this.movementSubscription.unsubscribe()
+    console.log("map destroyed")
+    if(this.backendSubscription){
+      this.backendSubscription.unsubscribe()
     }
   }
   
@@ -330,7 +318,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   })
 
     this.mymap.on(L.Draw.Event.CREATED,(e)=>{
-        
+        this.layers2delete = e.layer
         // clear data on map movement
         this.projects = []
         this.dataBus.changeData(this.projects)
@@ -361,65 +349,14 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
           this.drawnItems.addLayer(layer)
           // console.log(this.drawnItems)
           let drawingbb = this.drawnItems.toGeoJSON().features[0].geometry.coordinates[0]
-          this.moveEnd.coordsArray(drawingbb)
-          console.log(this.moveEnd)
+          this.extentCalculator.coordsArray(drawingbb)
+          console.log(this.extentCalculator)
 
-          // if(this.moveEnd.coords!==''){
+          // if(this.extentCalculator.coords!==''){
             let param = {}
-            // console.log(this.moveEnd.coords, 'vacio')
-            this.socket.emit('drawing', this.moveEnd.coords)
-            
-            
-            // }
-        // } else {
-          
-        //   this.mymap.eachLayer((layer)=>{
-        //     if(layer._radius===5){
-        //       this.mymap.removeLayer(layer)
-        //     }
-        //   })
-        //   let type = e.layerType
-        //   let layer = e.layer
-         
-        //   this.drawnItems.addLayer(layer)
-        //   let drawingBoundingBox = this.drawnItems.toGeoJSON().features[0].geometry.coordinates[0]
-
-        //   this.moveEnd.coordsArray(drawingBoundingBox)
-          
-        //   if(this.moveEnd.coords!==''){
-        //       // console.log(this.moveEnd.coords)
-        //       /* turf debugging: need points of polygon */
-        //       this.socket.emit('drawing', this.moveEnd.coords)
-        //       this.movementSubscription = this.socket.listen('pointssend')
-        //         .subscribe((data:GeoJsonObject)=>{
-        //           this.popupTable2()
-                  
-        //           this.markers.createMarkers(data)
-        //       this.markerLayer = this.markers.markers
-        //       this.markerLayer.addTo(this.mymap)
-              
-        //         if(data["features"].filter(item=>item.properties.Project==='AIM').length!==0){
-        //           this.aim_proj["project"] = "AIM"
-        //           this.aim_proj["length"] = data["features"].filter(item=>item.properties.Project==='AIM').length
-        //           this.projects.push(this.aim_proj)
-                  
-        //         }
-        //         if(data["features"].filter(item=>item.properties.Project==='LMF').length!==0){
-        //           this.lmf_proj["project"] = "LMF"
-        //           this.lmf_proj["length"] = data["features"].filter(item=>item.properties.Project==='LMF').length
-        //           this.projects.push(this.lmf_proj)
-        //         }
-                
-        //         this.dataBus.changeData(this.projects)
-        //         this.tabledata.changeData(data)
-        //         // finalize(()=>this.tabledata.clearData())
-        //       this.resultOutput = data['features'].length
-        //       // console.log(this.projects)
-        //       // console.log(this.resultOutput)
-        //       })
-        //   }
-      // }
-
+            // console.log(this.extentCalculator.coords, 'vacio')
+            this.socket.emit('drawing', this.extentCalculator.coords)
+      
   })
 
     // this.allPoints=L.featureGroup()
@@ -443,9 +380,9 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     // this.mymap.on('movestart', event=>{
 
     //     let bbox = this.mymap.getBounds()
-    //     this.moveEnd.boundsUtil(bbox)
-    //     this.socket.emit('fetchpoints', this.moveEnd.topos)
-    //     this.movementSubscription = this.socket.listen('pointssend')
+    //     this.extentCalculator.boundsUtil(bbox)
+    //     this.socket.emit('fetchpoints', this.extentCalculator.topos)
+    //     this.backendSubscription = this.socket.listen('pointssend')
     //       .subscribe((data:GeoJsonObject)=>{
     //         this.resultOutput = ''
     //         this.resultOutput = data['features'].length
@@ -487,18 +424,39 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       // finalize(()=>this.tabledata.clearData())
 
       this.resultOutput = data['features'].length
+      
     
+  }
+
+  onDrawingDeleted(){
+    // close popup
+    this.tabledata.sendCloseSignal()
+    this.projects = []
+    this.dataBus.changeData(this.projects)
+    this.mymap.eachLayer((layer)=>{
+      if(layer._radius===5){
+       this.mymap.removeLayer(layer)
+      }
+    })
+    this.mymap.addLayer(this.allPoints)
+  }
+  externalClearLayers(e){
+    console.log(e)
   }
 
 
   draggerClose(){
+    
     if(this.dragger==true){
       this.dragger=false
     }
   }
 
   tablepopupClose(){
+    // L.Draw.Event.DELETED
+    
     if(this.tablepopup==true){
+      
       this.tablepopup=false
     }
   }
@@ -605,8 +563,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   }
 
   toggle(event:MatSlideToggleChange){
-    if(this.movementSubscription){
-      this.movementSubscription.unsubscribe()
+    if(this.backendSubscription){
+      this.backendSubscription.unsubscribe()
     }
     this.mymap.eachLayer((layer)=>{
       if(layer===this.allPoints){
@@ -625,12 +583,12 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       console.log('bring publics')
 
       this.mymap.removeLayer(this.allPoints)
-      this.moveEnd.boundsUtil(this.extentCoords)
+      this.extentCalculator.boundsUtil(this.extentCoords)
       let param = {}
       param['public'] = true
-      this.moveEnd.topos.param = param
-      this.socket.emit('fetchpublic2', this.moveEnd.topos)
-      this.movementSubscription = this.socket.listen('pointssend')
+      this.extentCalculator.topos.param = param
+      this.socket.emit('fetchpublic2', this.extentCalculator.topos)
+      this.backendSubscription = this.socket.listen('pointssend')
         .subscribe((data:GeoJsonObject)=>{
           console.log(data)
           
@@ -689,12 +647,12 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       console.log('no publics')
       
       this.mymap.removeLayer(this.allPoints)
-      this.moveEnd.boundsUtil(this.extentCoords)
+      this.extentCalculator.boundsUtil(this.extentCoords)
       let param = {}
       param['public'] = false
-      this.moveEnd.topos.param = param
-      this.socket.emit('fetchpublic2', this.moveEnd.topos)
-      this.movementSubscription = this.socket.listen('pointssend')
+      this.extentCalculator.topos.param = param
+      this.socket.emit('fetchpublic2', this.extentCalculator.topos)
+      this.backendSubscription = this.socket.listen('pointssend')
         .subscribe((data:GeoJsonObject)=>{
           
           this.markers.createMarkers(data)
@@ -760,6 +718,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     if(this.tablepopup==false){
       this.tablepopup = true
     } else {
+      
       this.tablepopup= false
     }
  

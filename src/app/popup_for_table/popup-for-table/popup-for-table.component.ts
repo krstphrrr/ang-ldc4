@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, OnDestroy, OnChanges } from '@angular/core';
 import {Subscription} from 'rxjs'
 import {TabledataService} from '../../services/tabledata.service'
+// import {CdkDragDrop} from '@angular/cdk/drag-drop';
+
 
 @Component({
   selector: 'app-popup-for-table',

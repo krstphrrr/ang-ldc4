@@ -14,8 +14,8 @@ export class TabledataService {
   private dataTracker = new Subject()
   deleteSignal = new Subject()
   
-  private dataS = new BehaviorSubject<any[]>([])
-  dataSource$:Observable<any[]>= this.dataS.asObservable()
+  private dataS = new BehaviorSubject<any>({})
+  dataSource$:Observable<any>= this.dataS.asObservable()
 
   constructor() { }
 
@@ -33,6 +33,12 @@ export class TabledataService {
   }
   //getting data and storing it on data source
   changeData(data){
+    let complete={}
+    let cols = []
+    let dat = data.features
+
+    // need to passe the large json into material table datasource hmmm
+    console.log(data, "aqui")
     this.dataS.next(data)
     // this.dataSource$ = new Bej((observer)=>{
     //   observer.next(data)

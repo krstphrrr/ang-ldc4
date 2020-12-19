@@ -1,1 +1,38 @@
-<p>table works!</p>
+<div>
+  <div class="row">
+    <div class="col-md-5">
+      <div [ngStyle]="{'visibility':(tableDataSrc)? 'visible':'hidden'}">
+        <!-- <input matInput (keyup)="onSearchInput($event)" placeholder="Search.."> -->
+        <!-- filter panel start # options -->
+  
+
+  
+        
+        
+        <table mat-table [dataSource]="tableDataSrc" matSort class="mat-elevation-z8">
+          <ng-container *ngFor="let col of tableCols">
+            <ng-container matColumnDef="{{col}}">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{col}}</th>
+              <td mat-cell *matCellDef="let row" >{{ row[col]}}</td>
+            </ng-container>
+          </ng-container>
+        
+          <mat-header-row *matHeaderRowDef="tableCols"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: tableCols" ></mat-row>
+        </table>
+        <mat-paginator 
+          (page)="changePage($event)"
+          [pageSize]="limit" 
+          [length]="totalLength" 
+          [pageSizeOptions]="pageLimit"  
+          showFirstLastButtons></mat-paginator>
+      </div>
+      
+  
+    </div>
+  </div>
+    <!-- <li *ngFor="let item of output">
+      <span>{{item.data}}</span>
+  
+    </li> -->
+  </div>
