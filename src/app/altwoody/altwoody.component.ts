@@ -14,12 +14,12 @@ export class AltwoodyComponent implements OnInit {
   ngOnInit(): void {
   }
   pingApi(){
-    this.api.ping$().subscribe(
-      res => this.responseJson = res
-    )
+    // this.api.ping$().subscribe(
+    //   res => this.responseJson = res
+    // )
   }
   ugh2(){
-    this.api.ugh()
+    // this.api.ugh()
   }
 
 }

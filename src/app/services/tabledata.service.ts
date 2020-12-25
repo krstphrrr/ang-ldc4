@@ -6,6 +6,7 @@
 
 import { Injectable } from '@angular/core';
 import { Subject, Observable, BehaviorSubject } from 'rxjs';
+import { ApiService} from './api.service'
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,9 @@ export class TabledataService {
   private dataS = new BehaviorSubject<any>({})
   dataSource$:Observable<any>= this.dataS.asObservable()
 
-  constructor() { }
+  constructor(
+    private apiCall:ApiService
+  ) { }
 
   getdataSource$(){
     // if(this.dataSource$)
@@ -38,8 +41,21 @@ export class TabledataService {
     let dat = data.features
 
     // need to passe the large json into material table datasource hmmm
-    console.log(data, "aqui")
-    this.dataS.next(data)
+    // now: create array of unique primarykeys, pass array into service
+    dat.map(i=>{
+      let key = i.id
+      if(cols.includes(key)){
+        // console.log(key,"yatebgi esta")
+      } else {
+        cols.push(key)
+        console.log(key,"lometi")
+      }
+      console.log(key, "cosa")
+    })
+    this.apiCall.changeParams(cols)
+    this.apiCall.getParams()
+    console.log(dat, "aqui")
+    // this.dataS.next(dat)
     // this.dataSource$ = new Bej((observer)=>{
     //   observer.next(data)
     // })

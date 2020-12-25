@@ -1,18 +1,37 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import {HttpParams} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
+  params = new HttpParams()
+  private apiParams = new Subject()
+  private apiUpdate = new BehaviorSubject<any>([])
+  apiParams$:Observable<any>= this.apiUpdate.asObservable()
+
 
   constructor(private http: HttpClient) { }
 
-  ping$(): Observable<any> {
-    return this.http.get('http://localhost:5010/apiv1/altwoody')
+  getParams() {
+    this.newParams(this.apiUpdate)
+    this.http.get('http://api.landscapedatacommons.org/api/geoindicators',{
+      params: this.params
+    }).subscribe(res=>{
+      console.log(res)
+    })
   }
-  ugh(){
-    console.log(this.http.get('STRING'))
+  changeParams(terms){
+    this.apiUpdate.next(terms)
+    console.log(terms, "desde el servicio")
   }
+  newParams(list){
+    list.forEach(i=>{
+      this.params.append("PrimaryKey",i)
+    })
+  }
+  
 }
+
