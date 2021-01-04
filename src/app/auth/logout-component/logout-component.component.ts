@@ -6,10 +6,11 @@ import { MatMenu } from '@angular/material/menu';
 @Component({
   selector: 'app-logout-component',
   templateUrl: './logout-component.component.html',
-  styleUrls: ['./logout-component.component.css']
+  styleUrls: ['./logout-component.component.css'],
+
 })
 export class LogoutComponentComponent{
-  @ViewChild(MatMenu, {static: false}) menu: MatMenu;
+  @ViewChild(MatMenu, {static: true}) menu: MatMenu;
 
   constructor(@Inject(DOCUMENT) private doc: Document, public auth: AuthService) { }
 

@@ -21,6 +21,7 @@ import {
 
 export class HeaderComponent {
   @ViewChild(LogoutComponentComponent) childComponentMenu: LogoutComponentComponent;
+  // x
   @Output() featureSelected = new EventEmitter<string>()
   isCollapsed: boolean = true;
   whichPage;
