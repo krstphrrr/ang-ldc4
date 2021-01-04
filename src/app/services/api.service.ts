@@ -7,29 +7,40 @@ import {HttpParams} from "@angular/common/http";
   providedIn: 'root'
 })
 export class ApiService {
-  params = new HttpParams()
+  params
   private apiParams = new Subject()
   private apiUpdate = new BehaviorSubject<any>([])
   apiParams$:Observable<any>= this.apiUpdate.asObservable()
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    this.params = new HttpParams()
+  }
 
   getParams() {
     this.newParams(this.apiUpdate)
-    // this.http.get('http://api.landscapedatacommons.org/api/geoindicators',{
-    //   params: this.params
-    // }).subscribe(res=>{
-    //   console.log(res)
-    // })
+    console.log(this.params, "DENTRO DE LA FUNCION")
+    this.http.get('http://api.landscapedatacommons.org/api/geoindicators',{
+      params: this.params
+    }).subscribe(res=>{
+      console.log(res)
+    })
   }
   changeParams(terms){
     this.apiUpdate.next(terms)
     console.log(terms, "desde el servicio")
   }
   newParams(list){
-    list.forEach(i=>{
-      this.params.append("PrimaryKey",i)
+    // console.log(list.value, "lista pre iteration")
+    let empty = []
+    list.value.forEach(i=>{
+      if(empty.includes(i)){
+        // console.log("ALREADY HAVE", i )
+      }else{
+        empty.push(i)
+        this.params = this.params.set("PrimaryKey",i)
+      }
+      
     })
   }
   

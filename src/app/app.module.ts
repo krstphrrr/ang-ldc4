@@ -46,12 +46,14 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ProfileComponent } from './profile/profile.component';
 // import { AppRoutingModule } from './app-routing.module';
 import { ScrollingModule } from '@angular/cdk/scrolling'
-import { AuthGuard } from './services/auth.guard';
+// import { AuthGuard } from './services/auth.guard';
 import { AuthModule } from '@auth0/auth0-angular';
+import { AuthHttpInterceptor } from '@auth0/auth0-angular'
 import { SummaryTableComponent } from './map/summary-table/summary-table.component';
 import { DragpopComponent } from './map/dragpop/dragpop.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { InterceptorService } from './services/interceptor.service';
+// import { InterceptorService } from './services/interceptor.service';
+
 import { AltwoodyComponent } from './altwoody/altwoody.component';
 import { BaselayersComponent } from './map/baselayers/baselayers.component';
 import { OverlaysComponent } from './map/overlays/overlays.component';
@@ -79,8 +81,7 @@ const appRoutes: Routes = [
     component: FolderComponent },
 
   { path: 'profile', 
-    component: ProfileComponent,
-    canActivate: [AuthGuard] }
+    component: ProfileComponent, }
     
 
   // { path: , component: }
@@ -149,13 +150,25 @@ const appRoutes: Routes = [
     AuthModule.forRoot({
       domain:"dev-mg6fdv6o.auth0.com",
       clientId:"tWyDLZ1uzLeQDGjch7sHvi4ryt2IGQQz",
+      redirectUri:window.location.origin,
+      // httpInterceptor:{
+      //   allowedList:[
+      //     {
+      //       uri:'localhost:4200',
+      //       httpMethod:'get',
+      //       tokenOptions:{
+      //         audience:'https://api.landscapedatacommons.org',
+      //       }
+      //     }
+      //   ]
+      // }
     })
 
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: InterceptorService,
+      useClass: AuthHttpInterceptor,
       multi: true
     }
   ],
