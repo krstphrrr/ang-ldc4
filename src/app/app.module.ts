@@ -47,6 +47,7 @@ import { ProfileComponent } from './profile/profile.component';
 // import { AppRoutingModule } from './app-routing.module';
 import { ScrollingModule } from '@angular/cdk/scrolling'
 import { AuthGuard } from './services/auth.guard';
+import { AuthModule } from '@auth0/auth0-angular';
 import { SummaryTableComponent } from './map/summary-table/summary-table.component';
 import { DragpopComponent } from './map/dragpop/dragpop.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -56,6 +57,8 @@ import { BaselayersComponent } from './map/baselayers/baselayers.component';
 import { OverlaysComponent } from './map/overlays/overlays.component';
 import { PopupForTableComponent } from './popup_for_table/popup-for-table/popup-for-table.component';
 import { TableComponent } from './popup_for_table/table/table.component';
+import { LoginComponentComponent } from './auth/login-component/login-component.component';
+import { LogoutComponentComponent } from './auth/logout-component/logout-component.component';
 
 
 const appRoutes: Routes = [
@@ -107,7 +110,9 @@ const appRoutes: Routes = [
     BaselayersComponent,
     OverlaysComponent,
     PopupForTableComponent,
-    TableComponent
+    TableComponent,
+    LoginComponentComponent,
+    LogoutComponentComponent
     
   ],
   imports: [
@@ -140,7 +145,11 @@ const appRoutes: Routes = [
     MatSliderModule,
     MatButtonToggleModule,
     MatSnackBarModule,
-    ScrollingModule
+    ScrollingModule,
+    AuthModule.forRoot({
+      domain:"dev-mg6fdv6o.auth0.com",
+      clientId:"tWyDLZ1uzLeQDGjch7sHvi4ryt2IGQQz",
+    })
 
   ],
   providers: [

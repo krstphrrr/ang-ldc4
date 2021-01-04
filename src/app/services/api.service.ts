@@ -17,11 +17,11 @@ export class ApiService {
 
   getParams() {
     this.newParams(this.apiUpdate)
-    this.http.get('http://api.landscapedatacommons.org/api/geoindicators',{
-      params: this.params
-    }).subscribe(res=>{
-      console.log(res)
-    })
+    // this.http.get('http://api.landscapedatacommons.org/api/geoindicators',{
+    //   params: this.params
+    // }).subscribe(res=>{
+    //   console.log(res)
+    // })
   }
   changeParams(terms){
     this.apiUpdate.next(terms)

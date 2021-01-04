@@ -13,7 +13,7 @@ import { MarkerService } from '../services/marker.service'
 declare var $: any;
 // import {sidebar} from '../../plugins/L.Control.Sidebar.js'
 import { Subscription } from 'rxjs'
-import { debounceTime, scan, map, finalize } from 'rxjs/operators';
+// import { debounceTime, scan, map, finalize } from 'rxjs/operators';
 import * as d3 from 'd3'
 import { socketDataService } from '../services/socketTest.service'
 import { wmsService } from '../services/wms.service'

@@ -38,22 +38,19 @@
             </a>
       </li>
       <li ngbDropdown class="nav-item d-inline-block">
-          <a class="nav-link" (click)="auth.login()" *ngIf="!auth.loggedIn" style="cursor:pointer">
-            <img src="/assets/usr-logo.png" 
-                 alt="" 
-                 class="img-responsive" 
-                 style="max-height:20px"/> 
-          </a>
-          <a ngbDropdownToggle class="nav-link" *ngIf="auth.loggedIn">
+          <app-login-component *ngIf="!(auth.isAuthenticated$ | async)"></app-login-component>
+          <a ngbDropdownToggle class="nav-link" *ngIf="(auth.isAuthenticated$ | async)" [matMenuTriggerFor]="childComponentMenu?.menu">
             <img src="/assets/usr-logo.png" 
                  alt="" 
                  class="img-responsive" 
                  style="max-height:20px"/>
           </a>
-            <div class="dropdown-menu" ngbDropdownMenu>
-              <a routerLink="profile" *ngIf="auth.loggedIn" class="nav-link" style="cursor:pointer">Profile</a>
-              <a class="nav-link" (click)="auth.logout()" *ngIf="auth.loggedIn" style="cursor:pointer">Log Out</a>
-            </div>
+            <!-- <div class="dropdown-menu" ngbDropdownMenu> -->
+            
+              
+              <app-logout-component *ngIf="(auth.isAuthenticated$ | async)"></app-logout-component>
+
+            
           
       </li>
 

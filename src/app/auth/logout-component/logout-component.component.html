@@ -1,0 +1,4 @@
+<mat-menu #menu2="matMenu">
+<a mat-menu-item routerLink="profile" *ngIf="(auth.isAuthenticated$ | async)" class="nav-link" style="cursor:pointer">Profile</a>
+<a mat-menu-item class="nav-link" (click)="logout()" style="cursor:pointer">Log Out</a>
+</mat-menu>

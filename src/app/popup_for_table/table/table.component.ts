@@ -2,7 +2,7 @@ import { DataSource } from '@angular/cdk/collections';
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { map } from 'rxjs/operators';
+// import { map } from 'rxjs/operators';
 import { Subscription, BehaviorSubject, ObjectUnsubscribedError} from 'rxjs'
 import { Observable, of as observableOf, merge, of } from 'rxjs';
 import {TabledataService} from '../../services/tabledata.service'

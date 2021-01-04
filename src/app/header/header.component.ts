@@ -1,8 +1,11 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+// import { AuthService } from '../services/auth.service';
+import { AuthService } from '@auth0/auth0-angular';
 import { Router } from '@angular/router'
 import {LayerService} from '../services/layer.service'
 import { AboutSelService } from '../services/about-sel.service'
+import { LogoutComponentComponent} from '../auth/logout-component/logout-component.component'
+// import 
 import {
   MatSnackBar,
   MatSnackBarHorizontalPosition,
@@ -17,6 +20,7 @@ import {
 })
 
 export class HeaderComponent {
+  @ViewChild(LogoutComponentComponent) childComponentMenu: LogoutComponentComponent;
   @Output() featureSelected = new EventEmitter<string>()
   isCollapsed: boolean = true;
   whichPage;
