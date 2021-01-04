@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import {HttpParams} from "@angular/common/http";
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -11,9 +12,13 @@ export class ApiService {
   private apiParams = new Subject()
   private apiUpdate = new BehaviorSubject<any>([])
   apiParams$:Observable<any>= this.apiUpdate.asObservable()
+  resData = new Subject()
 
 
-  constructor(private http: HttpClient) { 
+  constructor(
+    private http: HttpClient,
+
+    ) { 
     this.params = new HttpParams()
   }
 
@@ -23,7 +28,7 @@ export class ApiService {
     this.http.get('http://api.landscapedatacommons.org/api/geoindicators',{
       params: this.params
     }).subscribe(res=>{
-      console.log(res)
+      this.resData.next(res)
     })
   }
   changeParams(terms){
@@ -43,6 +48,8 @@ export class ApiService {
       
     })
   }
-  
+  getNewData(){
+    return this.apiUpdate
+  }
 }
 

@@ -52,10 +52,21 @@ export class TabledataService {
       }
       console.log(key, "cosa")
     })
+    // sends list of columns to observable this.apiUpdate
     this.apiCall.changeParams(cols)
+    // uses list of columns in apiUpdate to 1) create params 2) set them 3) query api
     this.apiCall.getParams()
-    console.log(dat, "aqui")
+    // set results on "resData" subject
+
+    // subscribe to resData and update "dataS" subject (sends this json everywhere: 
+    // map component, popup component, table component )
+    this.apiCall.resData.subscribe(d=>{
+      this.dataS.next(d)
+    })
+  
     // this.dataS.next(dat)
+
+
     // this.dataSource$ = new Bej((observer)=>{
     //   observer.next(data)
     // })
