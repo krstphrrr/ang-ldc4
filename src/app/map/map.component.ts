@@ -33,6 +33,7 @@ import { SummaryTableComponent } from './summary-table/summary-table.component'
 import { DragpopComponent } from './dragpop/dragpop.component'
 import {TabledataService} from '../services/tabledata.service'
 import {ApiService} from '../services/api.service'
+import { StringService } from '../services/string.service';
 
 // interface Project {
 //   project: string;
@@ -114,6 +115,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     private dataBus: CustomControlService,
     private tabledata: TabledataService,
     private apiservice: ApiService,
+    private str: StringService,
 
     ) {
       
@@ -146,19 +148,26 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       })
       
       
-      this.tabledataSubscription = this.tabledata.dataSource$.subscribe(data=>{
-        this.tableData = []
-        this.tableCols = []
-        // console.log(data)
-        if(Object.keys(data).length!==0){
-
-          this.tableCols = data['cols']
-          this.tableData = data['data']
+      this.tabledataSubscription = this.str.retrieveContent().subscribe(dropDownChoice=>{
+        
+        if(dropDownChoice){
           
-        } else {
-          this.tableCols = []
-          this.tableData = []
+          this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
+            console.log(res)
+          })
         }
+        // this.tableData = []
+        // this.tableCols = []
+        // // console.log(data)
+        // if(Object.keys(data).length!==0){
+
+        //   this.tableCols = data['cols']
+        //   this.tableData = data['data']
+          
+        // } else {
+        //   this.tableCols = []
+        //   this.tableData = []
+        // }
         
         // if(this.tablepopup===false){
         //   this.tablepopup=true

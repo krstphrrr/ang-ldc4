@@ -1,4 +1,7 @@
 export const environment = {
   production: true,
-  API_URL: 'https://landscapedatacommons.org/'
+  SOCKET_URL: 'https://landscapedatacommons.org/',
+  API_URL: 'https://api.landscapedatacommons.org/',
+  TABLE_URL: 'https://api.landscapedatacommons.org/tables'
+
 };

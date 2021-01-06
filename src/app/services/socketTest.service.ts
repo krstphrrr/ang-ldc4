@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment'
 
 export class socketDataService {
   socket: any
-  readonly url:string = environment.API_URL
+  readonly url:string = environment.SOCKET_URL
   
 
   constructor(){

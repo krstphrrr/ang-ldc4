@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  API_URL: 'http://localhost:5000'
+  SOCKET_URL: 'http://localhost:5000',
+  API_URL: 'http://localhost:5002',
+  TABLE_URL: 'http://localhost:5002/tables'
 };
 
 /*

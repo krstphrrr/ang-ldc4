@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { StringService } from '../../services/string.service'
+import { ApiService } from '../../services/api.service'
 
 interface Tables {
   value: string;
@@ -20,9 +22,23 @@ export class TableDropdownComponent implements OnInit {
   // need to connect to new service (str) and api fetcher
 
 
-  constructor() { }
+  constructor(
+    private str: StringService,
+    private api: ApiService
+  ) { }
 
   ngOnInit(): void {
+    this.selected = this.api.getTables()
+  }
+
+  getTables(){
+    this.api.getTables().subscribe(result=>{
+      this.selected = result
+    })
+  }
+
+  sendContent(content){
+    this.str.sendContent(content.value)
   }
 
 }

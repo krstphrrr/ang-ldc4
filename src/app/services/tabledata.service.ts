@@ -34,7 +34,9 @@ export class TabledataService {
   getCloseSignal(){
     return this.dataTracker.asObservable()
   }
-  //getting data and storing it on data source
+  
+  //extracts primary keys to include as params for 
+  //following requests
   changeData(data){
     let complete={}
     let pks = []
@@ -46,7 +48,7 @@ export class TabledataService {
     dat.map(i=>{
       let key = i.id
       if(pks.includes(key)){
-        // console.log(key,"yatebgi esta")
+        
       } else {
         pks.push(key)
       }
@@ -54,7 +56,7 @@ export class TabledataService {
     // sends list of columns to observable this.apiUpdate
     this.apiCall.changeParams(pks)
     // uses list of columns in apiUpdate to 1) create params 2) set them 3) query api
-    this.apiCall.getParams()
+    // this.apiCall.getParams()
     this.apiCall.resCols.subscribe(cols =>{
       obj['cols'] = cols
     })
