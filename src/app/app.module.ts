@@ -61,6 +61,7 @@ import { PopupForTableComponent } from './popup_for_table/popup-for-table/popup-
 import { TableComponent } from './popup_for_table/table/table.component';
 import { LoginComponentComponent } from './auth/login-component/login-component.component';
 import { LogoutComponentComponent } from './auth/logout-component/logout-component.component';
+import { TableDropdownComponent } from './map/table-dropdown/table-dropdown.component';
 
 
 const appRoutes: Routes = [
@@ -113,7 +114,8 @@ const appRoutes: Routes = [
     PopupForTableComponent,
     TableComponent,
     LoginComponentComponent,
-    LogoutComponentComponent
+    LogoutComponentComponent,
+    TableDropdownComponent
     
   ],
   imports: [

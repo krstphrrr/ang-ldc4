@@ -37,31 +37,36 @@ export class TabledataService {
   //getting data and storing it on data source
   changeData(data){
     let complete={}
-    let cols = []
+    let pks = []
     let dat = data.features
+    let obj ={}
 
     // need to passe the large json into material table datasource hmmm
     // now: create array of unique primarykeys, pass array into service
     dat.map(i=>{
       let key = i.id
-      if(cols.includes(key)){
+      if(pks.includes(key)){
         // console.log(key,"yatebgi esta")
       } else {
-        cols.push(key)
-        console.log(key,"lometi")
+        pks.push(key)
       }
-      console.log(key, "cosa")
     })
     // sends list of columns to observable this.apiUpdate
-    this.apiCall.changeParams(cols)
+    this.apiCall.changeParams(pks)
     // uses list of columns in apiUpdate to 1) create params 2) set them 3) query api
     this.apiCall.getParams()
+    this.apiCall.resCols.subscribe(cols =>{
+      obj['cols'] = cols
+    })
+    
     // set results on "resData" subject
 
     // subscribe to resData and update "dataS" subject (sends this json everywhere: 
     // map component, popup component, table component )
     this.apiCall.resData.subscribe(d=>{
-      this.dataS.next(d)
+      obj['data'] = d
+      console.log(obj)
+      this.dataS.next(obj)
     })
   
     // this.dataS.next(dat)

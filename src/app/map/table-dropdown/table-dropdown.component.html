@@ -1,0 +1,9 @@
+<h4>======================</h4>
+<mat-form-field>
+  <mat-label>Available API tables</mat-label>
+  <mat-select (selectionChange)="sendContent($event)">
+    <mat-option *ngFor="let table of selected | async" [value]="table">
+      {{table}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

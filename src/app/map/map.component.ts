@@ -32,6 +32,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { SummaryTableComponent } from './summary-table/summary-table.component'
 import { DragpopComponent } from './dragpop/dragpop.component'
 import {TabledataService} from '../services/tabledata.service'
+import {ApiService} from '../services/api.service'
 
 // interface Project {
 //   project: string;
@@ -111,7 +112,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     private wms: wmsService, // makes wms layers available by pulling from apache
     private extentCalculator: MoveEndService,
     private dataBus: CustomControlService,
-    private tabledata: TabledataService
+    private tabledata: TabledataService,
+    private apiservice: ApiService,
 
     ) {
       
@@ -143,12 +145,19 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         // console.log(`from dropdown to map. you chose: ${dropdownOption.overlay.value}`)
       })
       
+      
       this.tabledataSubscription = this.tabledata.dataSource$.subscribe(data=>{
         this.tableData = []
         this.tableCols = []
         // console.log(data)
         if(Object.keys(data).length!==0){
-          console.log(data, "open close popo")
+
+          this.tableCols = data['cols']
+          this.tableData = data['data']
+          
+        } else {
+          this.tableCols = []
+          this.tableData = []
         }
         
         // if(this.tablepopup===false){

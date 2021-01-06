@@ -13,6 +13,8 @@ export class ApiService {
   private apiUpdate = new BehaviorSubject<any>([])
   apiParams$:Observable<any>= this.apiUpdate.asObservable()
   resData = new Subject()
+  
+  resCols = new Subject()
 
 
   constructor(
@@ -28,7 +30,9 @@ export class ApiService {
     this.http.get('http://api.landscapedatacommons.org/api/geoindicators',{
       params: this.params
     }).subscribe(res=>{
+      let columnArray = Object.keys(res[0])
       this.resData.next(res)
+      this.resCols.next(columnArray)
     })
   }
   changeParams(terms){
@@ -50,6 +54,10 @@ export class ApiService {
   }
   getNewData(){
     return this.apiUpdate
+  }
+
+  getAPIdata(){
+    return this.resData.asObservable()
   }
 }
 

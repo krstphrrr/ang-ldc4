@@ -1,11 +1,13 @@
 import { DataSource } from '@angular/cdk/collections';
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy, } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 // import { map } from 'rxjs/operators';
 import { Subscription, BehaviorSubject, ObjectUnsubscribedError} from 'rxjs'
 import { Observable, of as observableOf, merge, of } from 'rxjs';
 import {TabledataService} from '../../services/tabledata.service'
+import {ApiService} from '../../services/api.service'
 
 
 @Component({
@@ -13,10 +15,10 @@ import {TabledataService} from '../../services/tabledata.service'
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator:MatPaginator;
-  @Input('tableColumns')tableCols:string[]=[]
+  @Input()tableCols:string[]=[]
   @Input()tableData:{}[]=[];
 
   headerText: string;
@@ -30,16 +32,33 @@ export class TableComponent implements OnInit {
 
   output:any[]=[];
   subscription:Subscription;
-  
+  title = 'angdimatable';
   constructor(
-    private tbldata: TabledataService
+    private tbldata: TabledataService,
+    private apiserv: ApiService
   ) { 
-    this.subscription = this.tbldata.getdataSource$().subscribe(dat=>{
-      console.log(dat)
+    
+    this.subscription = this.apiserv.apiParams$.subscribe(dat=>{
+      this.refresh()
     })
   }
 
+  refresh(){
+    console.log()
+    // this.tempSet=[]
+    // this.filterArray = []
+    this.tbldata.dataSource$.subscribe(newData=>{
+      console.log(newData)
+      this.tableDataSrc = new MatTableDataSource(newData['data'])
+      this.tableDataSrc.sort = this.sort 
+      this.tableDataSrc.paginator = this.paginator
+    })
+    
+
+  }
+
   ngOnInit(): void {
+    this.refresh()
   }
   changePage(event){
 
@@ -49,6 +68,9 @@ export class TableComponent implements OnInit {
         this.skip = this.skip + this.limit;
       }
     }
+  }
+  ngOnDestroy(){
+    this.subscription.unsubscribe()
   }
 
 }

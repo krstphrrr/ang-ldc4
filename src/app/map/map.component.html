@@ -115,15 +115,15 @@
 
     </app-dragpop>
     <app-popup-for-table
-    *ngIf="tablepopup"
+    *ngIf="tablepopup && tableData"
     class="table-popup"
     style="position: absolute; top:0;left:50%;z-index: 3000;"
     cdkDrag
       cdkDragBoundary="#container">
       <app-table
-        *ngIf='tableData' 
+        
         [tableData]='tableData' 
-        [tableColumns]='tableCols'>
+        [tableCols]='tableCols'>
 
       </app-table>
 

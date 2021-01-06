@@ -22,7 +22,7 @@ export class PopupForTableComponent implements OnInit, OnDestroy, OnChanges {
     console.log("dentro del constructor")
     this.tabledataSubscription = this.tabledata.getdataSource$().subscribe(dat=>{
       this.extract = dat
-      console.log(this.extract)
+      // console.log(this.extract)
     })
 
     this.unsubscribeSubscription = this.tabledata.getUnsub().subscribe(sig=>{
