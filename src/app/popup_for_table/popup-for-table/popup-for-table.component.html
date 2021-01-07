@@ -13,7 +13,12 @@
     </div>
   </div>
   <app-table-dropdown></app-table-dropdown>
-  <!-- <app-table></app-table> -->
+  <app-table
+        
+        [tableData]='tableData' 
+        [tableCols]='tableCols'>
+
+      </app-table>
 </mat-card>
 </div>
 

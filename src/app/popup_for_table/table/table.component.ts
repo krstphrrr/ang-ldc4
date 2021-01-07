@@ -8,6 +8,7 @@ import { Subscription, BehaviorSubject, ObjectUnsubscribedError} from 'rxjs'
 import { Observable, of as observableOf, merge, of } from 'rxjs';
 import {TabledataService} from '../../services/tabledata.service'
 import {ApiService} from '../../services/api.service'
+import { StringService } from 'src/app/services/string.service';
 
 
 @Component({
@@ -35,10 +36,11 @@ export class TableComponent implements OnInit, OnDestroy {
   title = 'angdimatable';
   constructor(
     private tbldata: TabledataService,
-    private apiserv: ApiService
+    private api: ApiService,
+    private str: StringService
   ) { 
     
-    this.subscription = this.apiserv.apiParams$.subscribe(dat=>{
+    this.subscription = this.str.retrieveContent().subscribe(dat=>{
       this.refresh()
     })
   }
@@ -47,12 +49,13 @@ export class TableComponent implements OnInit, OnDestroy {
     console.log()
     // this.tempSet=[]
     // this.filterArray = []
-    this.tbldata.dataSource$.subscribe(newData=>{
-      console.log(newData)
-      this.tableDataSrc = new MatTableDataSource(newData['data'])
-      this.tableDataSrc.sort = this.sort 
-      this.tableDataSrc.paginator = this.paginator
-    })
+    if(this.api.data$){
+      this.api.data$.subscribe(newData=>{
+        this.tableDataSrc = new MatTableDataSource(newData['data'])
+        this.tableDataSrc.sort = this.sort
+        this.tableDataSrc.paginator = this.paginator
+      })
+    }
     
 
   }

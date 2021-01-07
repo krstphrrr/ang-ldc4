@@ -148,32 +148,42 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       })
       
       
-      this.tabledataSubscription = this.str.retrieveContent().subscribe(dropDownChoice=>{
+      // this.subscription = this.str.retrieveContent().subscribe(dropDownChoice=>{
         
-        if(dropDownChoice){
+      //   if(dropDownChoice){
           
-          this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
-            console.log(res)
-          })
-        }
-        // this.tableData = []
-        // this.tableCols = []
-        // // console.log(data)
-        // if(Object.keys(data).length!==0){
+      //     this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
+      //       this.tableData = []
+      //       this.tableCols = []
+      //       if(Object.keys(res).length!==0){
+      //         console.log(res)
+      //           this.tableCols = res['cols']
+      //           this.tableData = res['data']
+                
+      //         } else {
+      //           this.tableCols = []
+      //           this.tableData = []
+      //         }
+      //     })
+      //   }
+      //   // this.tableData = []
+      //   // this.tableCols = []
+      //   // // console.log(data)
+      //   // if(Object.keys(data).length!==0){
 
-        //   this.tableCols = data['cols']
-        //   this.tableData = data['data']
+      //   //   this.tableCols = data['cols']
+      //   //   this.tableData = data['data']
           
-        // } else {
-        //   this.tableCols = []
-        //   this.tableData = []
-        // }
+      //   // } else {
+      //   //   this.tableCols = []
+      //   //   this.tableData = []
+      //   // }
         
-        // if(this.tablepopup===false){
-        //   this.tablepopup=true
-        // }
-      }
-      )
+      //   // if(this.tablepopup===false){
+      //   //   this.tablepopup=true
+      //   // }
+      // }
+      // )
       this.unsubscribeSubscription = this.tabledata.deleteSignal.subscribe(signal=>{
         console.log(signal, "unsubs")
       })
@@ -287,6 +297,12 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     if(this.backendSubscription){
       this.backendSubscription.unsubscribe()
     }
+    this.overlaySubscription.unsubscribe()
+    this.tabledataSubscription.unsubscribe()
+    this.unsubscribeSubscription.unsubscribe()
+    this.dragTracker.unsubscribe()
+    this.popupTracker.unsubscribe()
+    
   }
   
   /* HELPER FUNCTIONS IN THE ORDER IN WHICH THEY ARE USED (throughout the lifecycle hooks)

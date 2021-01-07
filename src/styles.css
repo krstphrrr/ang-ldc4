@@ -2,7 +2,29 @@
 @import '~@fortawesome/fontawesome-free/css/all.min.css';
 @import '@angular/material/prebuilt-themes/deeppurple-amber';
 /* You can add global styles to this file, and also import other style files */
+.mat-paginator-container{
+  justify-content: normal !important;
+}
+/* th.mat-header-cell, td.mat-cell {
+  /* overflow: hidden; */
+ /* width: 250px; */
+ /* height: 30px; */
+ /* white-space: nowrap; */
+/* } */
+.mat-sort-header-container {
+  display: flex;
+  justify-content: center;
+  max-width: 100px;
+  /* overflow:hidden;
+  white-space: nowrap; */
+  text-overflow: ellipsis;
 
+}
+.th{
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
 
 #container{
   position: absolute;

@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, OnDestroy, OnChanges } from '@angular/core';
 import {Subscription} from 'rxjs'
+import { ApiService } from 'src/app/services/api.service';
+import { StringService } from 'src/app/services/string.service';
 import {TabledataService} from '../../services/tabledata.service'
 // import {CdkDragDrop} from '@angular/cdk/drag-drop';
 
@@ -15,11 +17,39 @@ export class PopupForTableComponent implements OnInit, OnDestroy, OnChanges {
   public unsubscribeSubscription:Subscription
   public extract
 
+  //table popu
+  tableCols = []
+  tableData:any= []
+  subscription:Subscription;
+
 
   constructor(
-    private tabledata:TabledataService
+    private tabledata:TabledataService,
+    private str: StringService,
+    private apiservice: ApiService,
+
   ) {
-    console.log("dentro del constructor")
+    this.subscription = this.str.retrieveContent().subscribe(dropDownChoice=>{
+        
+      if(dropDownChoice){
+        
+        this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
+          this.tableData = []
+          this.tableCols = []
+          if(Object.keys(res).length!==0){
+            console.log(res)
+              this.tableCols = res['cols']
+              this.tableData = res['data']
+              
+            } else {
+              this.tableCols = []
+              this.tableData = []
+            }
+        })
+      }
+    })
+
+    
     this.tabledataSubscription = this.tabledata.getdataSource$().subscribe(dat=>{
       this.extract = dat
       // console.log(this.extract)

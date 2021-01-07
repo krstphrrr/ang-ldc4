@@ -1,6 +1,41 @@
 table {
   width: 100%;
 }
-mat-table {
-  overflow-x: scroll;
+.size-container{
+  max-width: 500px;
+  height:400px;
+  width:auto;
+  overflow: auto;
+  z-index: 10000;
+}
+.flexible-container{
+  max-height: 400px;
+  overflow: auto;
+}
+.mat-header-cell, .mat-footer-cell, .mat-cell {
+  min-width: 80px;
+  max-width: 80px;
+  min-height:22px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.mat-column {
+  padding: 0 8px;
+  font-size: 10px;
+  text-align: center;
+}
+
+
+.truncate-cell { 
+  align-items: center;
+  max-width: 80px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.row{
+  max-height: 600px;
+  justify-content: center;
 }
