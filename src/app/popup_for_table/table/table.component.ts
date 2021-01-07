@@ -9,6 +9,7 @@ import { Observable, of as observableOf, merge, of } from 'rxjs';
 import {TabledataService} from '../../services/tabledata.service'
 import {ApiService} from '../../services/api.service'
 import { StringService } from 'src/app/services/string.service';
+import {saveAs} from 'file-saver/dist/FileSaver'
 
 
 @Component({
@@ -33,6 +34,7 @@ export class TableComponent implements OnInit, OnDestroy {
 
   output:any[]=[];
   subscription:Subscription;
+  saveSubs = new Observable
   title = 'angdimatable';
   constructor(
     private tbldata: TabledataService,
@@ -54,6 +56,7 @@ export class TableComponent implements OnInit, OnDestroy {
         this.tableDataSrc = new MatTableDataSource(newData['data'])
         this.tableDataSrc.sort = this.sort
         this.tableDataSrc.paginator = this.paginator
+        this.saveSubs = newData
       })
     }
     
@@ -76,4 +79,20 @@ export class TableComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe()
   }
 
-}
+  dlCsv(){
+    console.log(this.saveSubs)
+    if(this.saveSubs){
+      // this.subscription.subscribe(download=>{
+        const replacer = (key, value) => value === null ? '' : value; 
+        const header = this.saveSubs['cols'];
+        let csv = this.saveSubs['data'].map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
+        csv.unshift(header.join(','));
+        let csvArray = csv.join('\r\n');
+        var blob = new Blob([csvArray], {type: 'text/csv' })
+        saveAs(blob, "selectedData.csv");
+      }
+    }
+
+  }
+
+

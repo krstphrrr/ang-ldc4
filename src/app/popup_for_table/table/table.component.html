@@ -20,7 +20,7 @@
       </div>
       <div style="justify-content: normal;" [ngStyle]="{'visibility':(tableDataSrc)? 'visible':'hidden'}">
       <mat-paginator 
-        
+          
           (page)="changePage($event)"
           [pageSize]="limit" 
           [length]="totalLength" 
@@ -28,6 +28,10 @@
           showFirstLastButtons>
         </mat-paginator>
       </div>
+      <button 
+        mat-button
+        *ngIf="tableDataSrc"
+        (click)="dlCsv()">CSV</button>
         
       
   </div>
