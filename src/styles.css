@@ -5,26 +5,27 @@
 .mat-paginator-container{
   justify-content: normal !important;
 }
-/* th.mat-header-cell, td.mat-cell {
-  /* overflow: hidden; */
- /* width: 250px; */
- /* height: 30px; */
- /* white-space: nowrap; */
-/* } */
-.mat-sort-header-container {
-  display: flex;
+.th,mat-header-cell {
+  flex-direction: column;
   justify-content: center;
-  max-width: 100px;
-  /* overflow:hidden;
-  white-space: nowrap; */
+  min-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
-
-}
-.th{
   align-items: center;
-  justify-content: center;
   text-align: center;
 }
+.mat-sort-header-container{
+  justify-content: center !important;
+}
+
+.mat-cell {
+  text-align: center;
+  justify-content:center;
+  min-width: 150px;
+  min-height:22px;
+}
+
 
 #container{
   position: absolute;

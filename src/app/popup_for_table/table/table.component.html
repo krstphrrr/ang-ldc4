@@ -8,7 +8,7 @@
         <table mat-table [dataSource]="tableDataSrc" matSort class="flexible-container mat-elevation-z8">
           <ng-container *ngFor="let col of tableCols">
             <ng-container matColumnDef="{{col}}" class="mat-column">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{col}}</th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header class="align-right">{{col}}</th>
               <td mat-cell *matCellDef="let row" class="truncate-cell">{{ row[col]}}</td>
             </ng-container>
           </ng-container>

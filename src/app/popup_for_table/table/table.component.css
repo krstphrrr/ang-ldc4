@@ -12,25 +12,20 @@ table {
   max-height: 400px;
   overflow: auto;
 }
-.mat-header-cell, .mat-footer-cell, .mat-cell {
-  min-width: 80px;
-  max-width: 80px;
-  min-height:22px;
-  box-sizing: border-box;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+.th,.mat-header-cell{
+  min-width: 150px;
+  text-align: center !important;
 }
+
 .mat-column {
   padding: 0 8px;
   font-size: 10px;
   text-align: center;
 }
 
-
 .truncate-cell { 
   align-items: center;
-  max-width: 80px; 
+  max-width: 150px; 
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
