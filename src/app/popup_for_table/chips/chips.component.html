@@ -1,0 +1,26 @@
+<mat-form-field class="example-chip-list">
+  <mat-label>Available tables</mat-label>
+  <mat-chip-list #chipList aria-label="Table selection">
+    <mat-chip
+      *ngFor="let table of tables"
+      [selectable]="selectable"
+      [removable]="removable"
+      (removed)="remove(table)">
+      {{table}}
+      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+    </mat-chip>
+    <input
+      placeholder="New table..."
+      #tableInput2
+      [formControl]="tableCtrl"
+      [matAutocomplete]="auto"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      (matChipInputTokenEnd)="add($event)">
+  </mat-chip-list>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <mat-option *ngFor="let table of filteredTables | async" [value]="table">
+      {{table}}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

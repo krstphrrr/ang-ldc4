@@ -62,6 +62,11 @@ import { TableComponent } from './popup_for_table/table/table.component';
 import { LoginComponentComponent } from './auth/login-component/login-component.component';
 import { LogoutComponentComponent } from './auth/logout-component/logout-component.component';
 import { TableDropdownComponent } from './map/table-dropdown/table-dropdown.component';
+import { ChipsComponent } from './popup_for_table/chips/chips.component';
+import { TabsComponent } from './popup_for_table/tabs/tabs.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 
 const appRoutes: Routes = [
@@ -115,7 +120,9 @@ const appRoutes: Routes = [
     TableComponent,
     LoginComponentComponent,
     LogoutComponentComponent,
-    TableDropdownComponent
+    TableDropdownComponent,
+    ChipsComponent,
+    TabsComponent
     
   ],
   imports: [
@@ -164,7 +171,12 @@ const appRoutes: Routes = [
       //     }
       //   ]
       // }
-    })
+
+    }),
+    MatAutocompleteModule,
+    MatChipsModule,
+    MatFormFieldModule,
+    ReactiveFormsModule
 
   ],
   providers: [
