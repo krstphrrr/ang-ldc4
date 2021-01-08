@@ -9,6 +9,12 @@ import {map, startWith} from 'rxjs/operators';
 import { StringService } from '../../services/string.service'
 import { ApiService } from '../../services/api.service'
 
+interface Tables {
+  value: string;
+  pathName: string;
+}
+
+
 @Component({
   selector: 'app-chips',
   templateUrl: './chips.component.html',
@@ -33,8 +39,8 @@ export class ChipsComponent implements OnInit {
   ) { 
     this.filteredTables = this.tableCtrl.valueChanges.pipe(
       // need to look for schedule logic since startWith is deprecated
-      startWith(null),
-      map((fruit: string | null) => fruit ? this._filter(fruit) : this.allTables.slice()));
+      // startWith(null),
+      map((table: string | null) => table ? this._filter(table) : this.allTables.slice()));
   }
 
   add(event: MatChipInputEvent): void {
@@ -54,8 +60,8 @@ export class ChipsComponent implements OnInit {
     this.tableCtrl.setValue(null);
   }
 
-  remove(fruit: string): void {
-    const index = this.tables.indexOf(fruit);
+  remove(table: string): void {
+    const index = this.tables.indexOf(table);
 
     if (index >= 0) {
       this.tables.splice(index, 1);
@@ -69,10 +75,15 @@ export class ChipsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.api.getTables().subscribe(res=>{
+      this.allTables = res
+    })
+    // console.log(this.allTables)
   }
   getTables(){
     this.api.getTables().subscribe(result=>{
-      this.allTables = result
+      console.log(result)
+      // this.allTables = result
     })
   }
 
