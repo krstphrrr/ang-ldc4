@@ -7,10 +7,15 @@ import { Observable, Subject } from 'rxjs';
 })
 export class StringService {
   private subject = new Subject();
+  private tableArray = new Subject()
 
-  sendContent(content:string){
+  publicSubject = this.subject.asObservable()
+  publicTables = this.tableArray.asObservable()
+
+  sendContent(content){
     
-    this.subject.next({data:content})
+    this.subject.next({data:content.current})
+    this.tableArray.next({tables:content.tableArray})
   }
 
   retrieveContent():Observable<any>{
@@ -21,5 +26,9 @@ export class StringService {
   sendTableData(content:{}[]){
     
     this.subject.next({data:content})
+  }
+
+  sendTableArray(content){
+    this.tableArray.next({tables:content})
   }
 }

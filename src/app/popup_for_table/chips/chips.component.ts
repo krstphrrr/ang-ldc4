@@ -97,8 +97,21 @@ export class ChipsComponent implements OnInit {
   }
 
   sendContent(content){
-    console.log(content)
-    // this.str.sendContent(content.option.viewValue)
+    let currentTable 
+    let tableArray = content.value
+    let wholePackage = {}
+    
+    if(tableArray.length>0){
+      currentTable = tableArray[tableArray.length-1]
+      wholePackage['current'] = currentTable
+      wholePackage['tableArray'] = tableArray
+      this.str.sendContent(wholePackage)
+      // this.str.sendTableArray(tableArray)
+    }
+    // this.str.sendContent(content.value)
+  }
+  sendTableArray(content){
+    this.str.sendTableArray(content.value)
   }
 
 

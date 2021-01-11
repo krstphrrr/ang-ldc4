@@ -30,7 +30,7 @@ export class PopupForTableComponent implements OnInit, OnDestroy, OnChanges {
 
   ) {
     this.subscription = this.str.retrieveContent().subscribe(dropDownChoice=>{
-        
+        console.log(dropDownChoice)
       if(dropDownChoice){
         
         this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
