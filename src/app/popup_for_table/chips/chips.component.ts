@@ -27,7 +27,7 @@ export class ChipsComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   tableCtrl = new FormControl();
   filteredTables: Observable<string[]>;
-  tables = []
+  tables
   allTables
 
   @ViewChild('tableInput2') tableInput: ElementRef<HTMLInputElement>;
@@ -46,7 +46,7 @@ export class ChipsComponent implements OnInit {
   add(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
-
+    
     // Add our fruit
     if ((value || '').trim()) {
       this.tables.push(value.trim());
@@ -56,6 +56,8 @@ export class ChipsComponent implements OnInit {
     if (input) {
       input.value = '';
     }
+    console.log(event)
+    
 
     this.tableCtrl.setValue(null);
   }
@@ -69,6 +71,7 @@ export class ChipsComponent implements OnInit {
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
+    this.sendContent(event)
     this.tables.push(event.option.viewValue);
     this.tableInput.nativeElement.value = '';
     this.tableCtrl.setValue(null);
@@ -76,7 +79,7 @@ export class ChipsComponent implements OnInit {
 
   ngOnInit(): void {
     this.api.getTables().subscribe(res=>{
-      this.allTables = res
+      this.tables = res
     })
     // console.log(this.allTables)
   }
@@ -92,5 +95,11 @@ export class ChipsComponent implements OnInit {
 
     return this.allTables.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
   }
+
+  sendContent(content){
+    console.log(content)
+    // this.str.sendContent(content.option.viewValue)
+  }
+
 
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { StringService } from 'src/app/services/string.service';
 
 @Component({
   selector: 'app-tabs',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TabsComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private str: StringService
+  ) { }
 
   ngOnInit(): void {
+    this.str.retrieveContent().subscribe(res=>{
+      console.log(res)
+    })
   }
 
 }

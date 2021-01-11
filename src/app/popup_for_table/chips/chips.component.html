@@ -1,5 +1,20 @@
 <mat-form-field class="example-chip-list">
-  <mat-label>Available tables</mat-label>
+
+  <mat-label>Available Tables</mat-label>
+  <mat-select
+    placeholder="select"
+  
+    name="itemSelect" 
+    (selectionChange)="sendContent($event)"
+    disableRipple
+    multiple>
+  <mat-option 
+    *ngFor="let table of tables"
+    [value]="table">
+      {{table}}
+    </mat-option>
+  </mat-select>
+  <!-- <mat-label>Available tables</mat-label>
   <mat-chip-list #chipList aria-label="Table selection">
     <mat-chip
       *ngFor="let table of tables"
@@ -22,5 +37,5 @@
     <mat-option *ngFor="let table of filteredTables | async" [value]="table">
       {{table}}
     </mat-option>
-  </mat-autocomplete>
+  </mat-autocomplete> -->
 </mat-form-field>

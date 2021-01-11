@@ -9,7 +9,7 @@ export class StringService {
   private subject = new Subject();
 
   sendContent(content:string){
-    // console.log(content)
+    
     this.subject.next({data:content})
   }
 
@@ -19,6 +19,7 @@ export class StringService {
   }
 
   sendTableData(content:{}[]){
+    
     this.subject.next({data:content})
   }
 }
