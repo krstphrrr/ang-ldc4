@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { ApiService } from 'src/app/services/api.service';
 import { StringService } from 'src/app/services/string.service';
+import { TabledataService } from 'src/app/services/tabledata.service';
 interface Res{
   tables:[]
 }
@@ -11,9 +13,9 @@ interface Res{
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.css']
 })
-export class TabsComponent implements OnInit {
+export class TabsComponent implements OnInit, OnDestroy {
   // tabs: dynamic creation and destruction of tabs
-  tabs
+  tabs = []
   selected = new FormControl(0)
   // table data for each table in tab
   public tabledataSubscription:Subscription
@@ -26,18 +28,46 @@ export class TabsComponent implements OnInit {
   subscription:Subscription;
 
   constructor(
-    private str: StringService
+    private tabledata:TabledataService,
+    private str: StringService,
+    private apiservice: ApiService,
   ) {
+    //subscription to detect changes to tables
     this.str.publicTables.subscribe((res:Res)=>{
-      
       this.tabs = res.tables
     })
+
+    this.subscription = this.str.retrieveContent().subscribe(dropDownChoice=>{
+    
+    if(dropDownChoice){
+      // console.log("you chose something")
+      this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
+        // console.log(res)
+        this.tableData = []
+        this.tableCols = []
+        if(Object.keys(res).length!==0){
+          // console.log(res)
+            this.tableCols = res['cols']
+            this.tableData = res['data']
+            this.subscription.unsubscribe()
+            
+          } else {
+            this.tableCols = []
+            this.tableData = []
+          }
+      })
+    }
+  })
    }
-   addTab(selectAfterAdding:boolean){
-     this.tabs.push("new")
-     if (selectAfterAdding){
-       this.selected.setValue(this.tabs.length-1)
-     }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe()
+    // throw new Error('Method not implemented.');
+  }
+   addTab(tabname){
+     this.tabs.push(tabname)
+    //  if (selectAfterAdding){
+    //    this.selected.setValue(this.tabs.length-1)
+    //  }
    }
    removeTab(index){
      this.tabs.splice(index,1)
@@ -46,5 +76,6 @@ export class TabsComponent implements OnInit {
   ngOnInit(): void {
     
   }
+  
 
 }

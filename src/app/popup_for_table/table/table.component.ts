@@ -57,6 +57,7 @@ export class TableComponent implements OnInit, OnDestroy {
         this.tableDataSrc.sort = this.sort
         this.tableDataSrc.paginator = this.paginator
         this.saveSubs = newData
+        this.subscription.unsubscribe()
       })
     }
     
