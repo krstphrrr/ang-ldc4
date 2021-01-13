@@ -33,7 +33,7 @@ export class MoveEndService {
       this.topos = topos
   }
   coordsArray(boundsObj){
-    console.log(boundsObj)
+    // console.log(boundsObj)
     this.coords = boundsObj
   }
   clearCoords(){

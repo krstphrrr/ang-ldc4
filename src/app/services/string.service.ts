@@ -40,7 +40,7 @@ export class StringService {
 
 
   sendFullData(content){
-    console.log("received full data")
+    // console.log("received full data")
     this.fullData.next(content)
   }
 

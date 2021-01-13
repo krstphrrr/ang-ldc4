@@ -112,7 +112,7 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   includeData(){
-    console.log(this.saveSubs)
+    // console.log(this.saveSubs)
     
     if(this.csvTables){
       this.str.sendFullData(this.csvTables)

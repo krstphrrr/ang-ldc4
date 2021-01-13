@@ -92,7 +92,7 @@ export class PopupForTableComponent implements OnInit, OnDestroy, OnChanges {
   resubscribe(){
     this.tabledataSubscription = this.tabledata.getdataSource$().subscribe(dat=>{
       this.extract = dat
-      console.log(this.extract)
+      // console.log(this.extract)
     })
   }
   ngOnChanges(){

@@ -50,7 +50,7 @@ export class TabsComponent implements OnInit, OnDestroy {
     })
 
     this.str.fullData.subscribe(dat=>{
-      console.log(this.tabs.length)
+      // console.log(this.tabs.length)
       if(dat){
         for(let [val,index] of Object.entries(dat)){
           if(!Object.keys(this.myObj).includes(val)){
@@ -68,7 +68,7 @@ export class TabsComponent implements OnInit, OnDestroy {
     if(dropDownChoice){
       // console.log("you chose something")
       this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
-        console.log(res)
+        // console.log(res)
         
         if(Object.keys(res).length!==0){
           // console.log(res)
@@ -120,15 +120,13 @@ export class TabsComponent implements OnInit, OnDestroy {
   testBtn(){
     this.creatingCSVs()
     this.creatingZipFile("testPack")
-    
-    
   }
 
   creatingCSVs(){
     this.csvPack = {}
     if(this.myObj){
       for(let [k,v] of Object.entries(this.myObj)){
-        console.log(v)
+        // console.log(v)
         // this.subscription.subscribe(download=>{
           const replacer = (key, value) => value === null ? '' : value; 
           const header = v['cols'];
