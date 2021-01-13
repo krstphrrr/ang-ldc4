@@ -46,6 +46,7 @@ export class ApiService {
     this.data$  = new BehaviorSubject({})
     let newString = `${this.api}/api/${choice}`.toLowerCase()
     this.newParams(this.apiUpdate)
+    console.log(this.params)
     this.httpOptions['params'] = this.params
 
     // console.log(this.httpOptions)
@@ -55,6 +56,7 @@ export class ApiService {
         let complete = {}
         let cols = []
         let data = res
+        console.log(res)
         for(let[key,value] of Object.entries(res[0])){
           cols.push(key)
         }
@@ -73,17 +75,18 @@ export class ApiService {
     console.log(terms, "desde el servicio")
   }
   newParams(list){
-    // console.log(list.value, "lista pre iteration")
+    console.log(list.value, "lista pre iteration")
     let empty = []
-    list.value.forEach(i=>{
+    for(let i of list.value){
+      console.log(i)
+      this.params = this.params.set("PrimaryKey",i)
       if(empty.includes(i)){
-        // console.log("ALREADY HAVE", i )
+        console.log("ALREADY HAVE", i )
       }else{
         empty.push(i)
-        this.params = this.params.set("PrimaryKey",i)
+        
       }
-      
-    })
+    }
   }
   getNewData(){
     return this.apiUpdate

@@ -57,24 +57,24 @@ export class TabsComponent implements OnInit, OnDestroy {
             this.myObj[val] = dat[val]
           }
         }
-        console.log(this.myObj)
+        // console.log(this.myObj)
       }
       
     })
 
     this.subscription = this.str.retrieveContent().subscribe(dropDownChoice=>{
-    
+      this.tableData = []
+      this.tableCols = []
     if(dropDownChoice){
       // console.log("you chose something")
       this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
-        // console.log(res)
-        this.tableData = []
-        this.tableCols = []
+        console.log(res)
+        
         if(Object.keys(res).length!==0){
           // console.log(res)
             this.tableCols = res['cols']
             this.tableData = res['data']
-            this.subscription.unsubscribe()
+            // this.subscription.unsubscribe()
             
           } else {
             this.tableCols = []

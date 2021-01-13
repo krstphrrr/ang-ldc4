@@ -70,14 +70,14 @@ export class TableComponent implements OnInit, OnDestroy {
     // this.filterArray = []
     if(this.api.data$){
       this.api.data$.subscribe(newData=>{
+
         this.tableDataSrc = new MatTableDataSource(newData['data'])
         this.tableDataSrc.sort = this.sort
         this.tableDataSrc.paginator = this.paginator
         this.saveSubs = newData
-        this.saveTableData(newData['choice'],newData)
+        this.saveTableData(newData['choice'],newData) //for csv's
         this.includeData()
 
-        
         this.subscription.unsubscribe() //need to not reload each table as they appear
         
       })

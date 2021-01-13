@@ -146,7 +146,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         }
         // console.log(`from dropdown to map. you chose: ${dropdownOption.overlay.value}`)
       })
-      
+
       this.unsubscribeSubscription = this.tabledata.deleteSignal.subscribe(signal=>{
         console.log(signal, "unsubs")
       })
@@ -399,7 +399,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   onDrawingDeleted(){
     // close popup
     
-    this.tabledata.sendCloseSignal()
+    this.tabledata.clearData()
     this.projects = []
     this.dataBus.changeData(this.projects)
     this.drawnItems.eachLayer((layer)=>{
@@ -423,7 +423,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   tablepopupClose(){
     // L.Draw.Event.DELETED
-    
+    this.tabledata.clearData()
     if(this.tablepopup==true){
       this.tablepopup=false
     }
@@ -432,6 +432,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     })
 
     this.projects = []
+    this.dataBus.changeData(this.projects)
   }
   
 
