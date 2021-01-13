@@ -1,5 +1,5 @@
 import { DataSource } from '@angular/cdk/collections';
-import { Component, OnInit, Input, ViewChild, OnDestroy, } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy, Output, EventEmitter, } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -10,6 +10,10 @@ import {TabledataService} from '../../services/tabledata.service'
 import {ApiService} from '../../services/api.service'
 import { StringService } from 'src/app/services/string.service';
 import {saveAs} from 'file-saver/dist/FileSaver'
+interface Res{
+  current:string,
+  tableArray:[]
+}
 
 
 @Component({
@@ -22,6 +26,9 @@ export class TableComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator:MatPaginator;
   @Input()tableCols:string[]=[]
   @Input()tableData:{}[]=[];
+  @Output() dataChanged: EventEmitter<any> = new EventEmitter()
+
+  csvTables = {}
 
   headerText: string;
   limit:number = 10;
@@ -31,9 +38,12 @@ export class TableComponent implements OnInit, OnDestroy {
   pageLimit:number[] = [5, 10, 20, 100] ;
 
   tableDataSrc:any
+  tableName
+  tableList
 
   output:any[]=[];
   subscription:Subscription;
+  
   saveSubs = new Observable
   title = 'angdimatable';
   constructor(
@@ -41,14 +51,21 @@ export class TableComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private str: StringService
   ) { 
-    
+    this.str.tableArray2.subscribe(res=>{
+      // console.log(res)
+      this.tableList = res.tableArray
+      this.trimTableData()
+    })
+
     this.subscription = this.str.retrieveContent().subscribe(dat=>{
+
       this.refresh()
     })
   }
 
   refresh(){
-    console.log()
+    
+    
     // this.tempSet=[]
     // this.filterArray = []
     if(this.api.data$){
@@ -57,11 +74,32 @@ export class TableComponent implements OnInit, OnDestroy {
         this.tableDataSrc.sort = this.sort
         this.tableDataSrc.paginator = this.paginator
         this.saveSubs = newData
-        this.subscription.unsubscribe()
+        this.saveTableData(newData['choice'],newData['data'])
+        
+        this.subscription.unsubscribe() //need to not reload each table as they appear
+        
       })
     }
     
 
+  }
+  saveTableData(name, data){
+    if(name && data){
+      if(!Object.keys(this.csvTables).includes(name)){
+        this.csvTables[name] = data
+      }
+    }
+  }
+  trimTableData(){
+    if(this.csvTables){
+      console.log(this.csvTables)
+      for(let k of Object.keys(this.csvTables)){
+        console.log(this.tableList, k)
+        if(!this.tableList.includes(k)){
+          delete this.csvTables[k]
+        }
+      }
+    }
   }
 
   ngOnInit(): void {
@@ -81,17 +119,19 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   dlCsv(){
-    console.log(this.saveSubs)
-    if(this.saveSubs){
-      // this.subscription.subscribe(download=>{
-        const replacer = (key, value) => value === null ? '' : value; 
-        const header = this.saveSubs['cols'];
-        let csv = this.saveSubs['data'].map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
-        csv.unshift(header.join(','));
-        let csvArray = csv.join('\r\n');
-        var blob = new Blob([csvArray], {type: 'text/csv' })
-        saveAs(blob, "selectedData.csv");
-      }
+    // console.log(this.csvTables)
+    this.dataChanged.emit(this.csvTables)
+    // console.log((Object.keys(this.csvTables)))
+    // if(this.saveSubs){
+    //   // this.subscription.subscribe(download=>{
+    //     const replacer = (key, value) => value === null ? '' : value; 
+    //     const header = this.saveSubs['cols'];
+    //     let csv = this.saveSubs['data'].map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
+    //     csv.unshift(header.join(','));
+    //     let csvArray = csv.join('\r\n');
+    //     var blob = new Blob([csvArray], {type: 'text/csv' })
+    //     saveAs(blob, "selectedData.csv");
+    //   }
     }
 
   }

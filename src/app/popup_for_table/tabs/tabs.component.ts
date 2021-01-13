@@ -21,6 +21,7 @@ export class TabsComponent implements OnInit, OnDestroy {
   public tabledataSubscription:Subscription
   public unsubscribeSubscription:Subscription
   public extract
+  myObj = {}
 
   //table popu
   tableCols = []
@@ -75,6 +76,14 @@ export class TabsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     
+  }
+  dataChangeHandler(data){
+    for(let i in Object.keys(data)){
+      if(!Object.keys(this.myObj).includes(i)){
+        this.myObj[i]=data[i]
+      }
+    }
+    console.log(this.myObj)
   }
   
 

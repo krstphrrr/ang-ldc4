@@ -7,7 +7,7 @@
     >
       <!-- CONTENTS FOR EACH TAB// a dynamic table on each -->
       <app-table
-        
+      (dataChanged) = "dataChangeHandler($event)"
         [tableData]='tableData' 
         [tableCols]='tableCols'>
 

@@ -58,6 +58,7 @@ export class ApiService {
         for(let[key,value] of Object.entries(res[0])){
           cols.push(key)
         }
+        complete['choice'] = choice
         complete['cols'] =cols 
         complete['data'] = data 
         this.data$.next(complete)
