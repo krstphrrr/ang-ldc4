@@ -4,9 +4,16 @@ import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { StringService } from 'src/app/services/string.service';
 import { TabledataService } from 'src/app/services/tabledata.service';
+import * as JSZip from 'jszip';
+import {saveAs} from 'file-saver/dist/FileSaver'
 interface Res{
   tables:[]
 }
+interface csvPacks{
+  blobName?:string,
+  blobData?:Blob
+}
+
 
 @Component({
   selector: 'app-tabs',
@@ -14,6 +21,7 @@ interface Res{
   styleUrls: ['./tabs.component.css']
 })
 export class TabsComponent implements OnInit, OnDestroy {
+  zipFile: JSZip = new JSZip();
   // tabs: dynamic creation and destruction of tabs
   tabs = []
   selected = new FormControl(0)
@@ -22,6 +30,7 @@ export class TabsComponent implements OnInit, OnDestroy {
   public unsubscribeSubscription:Subscription
   public extract
   myObj = {}
+  csvPack:csvPacks = {}
 
   //table popu
   tableCols = []
@@ -36,6 +45,21 @@ export class TabsComponent implements OnInit, OnDestroy {
     //subscription to detect changes to tables
     this.str.publicTables.subscribe((res:Res)=>{
       this.tabs = res.tables
+      this.trimTableData()
+
+    })
+
+    this.str.fullData.subscribe(dat=>{
+      console.log(this.tabs.length)
+      if(dat){
+        for(let [val,index] of Object.entries(dat)){
+          if(!Object.keys(this.myObj).includes(val)){
+            this.myObj[val] = dat[val]
+          }
+        }
+        console.log(this.myObj)
+      }
+      
     })
 
     this.subscription = this.str.retrieveContent().subscribe(dropDownChoice=>{
@@ -77,14 +101,65 @@ export class TabsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     
   }
-  dataChangeHandler(data){
-    for(let i in Object.keys(data)){
-      if(!Object.keys(this.myObj).includes(i)){
-        this.myObj[i]=data[i]
+
+
+  trimTableData(){
+    // place on the tables subscription
+    // iterates over fullData object entries, 
+    // if the entries do not match the tables array, 
+    // trim the object to match it.
+    if(this.tabs){
+      for(let k of Object.keys(this.myObj)){
+        if(!this.tabs.includes(k)){
+          delete this.myObj[k]
+        }
       }
     }
-    console.log(this.myObj)
   }
+
+  testBtn(){
+    this.creatingCSVs()
+    this.creatingZipFile("testPack")
+    
+    
+  }
+
+  creatingCSVs(){
+    this.csvPack = {}
+    if(this.myObj){
+      for(let [k,v] of Object.entries(this.myObj)){
+        console.log(v)
+        // this.subscription.subscribe(download=>{
+          const replacer = (key, value) => value === null ? '' : value; 
+          const header = v['cols'];
+          let csv = v['data'].map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
+          csv.unshift(header.join(','));
+          let csvArray = csv.join('\r\n');
+          let blob:Blob = new Blob([csvArray], {type: 'text/csv' })
+          this.csvPack[k] = blob
+  
+      }
+      
+    }
+  }
+
+  creatingZipFile( zipname:string){
+    let zip: JSZip = new JSZip();
+    let zipName = zipname+'.zip'
+    for(let [blobName,csvBlob] of Object.entries(this.csvPack)){
+      if(csvBlob!==null){
+        zip.file(blobName+".csv",csvBlob)
+      }
+      
+      
+    }
+    zip.generateAsync({type:'blob'}).then((content)=>{
+      if(content){
+        saveAs(content,zipName)
+      }
+    })
+  }
+ 
   
 
 }

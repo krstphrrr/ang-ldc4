@@ -54,7 +54,7 @@ export class TableComponent implements OnInit, OnDestroy {
     this.str.tableArray2.subscribe(res=>{
       // console.log(res)
       this.tableList = res.tableArray
-      this.trimTableData()
+      
     })
 
     this.subscription = this.str.retrieveContent().subscribe(dat=>{
@@ -74,7 +74,9 @@ export class TableComponent implements OnInit, OnDestroy {
         this.tableDataSrc.sort = this.sort
         this.tableDataSrc.paginator = this.paginator
         this.saveSubs = newData
-        this.saveTableData(newData['choice'],newData['data'])
+        this.saveTableData(newData['choice'],newData)
+        this.includeData()
+
         
         this.subscription.unsubscribe() //need to not reload each table as they appear
         
@@ -84,23 +86,14 @@ export class TableComponent implements OnInit, OnDestroy {
 
   }
   saveTableData(name, data){
+    // let smallObject = {}
     if(name && data){
       if(!Object.keys(this.csvTables).includes(name)){
         this.csvTables[name] = data
       }
     }
   }
-  trimTableData(){
-    if(this.csvTables){
-      console.log(this.csvTables)
-      for(let k of Object.keys(this.csvTables)){
-        console.log(this.tableList, k)
-        if(!this.tableList.includes(k)){
-          delete this.csvTables[k]
-        }
-      }
-    }
-  }
+  
 
   ngOnInit(): void {
     this.refresh()
@@ -118,9 +111,12 @@ export class TableComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe()
   }
 
-  dlCsv(){
-    // console.log(this.csvTables)
-    this.dataChanged.emit(this.csvTables)
+  includeData(){
+    console.log(this.saveSubs)
+    
+    if(this.csvTables){
+      this.str.sendFullData(this.csvTables)
+    }
     // console.log((Object.keys(this.csvTables)))
     // if(this.saveSubs){
     //   // this.subscription.subscribe(download=>{

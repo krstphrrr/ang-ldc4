@@ -1,17 +1,23 @@
 <mat-tab-group
   [selectedIndex]="selected.value"
   (selectedIndexChange)="selected.setValue($event)">
+
     <mat-tab 
       *ngFor="let tab of tabs; let index = index"
       [label] = tab
     >
       <!-- CONTENTS FOR EACH TAB// a dynamic table on each -->
       <app-table
-      (dataChanged) = "dataChangeHandler($event)"
+      
         [tableData]='tableData' 
         [tableCols]='tableCols'>
 
       </app-table>
     </mat-tab>
+    
   
 </mat-tab-group>
+<button 
+        mat-button
+        
+        (click)="testBtn()">TEST</button>

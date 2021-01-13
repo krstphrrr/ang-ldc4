@@ -10,6 +10,8 @@ export class StringService {
   private tableArray = new Subject()
   tableArray2 = new BehaviorSubject(null)
 
+  fullData = new BehaviorSubject(null)
+
   publicSubject = this.subject.asObservable()
   publicTables = this.tableArray.asObservable()
   
@@ -34,5 +36,15 @@ export class StringService {
   sendTableArray(content){
     this.tableArray.next({tables:content})
     this.tableArray2.next(content)
+  }
+
+
+  sendFullData(content){
+    console.log("received full data")
+    this.fullData.next(content)
+  }
+
+  retrieveFullData(){
+    return this.fullData.asObservable()
   }
 }
