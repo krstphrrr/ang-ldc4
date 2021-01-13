@@ -147,43 +147,6 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         // console.log(`from dropdown to map. you chose: ${dropdownOption.overlay.value}`)
       })
       
-      
-      // this.subscription = this.str.retrieveContent().subscribe(dropDownChoice=>{
-        
-      //   if(dropDownChoice){
-          
-      //     this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
-      //       this.tableData = []
-      //       this.tableCols = []
-      //       if(Object.keys(res).length!==0){
-      //         console.log(res)
-      //           this.tableCols = res['cols']
-      //           this.tableData = res['data']
-                
-      //         } else {
-      //           this.tableCols = []
-      //           this.tableData = []
-      //         }
-      //     })
-      //   }
-      //   // this.tableData = []
-      //   // this.tableCols = []
-      //   // // console.log(data)
-      //   // if(Object.keys(data).length!==0){
-
-      //   //   this.tableCols = data['cols']
-      //   //   this.tableData = data['data']
-          
-      //   // } else {
-      //   //   this.tableCols = []
-      //   //   this.tableData = []
-      //   // }
-        
-      //   // if(this.tablepopup===false){
-      //   //   this.tablepopup=true
-      //   // }
-      // }
-      // )
       this.unsubscribeSubscription = this.tabledata.deleteSignal.subscribe(signal=>{
         console.log(signal, "unsubs")
       })
@@ -381,49 +344,22 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
           let type = e.layerType
           let layer = e.layer
           this.drawnItems.addLayer(layer)
-          // console.log(this.drawnItems)
           let drawingbb = this.drawnItems.toGeoJSON().features[0].geometry.coordinates[0]
           this.extentCalculator.coordsArray(drawingbb)
-          console.log(this.extentCalculator)
 
-          // if(this.extentCalculator.coords!==''){
-            let param = {}
-            // console.log(this.extentCalculator.coords, 'vacio')
+          if(this.extentCalculator.coords!==''){
             this.socket.emit('drawing', this.extentCalculator.coords)
+          }
+          this.extentCalculator.clearCoords()
       
   })
 
-    // this.allPoints=L.featureGroup()
-
-    
-    /* invalidate size debouncemoveend 
-       adds a timeout on every moveend-event refetch */
-    // this map.on(event, SERVICE.METHOD(EVENT))
     
     
     
     this.mymap.on('movestart', event=>{
-      // let bbox = this.mymap.getBounds()
-      // let center = this.mymap.getCenter()
-      // let zoomE = this.mymap.getZoom()
-      // console.log(event)
+      // here goes logic to start as one moves the map around
     })
-
-
-
-    // this.mymap.on('movestart', event=>{
-
-    //     let bbox = this.mymap.getBounds()
-    //     this.extentCalculator.boundsUtil(bbox)
-    //     this.socket.emit('fetchpoints', this.extentCalculator.topos)
-    //     this.backendSubscription = this.socket.listen('pointssend')
-    //       .subscribe((data:GeoJsonObject)=>{
-    //         this.resultOutput = ''
-    //         this.resultOutput = data['features'].length
-    //       })
-          
-        
-    //   })
 
     
   }
@@ -450,28 +386,27 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         this.lmf_proj["length"] = data["features"].filter(item=>item.properties.Project==='LMF').length
         this.projects.push(this.lmf_proj)
       }
-      // console.log(data)
+
       this.dataBus.changeData(this.projects)
       
       this.tabledata.changeData(data)
       this.tabledata.unsubSignal("delete")
-      // finalize(()=>this.tabledata.clearData())
+
 
       this.resultOutput = data['features'].length
-      
-    
   }
 
   onDrawingDeleted(){
     // close popup
+    
     this.tabledata.sendCloseSignal()
     this.projects = []
     this.dataBus.changeData(this.projects)
-    this.mymap.eachLayer((layer)=>{
-      if(layer._radius===5){
-       this.mymap.removeLayer(layer)
-      }
-    })
+    this.drawnItems.eachLayer((layer)=>{
+      this.drawnItems.removeLayer(layer)
+   })
+
+    
     this.mymap.addLayer(this.allPoints)
   }
   externalClearLayers(e){
@@ -490,19 +425,15 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     // L.Draw.Event.DELETED
     
     if(this.tablepopup==true){
-      
       this.tablepopup=false
     }
+    this.drawnItems.eachLayer((layer)=>{
+       this.drawnItems.removeLayer(layer)
+    })
+
+    this.projects = []
   }
   
-  
-  // this.newControl.include({
-  //   Events:{
-  //     CLICK:"click"
-  //   }
-  // })
-
-
 
   onMapLoad_TEST(){
     /*
