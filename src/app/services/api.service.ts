@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import {HttpParams} from "@angular/common/http";
 import { environment } from '../../environments/environment'
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +23,10 @@ export class ApiService {
   resData = new Subject()
   resCols = new Subject()
   data$
+  private readonly loading = new Subject<boolean>()
+  get loading$():Observable<boolean>{
+    return this.loading
+  }
 
   private extractData(res:Response){
     let body=res;
@@ -39,33 +43,37 @@ export class ApiService {
     private http: HttpClient,
 
     ) { 
-    this.params = new HttpParams()
+    // this.params = new HttpParams()
   }
 
   getData(choice){
+    
     this.data$  = new BehaviorSubject({})
     let newString = `${this.api}/api/${choice}`.toLowerCase()
     this.newParams(this.apiUpdate)
-    // console.log(this.params)
+
     this.httpOptions['params'] = this.params
 
-    // console.log(this.httpOptions)
+ 
     // console.log(this.params)
-    // console.log(newString)
-    this.http.get(newString, this.httpOptions).toPromise().then( res =>{
+
+    this.http.get(newString, this.httpOptions).subscribe( res =>{
+      tap(()=>this.loading.next(true))
         let complete = {}
         let cols = []
         let data = res
-        // console.log(res)
+
         for(let[key,value] of Object.entries(res[0])){
           cols.push(key)
         }
         complete['choice'] = choice
         complete['cols'] =cols 
         complete['data'] = data 
+        this.loading.next(false)
         this.data$.next(complete)
       }
     )
+    
     return this.data$
   }
 
@@ -75,12 +83,12 @@ export class ApiService {
     // console.log(terms, "desde el servicio")
   }
   newParams(list){
-    // console.log(list.value, "lista pre iteration")
+    this.params = new HttpParams()
+    let noRepeats = new Set(list.value)
 
-    for(let i of list.value){
-      // console.log(i)
-      this.params = this.params.set("PrimaryKey",i)
-    }
+    noRepeats.forEach(i =>{
+      this.params = this.params.append("PrimaryKey",i)
+    })
   }
   getNewData(){
     return this.apiUpdate

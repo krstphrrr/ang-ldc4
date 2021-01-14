@@ -29,25 +29,7 @@ export class PopupForTableComponent implements OnInit, OnDestroy, OnChanges {
     private apiservice: ApiService,
 
   ) {
-    this.subscription = this.str.retrieveContent().subscribe(dropDownChoice=>{
-        console.log(dropDownChoice)
-      if(dropDownChoice){
-        
-        this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
-          this.tableData = []
-          this.tableCols = []
-          if(Object.keys(res).length!==0){
-            console.log(res)
-              this.tableCols = res['cols']
-              this.tableData = res['data']
-              
-            } else {
-              this.tableCols = []
-              this.tableData = []
-            }
-        })
-      }
-    })
+
 
     
     this.tabledataSubscription = this.tabledata.getdataSource$().subscribe(dat=>{

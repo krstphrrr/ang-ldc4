@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { StringService } from 'src/app/services/string.service';
 import { TabledataService } from 'src/app/services/tabledata.service';
@@ -36,13 +36,14 @@ export class TabsComponent implements OnInit, OnDestroy {
   tableCols = []
   tableData:any= []
   subscription:Subscription;
+  loading$:Observable<boolean> = this.apiservice.loading$
 
   constructor(
     private tabledata:TabledataService,
     private str: StringService,
     private apiservice: ApiService,
   ) {
-    //subscription to detect changes to tables
+    
     this.str.publicTables.subscribe((res:Res)=>{
       this.tabs = res.tables
       this.trimTableData()
@@ -68,7 +69,7 @@ export class TabsComponent implements OnInit, OnDestroy {
     if(dropDownChoice){
       // console.log("you chose something")
       this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
-        // console.log(res)
+        
         
         if(Object.keys(res).length!==0){
           // console.log(res)
