@@ -35,7 +35,10 @@ export class TabsComponent implements OnInit, OnDestroy {
   //table popu
   tableCols = []
   tableData:any= []
+  dataSupplier:Subscription
   subscription:Subscription;
+  tableTrimmerSubscription:Subscription
+  csvFillerSubscription:Subscription
   loading$:Observable<boolean> = this.apiservice.loading$
 
   constructor(
@@ -44,23 +47,20 @@ export class TabsComponent implements OnInit, OnDestroy {
     private apiservice: ApiService,
   ) {
     
-    this.str.publicTables.subscribe((res:Res)=>{
+    this.tableTrimmerSubscription = this.str.publicTables.subscribe((res:Res)=>{
       this.tabs = res.tables
       this.trimTableData()
 
     })
 
-    this.str.fullData.subscribe(dat=>{
-      // console.log(this.tabs.length)
+    this.csvFillerSubscription = this.str.fullData.subscribe(dat=>{
       if(dat){
         for(let [val,index] of Object.entries(dat)){
           if(!Object.keys(this.myObj).includes(val)){
             this.myObj[val] = dat[val]
           }
         }
-        // console.log(this.myObj)
       }
-      
     })
 
     this.subscription = this.str.retrieveContent().subscribe(dropDownChoice=>{
@@ -68,7 +68,7 @@ export class TabsComponent implements OnInit, OnDestroy {
       this.tableCols = []
     if(dropDownChoice){
       // console.log("you chose something")
-      this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
+      this.dataSupplier = this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
         
         
         if(Object.keys(res).length!==0){
@@ -86,6 +86,9 @@ export class TabsComponent implements OnInit, OnDestroy {
   })
    }
   ngOnDestroy(): void {
+    this.dataSupplier.unsubscribe()
+    this.tableTrimmerSubscription.unsubscribe()
+    this.csvFillerSubscription.unsubscribe()
     this.subscription.unsubscribe()
     // throw new Error('Method not implemented.');
   }
@@ -136,7 +139,6 @@ export class TabsComponent implements OnInit, OnDestroy {
           let csvArray = csv.join('\r\n');
           let blob:Blob = new Blob([csvArray], {type: 'text/csv' })
           this.csvPack[k] = blob
-  
       }
       
     }
@@ -149,8 +151,6 @@ export class TabsComponent implements OnInit, OnDestroy {
       if(csvBlob!==null){
         zip.file(blobName+".csv",csvBlob)
       }
-      
-      
     }
     zip.generateAsync({type:'blob'}).then((content)=>{
       if(content){

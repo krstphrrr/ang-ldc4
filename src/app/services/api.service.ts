@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import {HttpParams} from "@angular/common/http";
 import { environment } from '../../environments/environment'
 import { map, tap } from 'rxjs/operators';
@@ -8,7 +8,7 @@ import { map, tap } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class ApiService {
+export class ApiService implements OnDestroy {
   //environment variables
   private api = environment.API_URL
   tables = environment.TABLE_URL
@@ -23,6 +23,8 @@ export class ApiService {
   resData = new Subject()
   resCols = new Subject()
   data$
+  // subscriptions
+  httpSub:Subscription
   private readonly loading = new Subject<boolean>()
   get loading$():Observable<boolean>{
     return this.loading
@@ -45,6 +47,9 @@ export class ApiService {
     ) { 
     // this.params = new HttpParams()
   }
+  ngOnDestroy(): void {
+    this.httpSub.unsubscribe()
+  }
 
   getData(choice){
     
@@ -57,12 +62,12 @@ export class ApiService {
  
     // console.log(this.params)
 
-    this.http.get(newString, this.httpOptions).subscribe( res =>{
+    this.httpSub = this.http.get(newString, this.httpOptions).subscribe( res =>{
       tap(()=>this.loading.next(true))
         let complete = {}
         let cols = []
         let data = res
-
+        console.log(res)
         for(let[key,value] of Object.entries(res[0])){
           cols.push(key)
         }
@@ -86,9 +91,10 @@ export class ApiService {
     this.params = new HttpParams()
     let noRepeats = new Set(list.value)
 
-    noRepeats.forEach(i =>{
-      this.params = this.params.append("PrimaryKey",i)
-    })
+    // noRepeats.forEach(i =>{
+    //   this.params = this.params.append("PrimaryKey",i)
+    // })
+    this.params = this.params.append("PrimaryKey",Array.from(noRepeats).join(','))
   }
   getNewData(){
     return this.apiUpdate

@@ -42,7 +42,10 @@ export class TableComponent implements OnInit, OnDestroy {
   tableList
 
   output:any[]=[];
+  //subscription
   subscription:Subscription;
+  tableListSubs:Subscription
+  apiResponseSubs:Subscription
   
   saveSubs = new Observable
   title = 'angdimatable';
@@ -51,7 +54,7 @@ export class TableComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private str: StringService
   ) { 
-    this.str.tableArray2.subscribe(res=>{
+    this.tableListSubs=this.str.tableArray2.subscribe(res=>{
       // console.log(res)
       this.tableList = res.tableArray
       
@@ -70,7 +73,6 @@ export class TableComponent implements OnInit, OnDestroy {
     // this.filterArray = []
     if(this.api.data$){
       this.api.data$.subscribe(newData=>{
-
         this.tableDataSrc = new MatTableDataSource(newData['data'])
         this.tableDataSrc.sort = this.sort
         this.tableDataSrc.paginator = this.paginator
@@ -108,28 +110,18 @@ export class TableComponent implements OnInit, OnDestroy {
     }
   }
   ngOnDestroy(){
+    // this.apiResponseSubs.unsubscribe()
     this.subscription.unsubscribe()
+    this.tableListSubs.unsubscribe()
   }
 
   includeData(){
-    // console.log(this.saveSubs)
-    
+    // sends data to tabs for csv creation
     if(this.csvTables){
       this.str.sendFullData(this.csvTables)
     }
-    // console.log((Object.keys(this.csvTables)))
-    // if(this.saveSubs){
-    //   // this.subscription.subscribe(download=>{
-    //     const replacer = (key, value) => value === null ? '' : value; 
-    //     const header = this.saveSubs['cols'];
-    //     let csv = this.saveSubs['data'].map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
-    //     csv.unshift(header.join(','));
-    //     let csvArray = csv.join('\r\n');
-    //     var blob = new Blob([csvArray], {type: 'text/csv' })
-    //     saveAs(blob, "selectedData.csv");
-    //   }
-    }
-
   }
+
+}
 
 
