@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
@@ -20,7 +20,7 @@ interface csvPacks{
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.css']
 })
-export class TabsComponent implements OnInit, OnDestroy {
+export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
   zipFile: JSZip = new JSZip();
   // tabs: dynamic creation and destruction of tabs
   tabs = []
@@ -40,11 +40,14 @@ export class TabsComponent implements OnInit, OnDestroy {
   tableTrimmerSubscription:Subscription
   csvFillerSubscription:Subscription
   loading$:Observable<boolean> = this.apiservice.loading$
+  public disabledButton = false
+  arrayForButton
 
   constructor(
     private tabledata:TabledataService,
     private str: StringService,
     private apiservice: ApiService,
+    private changeDetector: ChangeDetectorRef
   ) {
     
     this.tableTrimmerSubscription = this.str.publicTables.subscribe((res:Res)=>{
@@ -54,12 +57,17 @@ export class TabsComponent implements OnInit, OnDestroy {
     })
 
     this.csvFillerSubscription = this.str.fullData.subscribe(dat=>{
+      this.arrayForButton = 0
       if(dat){
+        this.arrayForButton = Object.keys(dat).length
+        this.disabledButton = this.arrayForButton>0
+        this.changeDetector.detectChanges()
         for(let [val,index] of Object.entries(dat)){
           if(!Object.keys(this.myObj).includes(val)){
             this.myObj[val] = dat[val]
           }
         }
+        this.changeDetector.detectChanges()
       }
     })
 
@@ -69,7 +77,6 @@ export class TabsComponent implements OnInit, OnDestroy {
     if(dropDownChoice){
       // console.log("you chose something")
       this.dataSupplier = this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
-        
         
         if(Object.keys(res).length!==0){
           // console.log(res)
@@ -85,6 +92,12 @@ export class TabsComponent implements OnInit, OnDestroy {
     }
   })
    }
+  ngAfterViewChecked(): void {
+    this.arrayForButton = 0
+    this.disabledButton = this.arrayForButton>0
+    this.changeDetector.detectChanges()
+    
+  }
   ngOnDestroy(): void {
     this.dataSupplier.unsubscribe()
     this.tableTrimmerSubscription.unsubscribe()

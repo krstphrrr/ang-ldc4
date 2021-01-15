@@ -90,7 +90,7 @@ export class PopupForTableComponent implements OnInit, OnDestroy, OnChanges {
     console.log("component destroyed")
     this.tabledataSubscription.unsubscribe()
     this.unsubscribeSubscription.unsubscribe()
-    this.subscription.unsubscribe()
+    // this.subscription.unsubscribe()
   }
 
 
