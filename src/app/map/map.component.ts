@@ -3,7 +3,7 @@ import { Component, OnInit, AfterViewInit, AfterViewChecked, ViewChild, ElementR
 import * as L from 'leaflet'
 // declare const L:any 
 import 'leaflet'
-import 'leaflet-easybutton'
+
 import {Map, latLng, Canvas, MapOptions, LeafletEvent, TileLayer} from 'leaflet'
 // import  '../../plugins/L.Control.Sidebar.js'
 import { ThemePalette } from '@angular/material/core'
@@ -14,12 +14,12 @@ declare var $: any;
 // import {sidebar} from '../../plugins/L.Control.Sidebar.js'
 import { Subscription } from 'rxjs'
 // import { debounceTime, scan, map, finalize } from 'rxjs/operators';
-import * as d3 from 'd3'
+// import * as d3 from 'd3'
 import { socketDataService } from '../services/socketTest.service'
 import { wmsService } from '../services/wms.service'
 
 import 'leaflet-draw'
-import FreeDraw, {CREATE,EDIT,DELETE, ALL} from 'leaflet-freedraw'
+// import FreeDraw, {CREATE,EDIT,DELETE, ALL} from 'leaflet-freedraw'
 import { GeoJsonObject } from 'geojson';
 import { PanelComponent } from './controls/panel/panel/panel.component';
 import { MoveEndService } from '../services/move-end.service'
