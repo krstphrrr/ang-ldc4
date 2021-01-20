@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Map } from 'leaflet'
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class MoveEndService {
+  private privateCoords = new BehaviorSubject([])
+  publicCoords$:Observable<any> = this.privateCoords.asObservable()
+
   topos;
   coords;
 
@@ -33,8 +37,8 @@ export class MoveEndService {
       this.topos = topos
   }
   coordsArray(boundsObj){
-    // console.log(boundsObj)
     this.coords = boundsObj
+    this.privateCoords.next(boundsObj)
   }
   clearCoords(){
     this.coords = ''

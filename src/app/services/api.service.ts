@@ -4,6 +4,7 @@ import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import {HttpParams} from "@angular/common/http";
 import { environment } from '../../environments/environment'
 import { map, tap } from 'rxjs/operators';
+import { MoveEndService } from './move-end.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,8 +24,13 @@ export class ApiService implements OnDestroy {
   resData = new Subject()
   resCols = new Subject()
   data$
+  coords
+
   // subscriptions
   httpSub:Subscription
+  coordSub:Subscription
+
+  // test for loading dependent elements like spinners
   private readonly loading = new Subject<boolean>()
   get loading$():Observable<boolean>{
     return this.loading
@@ -43,13 +49,13 @@ export class ApiService implements OnDestroy {
 
   constructor(
     private http: HttpClient,
+    private coordsService:MoveEndService,
 
     ) { 
+      this.coordsUpdate()
     // this.params = new HttpParams()
   }
-  ngOnDestroy(): void {
-    this.httpSub.unsubscribe()
-  }
+
 
   getData(choice){
     
@@ -82,6 +88,13 @@ export class ApiService implements OnDestroy {
     return this.data$
   }
 
+  coordsUpdate(){
+    this.coordSub = this.coordsService.publicCoords$.subscribe(dat=>{
+      // console.log(dat)
+      this.coords = dat
+    })
+  }
+
 
   changeParams(terms){
     this.apiUpdate.next(terms)
@@ -109,6 +122,10 @@ export class ApiService implements OnDestroy {
     return this.http.get(this.tables, this.httpOptions).pipe(
       map(this.extractData)
     )
+  }
+  ngOnDestroy(): void {
+    this.httpSub.unsubscribe()
+    this.coordSub.unsubscribe()
   }
 }
 
