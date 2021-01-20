@@ -61,15 +61,21 @@ export class ApiService implements OnDestroy {
     
     this.data$  = new BehaviorSubject({})
     let newString = `${this.api}/api/${choice}`.toLowerCase()
-    this.newParams(this.apiUpdate)
+
+    // coord controller string 
+    let newString2 = `${this.api}/api/${choice}_coords`.toLowerCase()
+    this.newParams(this.coords)
+
+    // experimental params object
+
 
     this.httpOptions['params'] = this.params
 
  
     // console.log(this.params)
 
-    this.httpSub = this.http.get(newString, this.httpOptions).subscribe( res =>{
-      tap(()=>this.loading.next(true))
+    this.httpSub = this.http.get(newString2, this.httpOptions).subscribe( res =>{
+      // tap(()=>this.loading.next(true))
         let complete = {}
         let cols = []
         let data = res
@@ -90,7 +96,7 @@ export class ApiService implements OnDestroy {
 
   coordsUpdate(){
     this.coordSub = this.coordsService.publicCoords$.subscribe(dat=>{
-      // console.log(dat)
+      
       this.coords = dat
     })
   }
@@ -102,13 +108,15 @@ export class ApiService implements OnDestroy {
   }
   newParams(list){
     this.params = new HttpParams()
-    let noRepeats = new Set(list.value)
+    // let noRepeats = new Set(list.value)
+    let encodedCoords = btoa(list)
 
     // noRepeats.forEach(i =>{
     //   this.params = this.params.append("PrimaryKey",i)
     // })
 
-    this.params = this.params.append("PrimaryKey",Array.from(noRepeats).join(','))
+    // this.params = this.params.append("PrimaryKey",Array.from(noRepeats).join(','))
+    this.params = this.params.append("coords",encodedCoords)
   }
   getNewData(){
     return this.apiUpdate
