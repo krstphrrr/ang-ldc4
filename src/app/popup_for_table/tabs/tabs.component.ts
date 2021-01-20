@@ -47,7 +47,7 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
     private tabledata:TabledataService,
     private str: StringService,
     private apiservice: ApiService,
-    private changeDetector: ChangeDetectorRef
+    // private changeDetector: ChangeDetectorRef
   ) {
     
     this.tableTrimmerSubscription = this.str.publicTables.subscribe((res:Res)=>{
@@ -59,15 +59,15 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.csvFillerSubscription = this.str.fullData.subscribe(dat=>{
       this.arrayForButton = 0
       if(dat){
-        this.arrayForButton = Object.keys(dat).length
-        this.disabledButton = this.arrayForButton>0
-        this.changeDetector.detectChanges()
+        // this.arrayForButton = Object.keys(dat).length
+        // this.disabledButton = this.arrayForButton>0
+        // this.changeDetector.detectChanges()
         for(let [val,index] of Object.entries(dat)){
           if(!Object.keys(this.myObj).includes(val)){
             this.myObj[val] = dat[val]
           }
         }
-        this.changeDetector.detectChanges()
+        // this.changeDetector.detectChanges()
       }
     })
 
@@ -93,9 +93,9 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
   })
    }
   ngAfterViewChecked(): void {
-    this.arrayForButton = 0
-    this.disabledButton = this.arrayForButton>0
-    this.changeDetector.detectChanges()
+    // this.arrayForButton = 0
+    // this.disabledButton = this.arrayForButton>0
+    // this.changeDetector.detectChanges()
     
   }
   ngOnDestroy(): void {

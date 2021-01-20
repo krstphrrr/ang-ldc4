@@ -94,6 +94,7 @@ export class ApiService implements OnDestroy {
     // noRepeats.forEach(i =>{
     //   this.params = this.params.append("PrimaryKey",i)
     // })
+
     this.params = this.params.append("PrimaryKey",Array.from(noRepeats).join(','))
   }
   getNewData(){
