@@ -17,7 +17,7 @@ export class StringService {
   
 
   sendContent(content){
-    
+    console.log(content, "TABLAS") 
     this.subject.next({data:content.current})
     this.tableArray.next({tables:content.tableArray})
     this.tableArray2.next(content)

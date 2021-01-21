@@ -33,6 +33,7 @@ export class TableDropdownComponent implements OnInit {
 
   getTables(){
     this.api.getTables().subscribe(result=>{
+     
       this.selected = result
     })
   }

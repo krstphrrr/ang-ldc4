@@ -41,11 +41,7 @@ export class ApiService implements OnDestroy {
     return body || {};
   }
 
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type':'application/json'
-    }),
-  }
+  httpOptions = {}
 
   constructor(
     private http: HttpClient,
@@ -95,8 +91,9 @@ export class ApiService implements OnDestroy {
   }
 
   coordsUpdate(){
+    
     this.coordSub = this.coordsService.publicCoords$.subscribe(dat=>{
-      
+      // console.log(dat)
       this.coords = dat
     })
   }
@@ -127,6 +124,12 @@ export class ApiService implements OnDestroy {
   }
 
   getTables(){
+
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':'application/json'
+      }),
+    }
     return this.http.get(this.tables, this.httpOptions).pipe(
       map(this.extractData)
     )

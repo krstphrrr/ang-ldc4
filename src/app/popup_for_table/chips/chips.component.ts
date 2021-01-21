@@ -8,6 +8,7 @@ import {map, startWith} from 'rxjs/operators';
 
 import { StringService } from '../../services/string.service'
 import { ApiService } from '../../services/api.service'
+import { table } from 'console';
 
 interface Tables {
   value: string;
@@ -40,7 +41,9 @@ export class ChipsComponent implements OnInit {
     this.filteredTables = this.tableCtrl.valueChanges.pipe(
       // need to look for schedule logic since startWith is deprecated
       // startWith(null),
-      map((table: string | null) => table ? this._filter(table) : this.allTables.slice()));
+      
+      map((table: string | null) => table ? this._filter(table) : this.allTables.slice()))
+      
   }
 
   add(event: MatChipInputEvent): void {
@@ -71,6 +74,7 @@ export class ChipsComponent implements OnInit {
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
+    
     this.sendContent(event)
     this.tables.push(event.option.viewValue);
     this.tableInput.nativeElement.value = '';
@@ -98,15 +102,32 @@ export class ChipsComponent implements OnInit {
 
   sendContent(content){
     let currentTable 
+    let tables = []
     let tableArray = content.value
     let wholePackage = {}
+    tableArray.sort((a,b)=>{
+      return tableArray.indexOf()
+    })
+    // array refreshes with same order as elements are received from backend
+    // so selecting current element by taking tha last one will not work
+    // for(let i in tableArray){
+    //   if(!tables.includes(i)){
+    //     tables.push(i)
+    //   }
+    // }
     
     if(tableArray.length>0){
-      currentTable = tableArray[tableArray.length-1]
-      wholePackage['current'] = currentTable
+      
+      currentTable = tableArray
+      wholePackage['current'] = currentTable[tableArray.length-1]
       wholePackage['tableArray'] = tableArray
       this.str.sendContent(wholePackage)
       // this.str.sendTableArray(tableArray)
+    } else {
+      currentTable
+      wholePackage['current'] = currentTable
+      wholePackage['tableArray'] = tableArray
+      this.str.sendContent(wholePackage)
     }
     // this.str.sendContent(content.value)
   }
