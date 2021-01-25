@@ -118,6 +118,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     private str: StringService,
 
     ) {
+      let pre = ['a']
+      let post = ['a','']
       
       /*
       Constructor subscriptions:

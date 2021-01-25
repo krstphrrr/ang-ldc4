@@ -18,6 +18,10 @@ export class StringService {
 
   sendContent(content){
     console.log(content, "TABLAS") 
+
+    // instead of sending a single table per Subject update (using next)
+    // maybe updating with an object with keys and entries? 
+    // then iterating through them to display them on table component
     this.subject.next({data:content.current})
     this.tableArray.next({tables:content.tableArray})
     this.tableArray2.next(content)

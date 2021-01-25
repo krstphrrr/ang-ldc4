@@ -29,6 +29,7 @@ export class ChipsComponent implements OnInit {
   tableCtrl = new FormControl();
   filteredTables: Observable<string[]>;
   tables
+  table = new Set()
   allTables
 
   @ViewChild('tableInput2') tableInput: ElementRef<HTMLInputElement>;
@@ -101,13 +102,15 @@ export class ChipsComponent implements OnInit {
   }
 
   sendContent(content){
+    console.log(content)
     let currentTable 
     let tables = []
     let tableArray = content.value
     let wholePackage = {}
-    tableArray.sort((a,b)=>{
-      return tableArray.indexOf()
-    })
+    // tableArray.sort((a,b)=>{
+    //   return tableArray.indexOf()
+    // })
+    
     // array refreshes with same order as elements are received from backend
     // so selecting current element by taking tha last one will not work
     // for(let i in tableArray){
@@ -116,11 +119,36 @@ export class ChipsComponent implements OnInit {
     //   }
     // }
     
+    let justAdded
     if(tableArray.length>0){
       
-      currentTable = tableArray
-      wholePackage['current'] = currentTable[tableArray.length-1]
+      console.log(this.dropdownFilter(Array.from(this.table),content.value))
+      // console.log(tableArray, "tablearray")
+      if(Array.from(this.table).length===0){
+        currentTable = tableArray[tableArray.length-1]
+      } else {
+        currentTable = Array.from(this.table)
+      }
+      // currentTable = tableArray[tableArray.length-1]
+      
+      tableArray.forEach(i=>{
+        if(!Array.from(this.table).includes(i)){
+          justAdded = i
+          this.table.add(i)
+          } 
+        })
+        
+      if(Array.from(this.table).length>1){
+       this.table.forEach(j=>{
+         console.log(j, justAdded)
+          if(j!==justAdded){
+            this.table.delete(j)
+          }
+        })
+      }
+      wholePackage['current'] = currentTable
       wholePackage['tableArray'] = tableArray
+      console.log(this.table)
       this.str.sendContent(wholePackage)
       // this.str.sendTableArray(tableArray)
     } else {
@@ -135,5 +163,27 @@ export class ChipsComponent implements OnInit {
     this.str.sendTableArray(content.value)
   }
 
-
+  dropdownFilter(prearray,post){
+    let retAr 
+    // console.log(prearray.length, post.length)
+    switch(true){
+      case (prearray.length<post.length):
+        post.forEach(i=>{
+          if(!prearray.includes(i)){
+            prearray.push(i)
+          }
+        })
+        // console.log(prearray)
+        return prearray
+      case (prearray.length>post.length):
+        prearray.forEach(i=>{
+          if(!post.includes(i)){
+            console.log(i)
+            retAr = prearray.filter(val=>{return val!==i})
+          }
+        })
+        console.log(retAr)
+        return retAr
+      }
+    }
 }
