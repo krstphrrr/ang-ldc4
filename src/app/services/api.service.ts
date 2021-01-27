@@ -75,20 +75,23 @@ export class ApiService implements OnDestroy {
         let complete = {}
         let cols = []
         let data = res
+        let preComplete = {}
         console.log(res)
         for(let[key,value] of Object.entries(res[0])){
           cols.push(key)
         }
         complete['choice'] = choice
-        complete['cols'] =cols 
-        complete['data'] = data 
+        preComplete['cols'] =cols 
+        preComplete['data'] = data 
+        complete[`${choice}`] = preComplete
+        console.log(complete)
         this.loading.next(false)
+
         this.data$.next(complete)
-      }
-    )
-    
+        }
+      )
     return this.data$
-  }
+    }
 
   coordsUpdate(){
     

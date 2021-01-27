@@ -32,10 +32,10 @@ export class PopupForTableComponent implements OnInit, OnDestroy, OnChanges {
 
 
     
-    this.tabledataSubscription = this.tabledata.getdataSource$().subscribe(dat=>{
-      this.extract = dat
-      // console.log(this.extract)
-    })
+    // this.tabledataSubscription = this.tabledata.getdataSource$().subscribe(dat=>{
+    //   this.extract = dat
+    //   // console.log(this.extract)
+    // })
 
     this.unsubscribeSubscription = this.tabledata.getUnsub().subscribe(sig=>{
       if(sig==="delete"){
@@ -88,7 +88,7 @@ export class PopupForTableComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnDestroy():void{
     console.log("component destroyed")
-    this.tabledataSubscription.unsubscribe()
+    // this.tabledataSubscription.unsubscribe()
     this.unsubscribeSubscription.unsubscribe()
     // this.subscription.unsubscribe()
   }

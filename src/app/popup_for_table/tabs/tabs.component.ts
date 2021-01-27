@@ -1,4 +1,4 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
@@ -6,6 +6,7 @@ import { StringService } from 'src/app/services/string.service';
 import { TabledataService } from 'src/app/services/tabledata.service';
 import * as JSZip from 'jszip';
 import {saveAs} from 'file-saver/dist/FileSaver'
+import { retryWhen } from 'rxjs/operators';
 interface Res{
   tables:[]
 }
@@ -23,6 +24,7 @@ interface csvPacks{
 export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
   zipFile: JSZip = new JSZip();
   // tabs: dynamic creation and destruction of tabs
+  @Input('ahsi') random:string
   tabs = []
   selected = new FormControl(0)
   // table data for each table in tab
@@ -50,13 +52,31 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
     // private changeDetector: ChangeDetectorRef
   ) {
     
+    // subscription pays attention to tablelist and updates the currently displayed
+    // tabs
+    // currently: just exchanges one array for the other
     this.tableTrimmerSubscription = this.str.publicTables.subscribe((res:Res)=>{
-      this.tabs = res.tables
+      console.log(res)
+      // this.tabs = res.tables
+      switch(true){
+        case (res.tables.length>this.tabs.length):
+          // this.tabs +1
+          
+          this.tabs.push(this.tableAdder(this.tabs, res.tables))
+          console.log(this.tabs)
+          
+          break
+        case (res.tables.length<this.tabs.length):
+          this.tabs.splice(this.tableRemover(this.tabs, res.tables),1)
+          console.log(this.tabs)
+          break
+      }
       this.trimTableData()
 
     })
 
     this.csvFillerSubscription = this.str.fullData.subscribe(dat=>{
+      
       this.arrayForButton = 0
       if(dat){
         // this.arrayForButton = Object.keys(dat).length
@@ -77,11 +97,12 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
     if(dropDownChoice){
       // console.log("you chose something")
       this.dataSupplier = this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
-        
-        if(Object.keys(res).length!==0){
-          // console.log(res)
-            this.tableCols = res['cols']
-            this.tableData = res['data']
+        console.log(this.random)
+        // this.which = dropDownChoice.data
+        if(Object.keys(res).length!==0 && this.random){
+          console.log(this.random)
+            this.tableCols = res[`${this.random}`]['cols']
+            this.tableData = res[`${this.random}`]['data']
             // this.subscription.unsubscribe()
             
           } else {
@@ -97,6 +118,25 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
     // this.disabledButton = this.arrayForButton>0
     // this.changeDetector.detectChanges()
     
+  }
+
+  tableAdder(pre,newList){
+    let ret
+    newList.forEach(el=>{
+      if(!pre.includes(el)){
+        ret = el
+      }
+    })
+    return ret
+  }
+  tableRemover(pre,newList){
+    let ret
+    pre.forEach(el=>{
+      if(!newList.includes(el)){
+        ret = pre.indexOf(el)
+      }
+    })
+    return ret
   }
   ngOnDestroy(): void {
     this.dataSupplier.unsubscribe()

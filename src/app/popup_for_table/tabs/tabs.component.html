@@ -5,19 +5,20 @@
     <mat-tab 
       *ngFor="let tab of tabs; let index = index"
       
-      [label] = tab
-    ><div *ngIf="{loading:loading$|async} as obs">
-        <mat-spinner
-          *ngIf="obs.loading">
-        </mat-spinner>
+      [label] = "tab"
+
+    >
+    
       <!-- CONTENTS FOR EACH TAB// a dynamic table on each -->
         <app-table
           
           [tableData]='tableData' 
-          [tableCols]='tableCols'>
-
+          [tableCols]='tableCols'
+          [which] = "tab"
+          >
         </app-table>
-    </div>
+      
+    
     </mat-tab>
     
   

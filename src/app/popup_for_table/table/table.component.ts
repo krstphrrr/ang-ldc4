@@ -26,6 +26,7 @@ export class TableComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator:MatPaginator;
   @Input()tableCols:string[]=[]
   @Input()tableData:{}[]=[];
+  @Input()which
   @Output() dataChanged: EventEmitter<any> = new EventEmitter()
 
   csvTables = {}
@@ -54,14 +55,15 @@ export class TableComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private str: StringService
   ) { 
+    
     this.tableListSubs=this.str.tableArray2.subscribe(res=>{
-      // console.log(res)
+      console.log(res)
       this.tableList = res.tableArray
       
     })
 
     this.subscription = this.str.retrieveContent().subscribe(dat=>{
-
+      console.log(dat)
       this.refresh()
     })
   }
@@ -73,14 +75,19 @@ export class TableComponent implements OnInit, OnDestroy {
     // this.filterArray = []
     if(this.api.data$){
       this.api.data$.subscribe(newData=>{
-        this.tableDataSrc = new MatTableDataSource(newData['data'])
-        this.tableDataSrc.sort = this.sort
-        this.tableDataSrc.paginator = this.paginator
-        this.saveSubs = newData
-        this.saveTableData(newData['choice'],newData) //for csv's
-        this.includeData()
+        if(Array.from(Object.keys(newData)).length>0){
+          // console.log(newData[this.which])
+          // console.log(this.which)
+          this.tableDataSrc = new MatTableDataSource(newData[this.which]['data'])
+          this.tableDataSrc.sort = this.sort
+          this.tableDataSrc.paginator = this.paginator
+          this.saveSubs = newData
+          this.saveTableData(newData['choice'],newData) //for csv's
+          this.includeData()
 
-        this.subscription.unsubscribe() //need to not reload each table as they appear
+          this.subscription.unsubscribe()
+        }
+         //need to not reload each table as they appear
         
       })
     }
