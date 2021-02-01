@@ -5,7 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 // import { map } from 'rxjs/operators';
 import { Subscription, BehaviorSubject, ObjectUnsubscribedError} from 'rxjs'
-import { Observable, of as observableOf, merge, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {TabledataService} from '../../services/tabledata.service'
 import {ApiService} from '../../services/api.service'
 import { StringService } from 'src/app/services/string.service';
@@ -41,6 +41,7 @@ export class TableComponent implements OnInit, OnDestroy {
   tableDataSrc:any
   tableName
   tableList
+  tick = 0
 
   output:any[]=[];
   //subscription
@@ -55,7 +56,10 @@ export class TableComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private str: StringService
   ) { 
-    
+    console.log(this.tableCols)
+    of(this.tableCols).subscribe(arr=>{
+      console.log(arr, "TESTING")
+    })
     this.tableListSubs=this.str.tableArray2.subscribe(res=>{
       console.log(res)
       this.tableList = res.tableArray
@@ -64,35 +68,47 @@ export class TableComponent implements OnInit, OnDestroy {
 
     this.subscription = this.str.retrieveContent().subscribe(dat=>{
       console.log(dat)
-      this.refresh()
+      this.saveSubsCheck()
+      if(this.tick<1){
+        this.refresh()
+        this.tick+=1
+      }
+      // this.refresh()
+      
     })
   }
 
   refresh(){
-    
+    console.log(this.tableCols)
+    console.log(this.saveSubs)
     
     // this.tempSet=[]
     // this.filterArray = []
     if(this.api.data$){
-      this.api.data$.subscribe(newData=>{
-        if(Array.from(Object.keys(newData)).length>0){
-          // console.log(newData[this.which])
-          // console.log(this.which)
+      this.apiResponseSubs = this.api.data$.subscribe(newData=>{
+        console.log(newData)
+        if(Array.from(Object.keys(newData)).length>0 && Object.keys(newData).includes(this.which)){
+          console.log(newData[this.which])
+          console.log(this.which)
+          console.log(this.tableCols)
+          console.log(this.tableData)
+          this.tableCols = newData[this.which]['cols']
           this.tableDataSrc = new MatTableDataSource(newData[this.which]['data'])
           this.tableDataSrc.sort = this.sort
           this.tableDataSrc.paginator = this.paginator
           this.saveSubs = newData
           this.saveTableData(newData['choice'],newData) //for csv's
           this.includeData()
-
           this.subscription.unsubscribe()
+          this.tableListSubs.unsubscribe()
+          this.apiResponseSubs.unsubscribe()
+          
         }
          //need to not reload each table as they appear
         
       })
     }
     
-
   }
   saveTableData(name, data){
     // let smallObject = {}
@@ -101,6 +117,9 @@ export class TableComponent implements OnInit, OnDestroy {
         this.csvTables[name] = data
       }
     }
+  }
+  saveSubsCheck(){
+    console.log(this.saveSubs)
   }
   
 
@@ -117,6 +136,7 @@ export class TableComponent implements OnInit, OnDestroy {
     }
   }
   ngOnDestroy(){
+    console.log("TABLE DESTROYED")
     // this.apiResponseSubs.unsubscribe()
     this.subscription.unsubscribe()
     this.tableListSubs.unsubscribe()

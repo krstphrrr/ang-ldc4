@@ -56,19 +56,19 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
     // tabs
     // currently: just exchanges one array for the other
     this.tableTrimmerSubscription = this.str.publicTables.subscribe((res:Res)=>{
-      console.log(res)
+      // console.log(res['tables'][res.tables.length-1])
       // this.tabs = res.tables
       switch(true){
         case (res.tables.length>this.tabs.length):
           // this.tabs +1
-          
-          this.tabs.push(this.tableAdder(this.tabs, res.tables))
-          console.log(this.tabs)
+          this.addTab(res['tables'][res.tables.length-1])
+          // this.tabs.push(res['tables'][res.tables.length-1])
+          // console.log(this.tabs)
           
           break
         case (res.tables.length<this.tabs.length):
-          this.tabs.splice(this.tableRemover(this.tabs, res.tables),1)
-          console.log(this.tabs)
+          this.tabs.pop()
+          // console.log(this.tabs)
           break
       }
       this.trimTableData()
@@ -97,7 +97,7 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
     if(dropDownChoice){
       // console.log("you chose something")
       this.dataSupplier = this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
-        console.log(this.random)
+        console.log(this.random, "merependejo")
         // this.which = dropDownChoice.data
         if(Object.keys(res).length!==0 && this.random){
           console.log(this.random)
@@ -146,7 +146,9 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
     // throw new Error('Method not implemented.');
   }
    addTab(tabname){
+     
      this.tabs.push(tabname)
+     console.log(`"${tabname}" added!`)
     //  if (selectAfterAdding){
     //    this.selected.setValue(this.tabs.length-1)
     //  }
@@ -157,6 +159,10 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   ngOnInit(): void {
     
+  }
+  secretFunction(event){
+    this.random = event.tab.textLabel
+    console.log(event, "merecabron")
   }
 
 

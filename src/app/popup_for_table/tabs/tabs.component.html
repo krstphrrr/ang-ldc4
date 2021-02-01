@@ -1,6 +1,7 @@
 <mat-tab-group
   [selectedIndex]="selected.value"
-  (selectedIndexChange)="selected.setValue($event)">
+  (selectedIndexChange)="selected.setValue($event)"
+  (selectedTabChange)="secretFunction($event)">
 
     <mat-tab 
       *ngFor="let tab of tabs; let index = index"
@@ -10,10 +11,11 @@
     >
     
       <!-- CONTENTS FOR EACH TAB// a dynamic table on each -->
+      {{this.random}}
         <app-table
           
-          [tableData]='tableData' 
-          [tableCols]='tableCols'
+          
+          
           [which] = "tab"
           >
         </app-table>

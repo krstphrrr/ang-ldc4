@@ -31,6 +31,7 @@ export class ChipsComponent implements OnInit {
   tables
   table = new Set()
   allTables
+  wholePackage = {}
 
   @ViewChild('tableInput2') tableInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
@@ -106,7 +107,7 @@ export class ChipsComponent implements OnInit {
     let currentTable 
     let tables = []
     let tableArray = content.value
-    let wholePackage = {}
+    // let wholePackage = {}
     // tableArray.sort((a,b)=>{
     //   return tableArray.indexOf()
     // })
@@ -146,16 +147,16 @@ export class ChipsComponent implements OnInit {
           }
         })
       }
-      wholePackage['current'] = currentTable
-      wholePackage['tableArray'] = tableArray
+      this.wholePackage['current'] = currentTable
+      this.wholePackage['tableArray'] = tableArray
       console.log(this.table)
-      this.str.sendContent(wholePackage)
+      this.str.sendContent(this.wholePackage)
       // this.str.sendTableArray(tableArray)
     } else {
       currentTable
-      wholePackage['current'] = currentTable
-      wholePackage['tableArray'] = tableArray
-      this.str.sendContent(wholePackage)
+      this.wholePackage['current'] = currentTable
+      this.wholePackage['tableArray'] = tableArray
+      this.str.sendContent(this.wholePackage)
     }
     // this.str.sendContent(content.value)
   }

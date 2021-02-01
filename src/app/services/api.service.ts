@@ -25,6 +25,7 @@ export class ApiService implements OnDestroy {
   resCols = new Subject()
   data$
   coords
+  complete = {}
 
   // subscriptions
   httpSub:Subscription
@@ -72,7 +73,7 @@ export class ApiService implements OnDestroy {
 
     this.httpSub = this.http.get(newString2, this.httpOptions).subscribe( res =>{
       // tap(()=>this.loading.next(true))
-        let complete = {}
+        // let complete = {}
         let cols = []
         let data = res
         let preComplete = {}
@@ -80,14 +81,18 @@ export class ApiService implements OnDestroy {
         for(let[key,value] of Object.entries(res[0])){
           cols.push(key)
         }
-        complete['choice'] = choice
+        this.complete['choice'] = choice
         preComplete['cols'] =cols 
         preComplete['data'] = data 
-        complete[`${choice}`] = preComplete
-        console.log(complete)
-        this.loading.next(false)
+        console.log(this.complete, "PRE IF ")
+        if(!Object.keys(this.complete).includes(choice)){
+          this.complete[`${choice}`] = preComplete
+        }
+        
+        console.log(this.complete, "POST IF")
 
-        this.data$.next(complete)
+        // this.loading.next(false)
+        this.data$.next(this.complete)
         }
       )
     return this.data$
@@ -99,6 +104,9 @@ export class ApiService implements OnDestroy {
       // console.log(dat)
       this.coords = dat
     })
+  }
+  onDestroySignal(){
+
   }
 
 
