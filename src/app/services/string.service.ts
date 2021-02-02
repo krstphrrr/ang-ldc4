@@ -17,7 +17,7 @@ export class StringService {
   
 
   sendContent(content){
-    console.log(content, "TABLAS") 
+    // console.log(content, "TABLAS") 
 
     // instead of sending a single table per Subject update (using next)
     // maybe updating with an object with keys and entries? 

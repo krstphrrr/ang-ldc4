@@ -80,10 +80,10 @@ export class TableComponent implements OnInit, OnDestroy {
     
     if(this.api.data$){
       this.apiResponseSubs = this.api.data$.subscribe(newData=>{
-        console.log(newData)
+        // console.log(newData)
         if(Array.from(Object.keys(newData)).length>0 && Object.keys(newData).includes(this.which)){
-          console.log(newData[this.which])
-          console.log(this.which)
+          // console.log(newData[this.which])
+          // console.log(this.which)
 
           this.tableCols = newData[this.which]['cols']
           this.tableDataSrc = new MatTableDataSource(newData[this.which]['data'])

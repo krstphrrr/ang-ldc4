@@ -198,10 +198,10 @@ export class ChipsComponent implements OnInit {
         return retAr
       case(prearray.length==post.length):
         if(prearray==post){
-          console.log("son iguales")
+          // console.log("son iguales")
           return post
         } else {
-          console.log("son distintos")
+          // console.log("son distintos")
           return post
         }
       }

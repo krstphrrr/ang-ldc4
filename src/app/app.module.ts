@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 // import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
-
+import { environment as env } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { MapComponent } from './map/map.component';
@@ -157,20 +157,15 @@ const appRoutes: Routes = [
     MatSnackBarModule,
     ScrollingModule,
     AuthModule.forRoot({
-      domain:"dev-mg6fdv6o.auth0.com",
-      clientId:"tWyDLZ1uzLeQDGjch7sHvi4ryt2IGQQz",
-      redirectUri:window.location.origin,
-      // httpInterceptor:{
-      //   allowedList:[
-      //     {
-      //       uri:'localhost:4200',
-      //       httpMethod:'get',
-      //       tokenOptions:{
-      //         audience:'https://api.landscapedatacommons.org',
-      //       }
-      //     }
-      //   ]
-      // }
+      ...env.auth,
+      httpInterceptor:{
+        allowedList:[{
+          uri:`/api/*`,
+          tokenOptions:{
+            audience:'http://localhost:5002'
+          }
+        }]
+      }
 
     }),
     MatAutocompleteModule,

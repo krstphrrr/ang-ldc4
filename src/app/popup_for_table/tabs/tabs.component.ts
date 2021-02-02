@@ -113,22 +113,27 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
       // (table will not load without assembled data packet)
       this.tableData = []
       this.tableCols = []
+      console.log(dropDownChoice)
     if(dropDownChoice){
+      if(dropDownChoice.data!==undefined){
+        this.dataSupplier = this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
+        
+        
+          if(Object.keys(res).length!==0){
+              this.tableCols = res[`${dropDownChoice.data}`]['cols']
+              this.tableData = res[`${dropDownChoice.data}`]['data']
+              this.apiservice.trimData(this.tabs)
+              // this.subscription.unsubscribe()
+              
+            } else {
+              this.tableCols = []
+              this.tableData = []
+            }
+        })
+      } else {
+        console.log("table selection cleared")
+      }
       
-      this.dataSupplier = this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
-        
-        
-        if(Object.keys(res).length!==0){
-            this.tableCols = res[`${dropDownChoice.data}`]['cols']
-            this.tableData = res[`${dropDownChoice.data}`]['data']
-            this.apiservice.trimData(this.tabs)
-            // this.subscription.unsubscribe()
-            
-          } else {
-            this.tableCols = []
-            this.tableData = []
-          }
-      })
     }
   })
    }
