@@ -56,10 +56,7 @@ export class TableComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private str: StringService
   ) { 
-    // console.log(this.tableCols)
-    // of(this.tableCols).subscribe(arr=>{
-    //   // console.log(arr, "TESTING")
-    // })
+    
     this.tableListSubs=this.str.tableArray2.subscribe(res=>{
       // console.log(res)
       this.tableList = res.tableArray
@@ -67,23 +64,20 @@ export class TableComponent implements OnInit, OnDestroy {
     })
 
     this.subscription = this.str.retrieveContent().subscribe(dat=>{
-      // console.log(dat)
-      // this.saveSubsCheck()
-      // if(this.tick<1){
-      //   this.refresh()
-      //   this.tick+=1
-      // }
+      // once a signal is received that an option has been selected, 
+      // this.refresh will check if a data packet has been assembled 
+      // (newData). if the newdata object includes the selected table (should have been
+      // assembled in tabs and sent to apiservice), the tablecols and tabledata will 
+      // be pulled from the apidata behavior subject. 
+
+      
       this.refresh()
       
     })
   }
 
   refresh(){
-    // console.log(this.tableCols)
-    // console.log(this.saveSubs)
     
-    // this.tempSet=[]
-    // this.filterArray = []
     if(this.api.data$){
       this.apiResponseSubs = this.api.data$.subscribe(newData=>{
         console.log(newData)
@@ -96,8 +90,11 @@ export class TableComponent implements OnInit, OnDestroy {
           this.tableDataSrc.sort = this.sort
           this.tableDataSrc.paginator = this.paginator
           this.saveSubs = newData
-          this.saveTableData(newData['choice'],newData) //for csv's
+          // csv data 
+          this.saveTableData(newData['choice'],newData[this.which]) //for csv's
           this.includeData()
+          // unsubscribe from all after setting the received data within html template
+          // to make sure data is not reused in subsequent created tables
           this.subscription.unsubscribe()
           this.tableListSubs.unsubscribe()
           this.apiResponseSubs.unsubscribe()
@@ -121,32 +118,6 @@ export class TableComponent implements OnInit, OnDestroy {
     console.log(this.saveSubs)
   }
 
-  // filterObject(preObj,postObj){
-  //   let preObjArray = Object.keys(preObj)
-  //   let postObjArray = Object.keys(postObj)
-  //   let retObj
-
-  //   switch(true){
-  //     case (preObjArray.length<postObjArray.length):
-  //       postObjArray.forEach(i=>{
-  //         if(!preObjArray.includes(i)){
-  //           preObjArray['']
-  //           // prearray.push(i) NO
-  //         }
-  //       })
-  //       // console.log(prearray)
-  //       return preObj
-  //     case (preObjArray.length>postObjArray.length):
-  //       preObjArray.forEach(i=>{
-  //         if(!postObjArray.includes(i)){
-  //           console.log(i)
-  //           retAr = prearray.filter(val=>{return val!==i})
-  //         }
-  //       })
-  //       console.log(retAr)
-  //       return retAr
-  //     }
-  // }
   
 
   ngOnInit(): void {

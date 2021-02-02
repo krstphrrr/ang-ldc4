@@ -62,17 +62,15 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
       let preArray:any[] = Array.from(this.tabs)
       let incoming:any[] = res.tables
       switch(true){
+        // if new selected options, add to set
         case (preArray.length<incoming.length):
           incoming.forEach(i=>{
             if(!preArray.includes(i)){
               this.tabs.add(i)
             }
           })
-          // this.addTab(res['tables'][incoming.length-1])
-          // this.tabs.push(res['tables'][res.tables.length-1])
-          // console.log(this.tabs)
-          
           break
+        // if removing options, remove from set
         case (preArray.length>incoming.length):
           // this.tabs.pop()
           preArray.forEach(i=>{
@@ -83,12 +81,12 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
             }
           })
           break
+        // handling alternate scenario
         case (preArray.length==incoming.length):
-          console.log("que hacemos ahora")
+          console.log("test equivalence")
           break
       }
-      // this.apiservice.trimData(this.tabs)
-      console.log(this.tabs)
+      // trimming data for csv 
       this.trimTableData()
 
     })
@@ -110,15 +108,17 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
     })
 
     this.subscription = this.str.retrieveContent().subscribe(dropDownChoice=>{
+      //once we get a choice from the dropdown, create data packet in apiservice 
+      // table component will pull from there  data packet is assembled 
+      // (table will not load without assembled data packet)
       this.tableData = []
       this.tableCols = []
     if(dropDownChoice){
       
       this.dataSupplier = this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
         
-        // this.which = dropDownChoice.data
+        
         if(Object.keys(res).length!==0){
-          // console.log(this.random)
             this.tableCols = res[`${dropDownChoice.data}`]['cols']
             this.tableData = res[`${dropDownChoice.data}`]['data']
             this.apiservice.trimData(this.tabs)
@@ -179,10 +179,6 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
   ngOnInit(): void {
     
   }
-  // secretFunction(event){
-  //   this.random = event.tab.textLabel
-  //   console.log(event, "merecabron")
-  // }
 
 
   trimTableData(){
