@@ -103,7 +103,8 @@ export class ChipsComponent implements OnInit {
   }
 
   sendContent(content){
-    console.log(content)
+    // content is produced when a selection event triggers
+    // it contains an array with the selection
     let currentTable 
     let tables = []
     let tableArray = content.value
@@ -122,26 +123,35 @@ export class ChipsComponent implements OnInit {
     
     let justAdded
     if(tableArray.length>0){
-      
-      console.log(this.dropdownFilter(Array.from(this.table),content.value))
-      // console.log(tableArray, "tablearray")
+      // if the 'selected table array' has anything...
+      // console.log(tableArray)
+      // console.log(content.value)
+      // console.log(this.table)
+      // console.log(this.dropdownFilter(Array.from(this.table),content.value))
+      let seqOrder
+      // 
       if(Array.from(this.table).length===0){
-        currentTable = tableArray[tableArray.length-1]
+        // if the SET "table" has nothing in it, 
+        seqOrder = tableArray
+        currentTable = seqOrder[seqOrder.length-1]
       } else {
-        currentTable = Array.from(this.table)
+        console.log(this.table, content.value)
+        seqOrder = this.dropdownFilter(Array.from(this.table),content.value)
+        currentTable = seqOrder[tableArray.length-1]
       }
       // currentTable = tableArray[tableArray.length-1]
-      
+      // console.log(currentTable)
       tableArray.forEach(i=>{
         if(!Array.from(this.table).includes(i)){
           justAdded = i
           this.table.add(i)
+          seqOrder = this.dropdownFilter(Array.from(this.table),content.value)
           } 
         })
         
       if(Array.from(this.table).length>1){
        this.table.forEach(j=>{
-         console.log(j, justAdded)
+        //  console.log(j, justAdded)
           if(j!==justAdded){
             this.table.delete(j)
           }
@@ -149,7 +159,7 @@ export class ChipsComponent implements OnInit {
       }
       this.wholePackage['current'] = currentTable
       this.wholePackage['tableArray'] = tableArray
-      console.log(this.table)
+      // console.log(this.table)
       this.str.sendContent(this.wholePackage)
       // this.str.sendTableArray(tableArray)
     } else {
@@ -183,8 +193,17 @@ export class ChipsComponent implements OnInit {
             retAr = prearray.filter(val=>{return val!==i})
           }
         })
+        
         console.log(retAr)
         return retAr
+      case(prearray.length==post.length):
+        if(prearray==post){
+          console.log("son iguales")
+          return post
+        } else {
+          console.log("son distintos")
+          return post
+        }
       }
     }
 }

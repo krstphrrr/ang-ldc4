@@ -84,12 +84,13 @@ export class ApiService implements OnDestroy {
         this.complete['choice'] = choice
         preComplete['cols'] =cols 
         preComplete['data'] = data 
-        console.log(this.complete, "PRE IF ")
-        if(!Object.keys(this.complete).includes(choice)){
-          this.complete[`${choice}`] = preComplete
-        }
+        // console.log(this.complete, "PRE IF ")
         
-        console.log(this.complete, "POST IF")
+        this.complete[`${choice}`] = preComplete
+        // console.log("ANHADIDO")
+        
+        
+        // console.log(this.complete, "POST IF")
 
         // this.loading.next(false)
         this.data$.next(this.complete)
@@ -107,6 +108,24 @@ export class ApiService implements OnDestroy {
   }
   onDestroySignal(){
 
+  }
+
+  trimData(newArray){
+    // console.log(this.complete)
+    let compArray = Object.keys(this.complete)
+    switch(true){
+      case(compArray.length>newArray.length):
+        compArray.forEach(i=>{
+          if(!newArray.includes(i)){
+            delete this.complete[i]
+          }
+        })
+        break
+
+      case(compArray.length<newArray.length || compArray.length==newArray.length):
+        console.log("es anhadir o son iguales")
+        break
+    }
   }
 
 

@@ -7,6 +7,7 @@ import { TabledataService } from 'src/app/services/tabledata.service';
 import * as JSZip from 'jszip';
 import {saveAs} from 'file-saver/dist/FileSaver'
 import { retryWhen } from 'rxjs/operators';
+import { P } from '@angular/cdk/keycodes';
 interface Res{
   tables:[]
 }
@@ -25,7 +26,7 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
   zipFile: JSZip = new JSZip();
   // tabs: dynamic creation and destruction of tabs
   @Input('ahsi') random:string
-  tabs = []
+  tabs = new Set()
   selected = new FormControl(0)
   // table data for each table in tab
   public tabledataSubscription:Subscription
@@ -58,19 +59,36 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.tableTrimmerSubscription = this.str.publicTables.subscribe((res:Res)=>{
       // console.log(res['tables'][res.tables.length-1])
       // this.tabs = res.tables
+      let preArray:any[] = Array.from(this.tabs)
+      let incoming:any[] = res.tables
       switch(true){
-        case (res.tables.length>this.tabs.length):
-          // this.tabs +1
-          this.addTab(res['tables'][res.tables.length-1])
+        case (preArray.length<incoming.length):
+          incoming.forEach(i=>{
+            if(!preArray.includes(i)){
+              this.tabs.add(i)
+            }
+          })
+          // this.addTab(res['tables'][incoming.length-1])
           // this.tabs.push(res['tables'][res.tables.length-1])
           // console.log(this.tabs)
           
           break
-        case (res.tables.length<this.tabs.length):
-          this.tabs.pop()
-          // console.log(this.tabs)
+        case (preArray.length>incoming.length):
+          // this.tabs.pop()
+          preArray.forEach(i=>{
+            if(!incoming.includes(i)){
+              // console.log(i)
+              
+              this.tabs.delete(i)
+            }
+          })
+          break
+        case (preArray.length==incoming.length):
+          console.log("que hacemos ahora")
           break
       }
+      // this.apiservice.trimData(this.tabs)
+      console.log(this.tabs)
       this.trimTableData()
 
     })
@@ -95,14 +113,15 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.tableData = []
       this.tableCols = []
     if(dropDownChoice){
-      // console.log("you chose something")
+      
       this.dataSupplier = this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
-        console.log(this.random, "merependejo")
+        
         // this.which = dropDownChoice.data
-        if(Object.keys(res).length!==0 && this.random){
-          console.log(this.random)
-            this.tableCols = res[`${this.random}`]['cols']
-            this.tableData = res[`${this.random}`]['data']
+        if(Object.keys(res).length!==0){
+          // console.log(this.random)
+            this.tableCols = res[`${dropDownChoice.data}`]['cols']
+            this.tableData = res[`${dropDownChoice.data}`]['data']
+            this.apiservice.trimData(this.tabs)
             // this.subscription.unsubscribe()
             
           } else {
@@ -145,25 +164,25 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.subscription.unsubscribe()
     // throw new Error('Method not implemented.');
   }
-   addTab(tabname){
+  //  addTab(tabname){
      
-     this.tabs.push(tabname)
-     console.log(`"${tabname}" added!`)
-    //  if (selectAfterAdding){
-    //    this.selected.setValue(this.tabs.length-1)
-    //  }
-   }
-   removeTab(index){
-     this.tabs.splice(index,1)
-   }
+  //    this.tabs.push(tabname)
+  //    console.log(`"${tabname}" added!`)
+  //   //  if (selectAfterAdding){
+  //   //    this.selected.setValue(this.tabs.length-1)
+  //   //  }
+  //  }
+  //  removeTab(index){
+  //    this.tabs.splice(index,1)
+  //  }
 
   ngOnInit(): void {
     
   }
-  secretFunction(event){
-    this.random = event.tab.textLabel
-    console.log(event, "merecabron")
-  }
+  // secretFunction(event){
+  //   this.random = event.tab.textLabel
+  //   console.log(event, "merecabron")
+  // }
 
 
   trimTableData(){
@@ -173,7 +192,7 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
     // trim the object to match it.
     if(this.tabs){
       for(let k of Object.keys(this.myObj)){
-        if(!this.tabs.includes(k)){
+        if(!Array.from(this.tabs).includes(k)){
           delete this.myObj[k]
         }
       }

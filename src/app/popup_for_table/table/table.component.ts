@@ -56,31 +56,31 @@ export class TableComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private str: StringService
   ) { 
-    console.log(this.tableCols)
-    of(this.tableCols).subscribe(arr=>{
-      console.log(arr, "TESTING")
-    })
+    // console.log(this.tableCols)
+    // of(this.tableCols).subscribe(arr=>{
+    //   // console.log(arr, "TESTING")
+    // })
     this.tableListSubs=this.str.tableArray2.subscribe(res=>{
-      console.log(res)
+      // console.log(res)
       this.tableList = res.tableArray
       
     })
 
     this.subscription = this.str.retrieveContent().subscribe(dat=>{
-      console.log(dat)
-      this.saveSubsCheck()
-      if(this.tick<1){
-        this.refresh()
-        this.tick+=1
-      }
-      // this.refresh()
+      // console.log(dat)
+      // this.saveSubsCheck()
+      // if(this.tick<1){
+      //   this.refresh()
+      //   this.tick+=1
+      // }
+      this.refresh()
       
     })
   }
 
   refresh(){
-    console.log(this.tableCols)
-    console.log(this.saveSubs)
+    // console.log(this.tableCols)
+    // console.log(this.saveSubs)
     
     // this.tempSet=[]
     // this.filterArray = []
@@ -90,8 +90,7 @@ export class TableComponent implements OnInit, OnDestroy {
         if(Array.from(Object.keys(newData)).length>0 && Object.keys(newData).includes(this.which)){
           console.log(newData[this.which])
           console.log(this.which)
-          console.log(this.tableCols)
-          console.log(this.tableData)
+
           this.tableCols = newData[this.which]['cols']
           this.tableDataSrc = new MatTableDataSource(newData[this.which]['data'])
           this.tableDataSrc.sort = this.sort
@@ -121,6 +120,33 @@ export class TableComponent implements OnInit, OnDestroy {
   saveSubsCheck(){
     console.log(this.saveSubs)
   }
+
+  // filterObject(preObj,postObj){
+  //   let preObjArray = Object.keys(preObj)
+  //   let postObjArray = Object.keys(postObj)
+  //   let retObj
+
+  //   switch(true){
+  //     case (preObjArray.length<postObjArray.length):
+  //       postObjArray.forEach(i=>{
+  //         if(!preObjArray.includes(i)){
+  //           preObjArray['']
+  //           // prearray.push(i) NO
+  //         }
+  //       })
+  //       // console.log(prearray)
+  //       return preObj
+  //     case (preObjArray.length>postObjArray.length):
+  //       preObjArray.forEach(i=>{
+  //         if(!postObjArray.includes(i)){
+  //           console.log(i)
+  //           retAr = prearray.filter(val=>{return val!==i})
+  //         }
+  //       })
+  //       console.log(retAr)
+  //       return retAr
+  //     }
+  // }
   
 
   ngOnInit(): void {
