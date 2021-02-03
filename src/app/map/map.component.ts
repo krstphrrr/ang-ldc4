@@ -263,7 +263,10 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       this.backendSubscription.unsubscribe()
     }
     this.overlaySubscription.unsubscribe()
-    this.tabledataSubscription.unsubscribe()
+    if(this.tabledataSubscription){
+      this.tabledataSubscription.unsubscribe()
+    }
+    // this.tabledataSubscription.unsubscribe()
     this.unsubscribeSubscription.unsubscribe()
     this.dragTracker.unsubscribe()
     this.popupTracker.unsubscribe()

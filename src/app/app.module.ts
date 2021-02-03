@@ -47,6 +47,7 @@ import { ProfileComponent } from './profile/profile.component';
 // import { AppRoutingModule } from './app-routing.module';
 import { ScrollingModule } from '@angular/cdk/scrolling'
 // import { AuthGuard } from './services/auth.guard';
+// import { JwtModule } from '@auth0/angular-jwt'
 import { AuthModule } from '@auth0/auth0-angular';
 import { AuthHttpInterceptor } from '@auth0/auth0-angular'
 import { SummaryTableComponent } from './map/summary-table/summary-table.component';
@@ -67,6 +68,11 @@ import { TabsComponent } from './popup_for_table/tabs/tabs.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatFormFieldModule} from '@angular/material/form-field';
+
+// token test
+export function tokenGetter() {
+  return localStorage.getItem("access_token");
+}
 
 
 const appRoutes: Routes = [
@@ -160,7 +166,7 @@ const appRoutes: Routes = [
       ...env.auth,
       httpInterceptor:{
         allowedList:[{
-          uri:`/api/*`,
+          uri:`${env.dev.serverUrl}/api/*`,
           tokenOptions:{
             audience:'http://localhost:5002'
           }
