@@ -5,6 +5,7 @@ import {HttpParams} from "@angular/common/http";
 import { environment } from '../../environments/environment'
 import { map, tap } from 'rxjs/operators';
 import { MoveEndService } from './move-end.service';
+import { AuthService } from '@auth0/auth0-angular';
 
 @Injectable({
   providedIn: 'root'
@@ -26,10 +27,12 @@ export class ApiService implements OnDestroy {
   data$
   coords
   complete = {}
+  isAuth
 
   // subscriptions
   httpSub:Subscription
   coordSub:Subscription
+  authSubs:Subscription
 
   // test for loading dependent elements like spinners
   private readonly loading = new Subject<boolean>()
@@ -47,9 +50,13 @@ export class ApiService implements OnDestroy {
   constructor(
     private http: HttpClient,
     private coordsService:MoveEndService,
+    private auth:AuthService
 
     ) { 
       this.coordsUpdate()
+      this.auth.isAuthenticated$.subscribe(e=>{
+        this.isAuth = e
+      })
     // this.params = new HttpParams()
   }
 
@@ -57,10 +64,13 @@ export class ApiService implements OnDestroy {
   getData(choice){
     
     this.data$  = new BehaviorSubject({})
+    console.log(this.isAuth)
+    let nonAuth = this.isAuth===true?'logged/':''
     let newString = `${this.api}/api/${choice}`.toLowerCase()
 
     // coord controller string 
-    let newString2 = `${this.api}/api/${choice}_coords`.toLowerCase()
+    let newString2 = `${this.api}/api/${this.isAuth==true?'logged/':''}${choice}_coords`.toLowerCase()
+    console.log(newString2)
     this.newParams(this.coords)
 
     // experimental params object

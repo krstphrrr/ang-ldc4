@@ -166,7 +166,7 @@ const appRoutes: Routes = [
       ...env.auth,
       httpInterceptor:{
         allowedList:[{
-          uri:`${env.dev.serverUrl}/api/*`,
+          uri:`${env.dev.serverUrl}/api/logged/*`,
           tokenOptions:{
             audience:'http://localhost:5002'
           }
