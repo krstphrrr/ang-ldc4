@@ -8,11 +8,37 @@ services:
     image: dima_api 
     ports: 
       - "5005:5005"
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+
+        failure_action: rollback
+        delay: 10s
+      
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   dima_check:
     image: dima_check 
     ports: 
       - "4201:80"
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+
+        failure_action: rollback
+        delay: 10s
+      
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   main_api:
     image: api2
@@ -40,6 +66,19 @@ services:
       - "5010:5010"
     env_file: 
       - /home/kris/nri_api/.env
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+
+        failure_action: rollback
+        delay: 10s
+      
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
       
   met_api:
     image: met_api 
@@ -47,6 +86,19 @@ services:
       - "5013:5013"
     env_file: 
       - /home/kris/met_api/.env
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+
+        failure_action: rollback
+        delay: 10s
+      
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
       
   aero_api:
     image: aero_api
@@ -54,6 +106,19 @@ services:
       - "5015:5015"
     env_file: 
       - /home/kris/aero_api/.env
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+
+        failure_action: rollback
+        delay: 10s
+      
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 # 
 # sudo docker stack deploy --compose-file docker-compose.yml api_services
 # to check stack:
