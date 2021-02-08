@@ -1,4 +1,4 @@
-import { domain, clientId, audience, serverUrl } from '../../auth_config.json';
+import { domain, clientId, audience, serverUrl_p } from '../../auth_config.json';
 export const environment = {
   production: true,
   SOCKET_URL: 'https://landscapedatacommons.org/',
@@ -11,7 +11,7 @@ export const environment = {
     audience,
   },
   dev:{
-    serverUrl
+    serverUrl_p
   }
 
 };
