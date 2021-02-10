@@ -54,7 +54,7 @@ import { SummaryTableComponent } from './map/summary-table/summary-table.compone
 import { DragpopComponent } from './map/dragpop/dragpop.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 // import { InterceptorService } from './services/interceptor.service';
-
+import { MAT_TABS_CONFIG } from '@angular/material/tabs';
 import { AltwoodyComponent } from './altwoody/altwoody.component';
 import { BaselayersComponent } from './map/baselayers/baselayers.component';
 import { OverlaysComponent } from './map/overlays/overlays.component';
@@ -185,7 +185,8 @@ const appRoutes: Routes = [
       provide: HTTP_INTERCEPTORS,
       useClass: AuthHttpInterceptor,
       multi: true
-    }
+    },
+    { provide: MAT_TABS_CONFIG, useValue: { animationDuration: 100 }}
   ],
   bootstrap: [AppComponent]
 })

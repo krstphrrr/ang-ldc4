@@ -20,6 +20,8 @@
         [tableCols]='tableCols'>
 
       </app-table> -->
+      <br>
+      <span class="auth-warning" *ngIf="((auth.isAuthenticated$ | async) === false && dataFlag!==undefined)">Anonymous user: result set limited</span>
   <app-tabs 
   style="min-height: 200px;min-width: 200px;"
   

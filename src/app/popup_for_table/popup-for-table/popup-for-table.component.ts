@@ -3,6 +3,7 @@ import {Subscription} from 'rxjs'
 import { ApiService } from 'src/app/services/api.service';
 import { StringService } from 'src/app/services/string.service';
 import {TabledataService} from '../../services/tabledata.service'
+import { AuthService } from '@auth0/auth0-angular';
 // import {CdkDragDrop} from '@angular/cdk/drag-drop';
 
 
@@ -15,27 +16,30 @@ export class PopupForTableComponent implements OnInit, OnDestroy, OnChanges {
 
   public tabledataSubscription:Subscription
   public unsubscribeSubscription:Subscription
-  public extract
+  public dataFlag
 
   //table popu
   tableCols = []
   tableData:any= []
   subscription:Subscription;
+  data:Subscription
 
 
   constructor(
     private tabledata:TabledataService,
     private str: StringService,
     private apiservice: ApiService,
+    public auth: AuthService,
 
   ) {
 
 
     
-    // this.tabledataSubscription = this.tabledata.getdataSource$().subscribe(dat=>{
-    //   this.extract = dat
-    //   // console.log(this.extract)
-    // })
+    this.data = this.str.publicSubject.subscribe(dat=>{
+      // this.extract = dat
+      this.dataFlag = dat
+      
+    })
 
     this.unsubscribeSubscription = this.tabledata.getUnsub().subscribe(sig=>{
       if(sig==="delete"){
@@ -43,7 +47,9 @@ export class PopupForTableComponent implements OnInit, OnDestroy, OnChanges {
         
       }
     })
-    // this.testFunction()
+    this.auth.idTokenClaims$.subscribe(hmm =>{
+      console.log(hmm)
+    })
     
     
   }
@@ -72,10 +78,10 @@ export class PopupForTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   resubscribe(){
-    this.tabledataSubscription = this.tabledata.getdataSource$().subscribe(dat=>{
-      this.extract = dat
-      // console.log(this.extract)
-    })
+    // this.tabledataSubscription = this.tabledata.getdataSource$().subscribe(dat=>{
+    //   this.extract = dat
+    //   // console.log(this.extract)
+    // })
   }
   ngOnChanges(){
 
