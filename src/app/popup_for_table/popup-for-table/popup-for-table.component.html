@@ -21,7 +21,7 @@
 
       </app-table> -->
       <br>
-      <span class="auth-warning" *ngIf="((auth.isAuthenticated$ | async) === false && dataFlag!==undefined)">Anonymous user: result set limited</span>
+      <span class="auth-warning" *ngIf="((auth.isAuthenticated$ | async) === false && dataFlag!==undefined)">Result set limited, please log in.</span>
   <app-tabs 
   style="min-height: 200px;min-width: 200px;"
   
