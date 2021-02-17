@@ -48,6 +48,7 @@ export class TableComponent implements OnInit, OnDestroy {
   subscription:Subscription;
   tableListSubs:Subscription
   apiResponseSubs:Subscription
+  loading$:boolean=true
   
   saveSubs = new Observable
   title = 'angdimatable';
@@ -56,6 +57,10 @@ export class TableComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private str: StringService
   ) { 
+    this.api.loading$.subscribe(isLoading=>{
+      
+      this.loading$=isLoading
+    })
     
     this.tableListSubs=this.str.tableArray2.subscribe(res=>{
       // console.log(res)
@@ -97,7 +102,7 @@ export class TableComponent implements OnInit, OnDestroy {
           // to make sure data is not reused in subsequent created tables
           this.subscription.unsubscribe()
           this.tableListSubs.unsubscribe()
-          this.apiResponseSubs.unsubscribe()
+          // this.apiResponseSubs.unsubscribe()
           
         }
          //need to not reload each table as they appear

@@ -68,6 +68,7 @@ import { TabsComponent } from './popup_for_table/tabs/tabs.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { SpinnerComponent } from './utils/spinner/spinner.component';
 
 // token test
 export function tokenGetter() {
@@ -128,7 +129,8 @@ const appRoutes: Routes = [
     LogoutComponentComponent,
     TableDropdownComponent,
     ChipsComponent,
-    TabsComponent
+    TabsComponent,
+    SpinnerComponent
     
   ],
   imports: [

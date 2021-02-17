@@ -35,3 +35,9 @@ table {
   max-width: 600px;
   justify-content: center;
 }
+
+.spinner{
+  width: 400px;
+  height: 200px;
+
+}

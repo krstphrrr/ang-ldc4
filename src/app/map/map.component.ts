@@ -250,6 +250,10 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       position:'left'
     })
     .addTo(this.mymap)
+    L.control.scale({
+      "metric":true,
+      "imperial":false,
+    }).addTo(this.mymap);
 
     this.drawingControl(this.mymap)
   }

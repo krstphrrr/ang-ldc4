@@ -5,6 +5,12 @@
 .mat-paginator-container{
   justify-content: normal !important;
 }
+
+mat-spinner{
+  position:absolute;
+  left: 50%;
+  top:10%;
+}
 .th,mat-header-cell {
   flex-direction: column;
   justify-content: center;

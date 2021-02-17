@@ -42,7 +42,7 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
   subscription:Subscription;
   tableTrimmerSubscription:Subscription
   csvFillerSubscription:Subscription
-  loading$:Observable<boolean> = this.apiservice.loading$
+  // loading$:boolean = true
   public disabledButton = false
   arrayForButton
 
@@ -108,6 +108,7 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
     })
 
     this.subscription = this.str.retrieveContent().subscribe(dropDownChoice=>{
+      
       //once we get a choice from the dropdown, create data packet in apiservice 
       // table component will pull from there  data packet is assembled 
       // (table will not load without assembled data packet)
@@ -117,9 +118,10 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
     if(dropDownChoice){
       if(dropDownChoice.data!==undefined){
         this.dataSupplier = this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
-        
+          
         
           if(Object.keys(res).length!==0){
+            console.log(res)
               this.tableCols = res[`${dropDownChoice.data}`]['cols']
               this.tableData = res[`${dropDownChoice.data}`]['data']
               this.apiservice.trimData(this.tabs)
@@ -129,6 +131,7 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
               this.tableCols = []
               this.tableData = []
             }
+            
         })
       } else {
         console.log("table selection cleared")

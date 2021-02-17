@@ -1,5 +1,8 @@
-
-  <div class="row">
+  <div class="spinner" *ngIf="loading$===true">
+    <mat-spinner ></mat-spinner>
+  </div>
+  
+  <div class="row" *ngIf="loading$===false">
 
       <div class="size-container" >
         <!-- <input matInput (keyup)="onSearchInput($event)" placeholder="Search.."> -->
