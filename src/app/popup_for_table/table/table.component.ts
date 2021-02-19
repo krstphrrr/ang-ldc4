@@ -49,6 +49,7 @@ export class TableComponent implements OnInit, OnDestroy {
   tableListSubs:Subscription
   apiResponseSubs:Subscription
   loading$:boolean=true
+  countContent
   
   saveSubs = new Observable
   title = 'angdimatable';
@@ -95,6 +96,7 @@ export class TableComponent implements OnInit, OnDestroy {
           this.tableDataSrc.sort = this.sort
           this.tableDataSrc.paginator = this.paginator
           this.saveSubs = newData
+          newData[this.which]['count'].then(e=>this.countContent=e)
           // csv data 
           this.saveTableData(newData['choice'],newData[this.which]) //for csv's
           this.includeData()

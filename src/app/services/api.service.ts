@@ -28,6 +28,7 @@ export class ApiService implements OnDestroy {
   coords
   complete = {}
   isAuth
+  dataCount$ = new Subject()
 
   // subscriptions
   httpSub:Subscription
@@ -82,6 +83,7 @@ export class ApiService implements OnDestroy {
     // console.log(this.params)
 
     this.httpSub = this.http.get(newString2, this.httpOptions).subscribe( res =>{
+      console.log(res)
         this.loading.next(true)
         // let complete = {}
         let cols = []
@@ -94,7 +96,9 @@ export class ApiService implements OnDestroy {
         this.complete['choice'] = choice
         preComplete['cols'] =cols 
         preComplete['data'] = data 
-        // console.log(this.complete, "PRE IF ")
+        // counting items inside response
+        // this.dataCount$.next(this.countFunction(data))
+        preComplete['count'] = this.countFunction(data)
         
         this.complete[`${choice}`] = preComplete
         // console.log("ANHADIDO")
@@ -119,6 +123,40 @@ export class ApiService implements OnDestroy {
   onDestroySignal(){
 
   }
+
+  async countFunction(data){
+    
+    let rowsLength = await this.dataCount(data)
+    
+    let pkLength = await this.pkCount(data)
+
+    return `Result set of ${rowsLength} rows, and ${pkLength} primary keys.`
+  }
+
+  async pkCount(data){
+    const uniquePK = []
+    let pkLength = uniquePK.length
+    await data.forEach(dat=>{
+      if(!uniquePK.includes(dat["PrimaryKey"]))
+        uniquePK.push(dat["PrimaryKey"])
+        
+    })
+  //   for await(let i of data){
+  //     console.log(data[i])
+  //     // if(!uniquePK.includes(i["PrimaryKey"])){
+  //     //   console.log(i["PrimaryKey"])
+  //     //   uniquePK.push(i["PrimaryKey"])
+  //     // }
+  // }
+  
+  return uniquePK.length
+}
+
+   async dataCount(data){
+    let rowsLength = await data.length
+    return rowsLength
+    }
+    
 
   trimData(newArray){
     // console.log(this.complete)
