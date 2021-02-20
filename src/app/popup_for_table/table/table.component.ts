@@ -50,6 +50,7 @@ export class TableComponent implements OnInit, OnDestroy {
   apiResponseSubs:Subscription
   loading$:boolean=true
   countContent
+  errorMessage =false
   
   saveSubs = new Observable
   title = 'angdimatable';
@@ -106,6 +107,10 @@ export class TableComponent implements OnInit, OnDestroy {
           this.tableListSubs.unsubscribe()
           // this.apiResponseSubs.unsubscribe()
           
+        } else {
+          this.errorMessage = true
+          this.subscription.unsubscribe()
+          this.tableListSubs.unsubscribe()
         }
          //need to not reload each table as they appear
         

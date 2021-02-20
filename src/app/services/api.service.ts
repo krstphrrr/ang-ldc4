@@ -82,8 +82,9 @@ export class ApiService implements OnDestroy {
  
     // console.log(this.params)
 
-    this.httpSub = this.http.get(newString2, this.httpOptions).subscribe( res =>{
+    this.httpSub = this.http.get(newString2, this.httpOptions).subscribe( (res:{}[])=>{
       console.log(res)
+      if(res.length>0){
         this.loading.next(true)
         // let complete = {}
         let cols = []
@@ -108,7 +109,11 @@ export class ApiService implements OnDestroy {
 
         this.loading.next(false)
         this.data$.next(this.complete)
+        } else {
+          let emptyRes = {}
+          this.data$.next(emptyRes)
         }
+      }
       )
     return this.data$
     }
