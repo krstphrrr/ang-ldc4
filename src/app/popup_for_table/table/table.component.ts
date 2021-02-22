@@ -22,7 +22,7 @@ interface Res{
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnInit, OnDestroy {
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatSort,{static:true}) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator:MatPaginator;
   @Input()tableCols:string[]=[]
   @Input()tableData:{}[]=[];
@@ -87,15 +87,17 @@ export class TableComponent implements OnInit, OnDestroy {
     
     if(this.api.data$){
       this.apiResponseSubs = this.api.data$.subscribe(newData=>{
-        // console.log(newData)
+        console.log(newData)
         if(Array.from(Object.keys(newData)).length>0 && Object.keys(newData).includes(this.which)){
-          // console.log(newData[this.which])
-          // console.log(this.which)
+          this.errorMessage= false
 
+          // console.log(this.which)
           this.tableCols = newData[this.which]['cols']
           this.tableDataSrc = new MatTableDataSource(newData[this.which]['data'])
-          this.tableDataSrc.sort = this.sort
           this.tableDataSrc.paginator = this.paginator
+          this.totalLength = this.tableDataSrc.data.length
+          this.tableDataSrc.sort = this.sort
+          // console.log(this.totalLength,, this.pageIndex)
           this.saveSubs = newData
           newData[this.which]['count'].then(e=>this.countContent=e)
           // csv data 
@@ -136,8 +138,8 @@ export class TableComponent implements OnInit, OnDestroy {
     this.refresh()
   }
   changePage(event){
-
-    if(this.totalLength > this.tableDataSrc.data.length){
+    console.log(this.totalLength,this.tableDataSrc.data.length, this.pageIndex,event.pageIndex)
+    if(this.totalLength < this.tableDataSrc.data.length){
        if(this.pageIndex < event.pageIndex){
         // next page
         this.skip = this.skip + this.limit;
@@ -149,6 +151,9 @@ export class TableComponent implements OnInit, OnDestroy {
     // this.apiResponseSubs.unsubscribe()
     this.subscription.unsubscribe()
     this.tableListSubs.unsubscribe()
+  }
+  trackTask(index: number, item: any): string {
+    return `${item.id}`;
   }
 
   includeData(){

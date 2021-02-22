@@ -110,8 +110,10 @@ export class ApiService implements OnDestroy {
         this.loading.next(false)
         this.data$.next(this.complete)
         } else {
+          this.loading.next(true)
           let emptyRes = {}
           this.data$.next(emptyRes)
+          this.loading.next(false)
         }
       }
       )

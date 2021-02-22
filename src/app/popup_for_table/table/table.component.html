@@ -1,15 +1,15 @@
-  <div class="spinner" *ngIf="loading$===true && errorMessage===false">
+  <div class="spinner" *ngIf="loading$===true">
     <mat-spinner ></mat-spinner>
   </div>
   
-  <div class="row" *ngIf="loading$===false && errorMessage===false">
+  <div class="row" >
     <span>{{countContent}}</span>
       <div class="size-container" >
         <!-- <input matInput (keyup)="onSearchInput($event)" placeholder="Search.."> -->
         <!-- filter panel start # options -->
 
         <table mat-table [dataSource]="tableDataSrc" matSort class="flexible-container mat-elevation-z8">
-          <ng-container *ngFor="let col of tableCols">
+          <ng-container *ngFor="let col of tableCols; trackBy:trackTask">
             <ng-container matColumnDef="{{col}}" class="mat-column">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="align-right">{{col}}</th>
               <td mat-cell *matCellDef="let row" class="truncate-cell">{{ row[col]}}</td>
@@ -23,7 +23,7 @@
       </div>
       <div style="justify-content: normal;" [ngStyle]="{'visibility':(tableDataSrc)? 'visible':'hidden'}">
       <mat-paginator 
-          
+          [pageIndex]="pageIndex"
           (page)="changePage($event)"
           [pageSize]="limit" 
           [length]="totalLength" 
@@ -35,7 +35,7 @@
         
       
   </div>
-  <div *ngIf="errorMessage===true">
+  <div *ngIf="errorMessage===true && loading$===false">
     <span>Result set empty.</span>
   </div>
     <!-- <li *ngFor="let item of output">
