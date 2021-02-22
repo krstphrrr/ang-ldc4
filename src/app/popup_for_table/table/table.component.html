@@ -8,7 +8,7 @@
         <!-- <input matInput (keyup)="onSearchInput($event)" placeholder="Search.."> -->
         <!-- filter panel start # options -->
 
-        <table mat-table [dataSource]="tableDataSrc" matSort class="flexible-container mat-elevation-z8">
+        <table mat-table [dataSource]="tableDataSrc" matSort [trackBy]="trackTask" class="flexible-container mat-elevation-z8">
           <ng-container *ngFor="let col of tableCols; trackBy:trackTask">
             <ng-container matColumnDef="{{col}}" class="mat-column">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="align-right">{{col}}</th>
