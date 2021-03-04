@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment'
 import { map, tap } from 'rxjs/operators';
 import { MoveEndService } from './move-end.service';
 import { AuthService } from '@auth0/auth0-angular';
+import { xml } from 'd3';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +35,7 @@ export class ApiService implements OnDestroy {
   httpSub:Subscription
   coordSub:Subscription
   authSubs:Subscription
+  schemaSub:Subscription
 
   // test for loading dependent elements like spinners
   private readonly loading = new Subject<boolean>()
@@ -63,7 +65,7 @@ export class ApiService implements OnDestroy {
 
 
   getData(choice){
-    
+    this.schemaPull(choice)
     this.data$  = new BehaviorSubject({})
     console.log(this.isAuth)
     let nonAuth = this.isAuth===true?'logged/':''
@@ -72,6 +74,7 @@ export class ApiService implements OnDestroy {
     // coord controller string 
     let newString2 = `${this.api}/api/${this.isAuth==true?'logged/':''}${choice}_coords`.toLowerCase()
     console.log(newString2)
+    console.log(this.coords)
     this.newParams(this.coords)
 
     // experimental params object
@@ -80,7 +83,7 @@ export class ApiService implements OnDestroy {
     this.httpOptions['params'] = this.params
 
  
-    // console.log(this.params)
+    console.log(this.params)
 
     this.httpSub = this.http.get(newString2, this.httpOptions).subscribe( (res:{}[])=>{
       console.log(res)
@@ -119,6 +122,8 @@ export class ApiService implements OnDestroy {
       )
     return this.data$
     }
+
+  
 
   coordsUpdate(){
     
@@ -187,6 +192,20 @@ export class ApiService implements OnDestroy {
   changeParams(terms){
     this.apiUpdate.next(terms)
     // console.log(terms, "desde el servicio")
+  }
+
+
+  schemaPull(whichTable){
+    let xmlParams = new HttpParams()
+    xmlParams = xmlParams.append("Table",whichTable)
+    let url = `${this.api}/schemas`
+    let httpOptions = {}
+    httpOptions['params'] = xmlParams
+    console.log(xmlParams)
+    console.log(httpOptions)
+    this.schemaSub = this.http.get(url,httpOptions).subscribe(d=>
+      console.log(d)
+      )
   }
   newParams(list){
     this.params = new HttpParams()

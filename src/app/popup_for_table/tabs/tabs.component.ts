@@ -8,6 +8,7 @@ import * as JSZip from 'jszip';
 import {saveAs} from 'file-saver/dist/FileSaver'
 import { retryWhen } from 'rxjs/operators';
 import { P } from '@angular/cdk/keycodes';
+import * as convert from 'xml-js'
 interface Res{
   tables:[]
 }
@@ -201,6 +202,11 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
         }
       }
     }
+  }
+  xmlAssembler(json){
+    // let xmlDoc = new ActiveXObject("Microsoft.XMLDOM")
+    let result = convert.json2xml(json)
+    console.log(result)
   }
 
   testBtn(){
