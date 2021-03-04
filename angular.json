@@ -17,7 +17,8 @@
                "socket.io-client",
                "debug",
                "socket.io-parser",
-               "file-saver"
+               "file-saver",
+               "xml-js"
             ],
             "outputPath": "dist/ang-ldc4",
             "index": "src/index.html",

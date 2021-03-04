@@ -59,8 +59,12 @@ import '@angular/localize/init';
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
+// https://stackoverflow.com/a/50488337
+(window as any).global = window
+let global = (window as any).global || window
 import 'zone.js/dist/zone';
 import 'hammerjs'
+global.Buffer = global.Buffer || require('buffer').Buffer;
 
 /***************************************************************************************************
  * APPLICATION IMPORTS

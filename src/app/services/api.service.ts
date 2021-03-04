@@ -6,7 +6,13 @@ import { environment } from '../../environments/environment'
 import { map, tap } from 'rxjs/operators';
 import { MoveEndService } from './move-end.service';
 import { AuthService } from '@auth0/auth0-angular';
+import { StringService } from 'src/app/services/string.service';
 import { xml } from 'd3';
+import * as convert from 'xml-js'
+
+interface Res{
+  tables:[]
+}
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +21,17 @@ export class ApiService implements OnDestroy {
   //environment variables
   private api = environment.API_URL
   tables = environment.TABLE_URL
+  currentTables:[]
+  xmlParams
 
   //param mangling
   params
   private apiParams = new Subject()
   private apiUpdate = new BehaviorSubject<any>([])
   apiParams$:Observable<any>= this.apiUpdate.asObservable()
+
+  private xmlData = new BehaviorSubject<any>([])
+  xmlData$:Observable<any> = this.xmlData.asObservable()
   
   //response mangling
   resData = new Subject()
@@ -36,6 +47,7 @@ export class ApiService implements OnDestroy {
   coordSub:Subscription
   authSubs:Subscription
   schemaSub:Subscription
+  tablesSub:Subscription
 
   // test for loading dependent elements like spinners
   private readonly loading = new Subject<boolean>()
@@ -53,19 +65,31 @@ export class ApiService implements OnDestroy {
   constructor(
     private http: HttpClient,
     private coordsService:MoveEndService,
-    private auth:AuthService
+    private auth:AuthService,
+    private str: StringService
 
     ) { 
       this.coordsUpdate()
       this.auth.isAuthenticated$.subscribe(e=>{
         this.isAuth = e
       })
+      this.tablesSub = this.str.publicTables.subscribe((res:Res)=>{
+        this.xmlParams = new HttpParams()
+
+
+    // xmlParams = xmlParams.append("Table",whichTable)
+        res.tables.forEach(i=>{
+          this.xmlParams = this.xmlParams.append("Table",i)
+        })
+        
+      })
+
     // this.params = new HttpParams()
   }
 
 
   getData(choice){
-    this.schemaPull(choice)
+    
     this.data$  = new BehaviorSubject({})
     console.log(this.isAuth)
     let nonAuth = this.isAuth===true?'logged/':''
@@ -94,6 +118,7 @@ export class ApiService implements OnDestroy {
         let data = res
         let preComplete = {}
         console.log(res)
+        this.schemaPull(this.xmlParams)
         for(let[key,value] of Object.entries(res[0])){
           cols.push(key)
         }
@@ -120,6 +145,7 @@ export class ApiService implements OnDestroy {
         }
       }
       )
+
     return this.data$
     }
 
@@ -195,17 +221,18 @@ export class ApiService implements OnDestroy {
   }
 
 
-  schemaPull(whichTable){
-    let xmlParams = new HttpParams()
-    xmlParams = xmlParams.append("Table",whichTable)
+  schemaPull(params){
+    
     let url = `${this.api}/schemas`
     let httpOptions = {}
-    httpOptions['params'] = xmlParams
-    console.log(xmlParams)
-    console.log(httpOptions)
-    this.schemaSub = this.http.get(url,httpOptions).subscribe(d=>
+    httpOptions['params'] = params
+ 
+    
+    console.log("NEW PARAMS", params)
+    this.schemaSub = this.http.get(url,httpOptions).subscribe((d)=>{
       console.log(d)
-      )
+      this.xmlData.next(d)
+     })
   }
   newParams(list){
     this.params = new HttpParams()

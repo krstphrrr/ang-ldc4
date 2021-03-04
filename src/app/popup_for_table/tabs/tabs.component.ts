@@ -32,8 +32,10 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
   // table data for each table in tab
   public tabledataSubscription:Subscription
   public unsubscribeSubscription:Subscription
+  public xmlSubscription:Subscription
   public extract
   myObj = {}
+  xmlObj
   csvPack:csvPacks = {}
 
   //table popu
@@ -56,8 +58,18 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
     
     // subscription pays attention to tablelist and updates the currently displayed
     // tabs
+    this.xmlSubscription = this.apiservice.xmlData$.subscribe(json=>{
+      let options = {compact:true, spaces:4}
+      let preXml = JSON.stringify(json)
+      console.log(preXml)
+      let result = convert.json2xml(preXml, options)
+      this.xmlObj = result
+      console.log(this.xmlObj)
+      console.log(result)
+    })
     // currently: just exchanges one array for the other
     this.tableTrimmerSubscription = this.str.publicTables.subscribe((res:Res)=>{
+      // console.log(this.tabs)
       // console.log(res['tables'][res.tables.length-1])
       // this.tabs = res.tables
       let preArray:any[] = Array.from(this.tabs)
@@ -203,10 +215,12 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
       }
     }
   }
-  xmlAssembler(json){
+  xmlAssembler(tables){
     // let xmlDoc = new ActiveXObject("Microsoft.XMLDOM")
-    let result = convert.json2xml(json)
-    console.log(result)
+    this.xmlSubscription = this.apiservice.xmlData$.subscribe(xml =>{
+      console.log(xml)
+    })
+
   }
 
   testBtn(){
@@ -239,6 +253,10 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
       if(csvBlob!==null){
         zip.file(blobName+".csv",csvBlob)
       }
+    }
+
+    if(this.xmlObj!=undefined){
+      zip.file("tableSchemas.xml",this.xmlObj)
     }
     zip.generateAsync({type:'blob'}).then((content)=>{
       if(content){
