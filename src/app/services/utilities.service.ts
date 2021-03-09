@@ -1,0 +1,48 @@
+import { Injectable } from '@angular/core';
+import {create} from 'xmlbuilder2'
+// import * as data from '../assets/xml_desc.json'
+// import format from 'xml-formatter'
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UtilitiesService {
+
+  constructor() { }
+
+  xmlCreate(table,dat){
+    let jsonfile = dat.default[table]
+    console.log(jsonfile)
+    let docu = create({version:'1.0'})
+    .ele('metadata')
+      .ele('idinfo')
+        .ele('citation')
+          .ele('citeinfo')
+            .ele('origin').txt(jsonfile.citeinfo.origin).up()
+            .ele('pubdate').txt(jsonfile.citeinfo.pubupdate).up()
+            .ele('title').txt(jsonfile.citeinfo.title).up()
+            .ele('geoform').txt(jsonfile.citeinfo.geoform).up()
+            .ele('onlink').txt(jsonfile.citeinfo.onlink).up()
+            .up()
+          .up()
+        .up()
+        .ele('descript')
+          .ele('abstract').txt(jsonfile.descript.abstract).up()
+          .ele('purpose').txt(jsonfile.descript.purpose).up()
+          .ele('supplinf').txt(jsonfile.descript.supplinf).up()
+          .up()
+          .ele('timeperd')
+            .ele('timeinfo')
+              .ele('sngdate')
+                .ele('caldate').txt(jsonfile.timeperd.timeinfo.sngdate.caldate).up()
+                .up()
+              .up()
+              .ele('current').txt(jsonfile.timeperd.current).up()
+          .up()
+          .ele('status')
+            .ele('progress').txt(jsonfile.status.progress).up()
+            .ele('update').txt(jsonfile.status.update).up()
+          .up()
+  }
+}

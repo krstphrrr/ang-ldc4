@@ -9,6 +9,9 @@ import {saveAs} from 'file-saver/dist/FileSaver'
 import { retryWhen } from 'rxjs/operators';
 import { P } from '@angular/cdk/keycodes';
 import * as convert from 'xml-js'
+import {UtilitiesService} from 'src/app/services/utilities.service' 
+// import * as data from '../assets/xml_desc.json'
+
 interface Res{
   tables:[]
 }
@@ -53,18 +56,22 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
     private tabledata:TabledataService,
     private str: StringService,
     private apiservice: ApiService,
+    private util: UtilitiesService,
     // private changeDetector: ChangeDetectorRef
   ) {
     
     // subscription pays attention to tablelist and updates the currently displayed
     // tabs
     this.xmlSubscription = this.apiservice.xmlData$.subscribe(json=>{
+
+      // once schemaTable is updated, will pull field data from there 
+      // and use this.util.xmlCreate
       let options = {compact:true, spaces:4}
       let preXml = JSON.stringify(json)
       console.log(preXml)
       let result = convert.json2xml(preXml, options)
       this.xmlObj = result
-      console.log(this.xmlObj)
+      // console.log(this.xmlObj)
       console.log(result)
     })
     // currently: just exchanges one array for the other
