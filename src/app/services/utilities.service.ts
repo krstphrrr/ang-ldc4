@@ -45,6 +45,14 @@ export class UtilitiesService {
               .ele('progress').txt(jsonfile.status.progress).up()
               .ele('update').txt(jsonfile.status.update).up()
             .up()
+            .ele("spdom")
+              .ele("bounding")
+                .ele("westbc").up()
+                .ele("eastbc").up()
+                .ele("northbc").up()
+                .ele("southbc").up()
+              .up()
+            .ele("keywords")
             return docu
     } else{
       console.log(`Table '${table}' not implemented!`)

@@ -23,9 +23,43 @@
       "status":{
         "progress":"In work",
         "update":"Continually"
-      }
-      
-
+      },
+      "spdom":{},
+     "keywords":{
+       "theme1":{
+         "themekt":"ISO 19115 Topic Category",
+         "themekey1":"geoscientificInformation",
+         "themekey2":"climatologyMeteorologyAtmosphere",
+         "themekey3":"environment"
+       },
+       "theme2":{
+         "themekt":"DDT data",
+         "themekey1":"dust deposition flux"
+       },
+       "theme3":{
+         "themekt":"Height data",
+         "themekey1":"Height"
+       }
+     },
+     "accconst":"The National Wind Erosion Research Network is committed to providing access to data collected as part of Network activities to all stakeholders, collaborators and the general public. Anyone who wishes to access Network data should contact the Information Manager or relevant Site Contacts prior to doing so. Access to the National Wind Erosion Research Network resources is controlled by resource type to protect collaborator research and publishing requirements and sensitive material regarding the location of some Network sites.",
+     "useconst":"Use of National Wind Erosion Research Network data is subject to acceptance of the following terms: 1. User Affiliation: Network users including any person directly affiliated with the Network, either as a stakeholder (associated with running a Network site) or collaborator (person working with one or more Network sites on a related project). 2. Access Level: Data accessible following registration and login (Project Web). The user registers their name and contact details prior to accessing Network data. This information will be used to notify data users of any changes to content of the website, data, or protocols and for reporting purposes. 3. The user agrees to acknowledge the data source in any reports, presentation, publications, etc. arising from the data use and analyses by citing the following publication: a) N. Webb, Herrick, J., Van Zee, J., Courtright, E., Hugenholtz, C., Zobeck, T. M., Okin, G. S., Barchyn, T. E., Billings, B. J., Boyd, R., Clingan, S., Cooper, B., Duniway, M. C., Derner, J. D., Fox, F. A., Havstad, K. M., Heilman, P., LaPlante, V., Ludwig, N. A., Metz, L. J., Nearing, M. A., M. Norfleet, L., Pierson, F. B., Sanderson, M. A., Sharratt, B. S., Steiner, J. L., Tatarko, J., Tedela, N. H., Toledo, D., Unnasch, R. S., R. Van Pelt, S., and Wagner, L., The National Wind Erosion Research Network: Building a standardized long-term data resource for aeolian research, modeling and land management, Aeolian Research, vol. 22, pp. 23-36, 2016. b) Webb NP, Herrick JE, Van Zee, JW, Hugenholtz CH, Zobeck TM, Okin GS, 2015. Standard Methods for Wind Erosion Research and Model Development: Protocol for the National Wind Erosion Research Network. USDA ARS Jornada Experimental Range. Las Cruces, NM, USA. ISBN 978-0-9755552-4-8. 4. The user agrees to contact individual Network sites to discuss the nature of intended data use and collaboration before using the data. 5. The user agrees to include the following statement in any form of publication or presentation using Network data: “Datasets were provided by the USDA’s National Wind Erosion Research Network”. 6. The user agrees to send a copy of any publication or report based on Network data to the Information Manager prior to submitting it for publication. 7. The user agrees that publications, reports, presentations or links to those materials using Network data may be published on the Network website for access by stakeholders, collaborators and the general public. 8. All efforts are made for quality assurance and quality control of the online Network data, and that the data is up to date, but the National Wind Erosion Research Network program cannot take responsibility for any errors in the online data or in analysis or judgment resulting from the data use.",
+     "ptcontact":{
+       "cntinfo":{
+         "cntperp":{
+           "cntper":"Ericha Courtright",
+           "cntorg":"Jornada Experimental Range"
+         },
+         "cntpos": "Information Manager &amp; Website Developer",
+         "cntaddr":{
+           "addrtype": "mailing and physical",
+           "address": "P.O.Box 30003, MSC 3 JER, NMSU",
+           "city":"Las Cruces",
+           "state": "NM",
+           "postal":"88003",
+           "country":"US"
+         }
+       }
+     }
 
   }
 }
