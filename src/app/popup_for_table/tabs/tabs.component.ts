@@ -10,7 +10,8 @@ import { retryWhen } from 'rxjs/operators';
 import { P } from '@angular/cdk/keycodes';
 import * as convert from 'xml-js'
 import {UtilitiesService} from 'src/app/services/utilities.service' 
-// import * as data from '../assets/xml_desc.json'
+import * as data from '../../../assets/xml_desc.json'
+import format from 'xml-formatter'
 
 interface Res{
   tables:[]
@@ -32,6 +33,7 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input('ahsi') random:string
   tabs = new Set()
   selected = new FormControl(0)
+  tableChoice
   // table data for each table in tab
   public tabledataSubscription:Subscription
   public unsubscribeSubscription:Subscription
@@ -66,13 +68,19 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
 
       // once schemaTable is updated, will pull field data from there 
       // and use this.util.xmlCreate
-      let options = {compact:true, spaces:4}
-      let preXml = JSON.stringify(json)
-      console.log(preXml)
-      let result = convert.json2xml(preXml, options)
-      this.xmlObj = result
-      // console.log(this.xmlObj)
-      console.log(result)
+      if(this.tableChoice){
+        // console.log(this.tableChoice)
+        console.log(format(`${this.util.xmlCreate(this.tableChoice,data)}`))
+        // console.log(format(`${this.util.xmlCreate(`${this.tableChoice}`,data)}`))
+      }
+      
+      // let options = {compact:true, spaces:4}
+      // let preXml = JSON.stringify(json)
+      // console.log(preXml)
+      // let result = convert.json2xml(preXml, options)
+      // this.xmlObj = result
+      // // console.log(this.xmlObj)
+      // console.log(result)
     })
     // currently: just exchanges one array for the other
     this.tableTrimmerSubscription = this.str.publicTables.subscribe((res:Res)=>{
@@ -136,6 +144,7 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.tableCols = []
       console.log(dropDownChoice)
     if(dropDownChoice){
+      this.tableChoice = dropDownChoice.data
       if(dropDownChoice.data!==undefined){
         this.dataSupplier = this.apiservice.getData(dropDownChoice.data).subscribe(res=>{
           
