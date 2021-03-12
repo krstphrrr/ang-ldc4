@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { AboutSelService } from '../services/about-sel.service'
+
+import { UtilitiesService } from '../services/utilities.service'
 import { Subscription } from 'rxjs'
 
 @Component({
@@ -13,18 +14,19 @@ export class AboutComponent implements OnInit {
 
 
   constructor(
-    public about: AboutSelService
+    
+    public util: UtilitiesService,
   ) {
-    this.subscription = about.option$.subscribe(
+    this.subscription = util.option$.subscribe(
       abt => {
-        console.log(abt)
+        // console.log(abt)
         this.isAbout = abt
       }
     )
    }
 
   ngOnInit(){
-    console.log(this.isAbout)
+    // console.log(this.isAbout)
 
   }
   displayAbout(){

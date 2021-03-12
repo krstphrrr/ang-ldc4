@@ -1,12 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-// import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
+
 import { environment as env } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { MapComponent } from './map/map.component';
 import { LearnComponent } from './learn/learn.component';
-import { DataComponent } from './data/data.component';
+
 import { AboutComponent } from './about/about.component';
 import { FolderComponent } from './folder/folder.component';
 import { UsersComponent } from './users/users.component';
@@ -25,11 +25,8 @@ import { MatMenuModule } from '@angular/material/menu'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { PanelComponent } from './map/controls/panel/panel/panel.component';
-import { LoginComponent } from './header/login/login.component';
 import { Routes, RouterModule } from '@angular/router'
-// import { AuthService } from './auth/auth.service'
-// import { AuthGuard } from './auth/auth.guard';
-import { CallbackComponent } from './callback/callback.component'
+
 import { MatButtonToggleModule } from '@angular/material/button-toggle'
 import { MatIconModule } from '@angular/material/icon'
 import {MatSliderModule} from '@angular/material/slider';
@@ -55,7 +52,7 @@ import { DragpopComponent } from './map/dragpop/dragpop.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 // import { InterceptorService } from './services/interceptor.service';
 import { MAT_TABS_CONFIG } from '@angular/material/tabs';
-import { AltwoodyComponent } from './altwoody/altwoody.component';
+
 import { BaselayersComponent } from './map/baselayers/baselayers.component';
 import { OverlaysComponent } from './map/overlays/overlays.component';
 import { PopupForTableComponent } from './popup_for_table/popup-for-table/popup-for-table.component';
@@ -84,9 +81,6 @@ const appRoutes: Routes = [
   { path: 'learn', 
     component: LearnComponent },
 
-  { path: 'data', 
-    component: DataComponent },
-
   { path: 'about', 
     component: AboutComponent },
 
@@ -107,20 +101,16 @@ const appRoutes: Routes = [
     HeaderComponent,
     MapComponent,
     LearnComponent,
-    DataComponent,
     AboutComponent,
     FolderComponent,
     UsersComponent,
     PanelComponent,
-    LoginComponent,
-    CallbackComponent,
     PlotsComponent,
     PlotListComponent,
     LayersComponent,
     ProfileComponent,
     SummaryTableComponent,
     DragpopComponent,
-    AltwoodyComponent,
     BaselayersComponent,
     OverlaysComponent,
     PopupForTableComponent,

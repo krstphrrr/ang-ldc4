@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import {create} from 'xmlbuilder2'
 // import * as data from '../assets/xml_desc.json'
 // import format from 'xml-formatter'
@@ -8,11 +9,18 @@ import {create} from 'xmlbuilder2'
   providedIn: 'root'
 })
 export class UtilitiesService {
+  // about page
+  private option = new Subject<string>()
+  public option$ = this.option.asObservable()
+
 
   constructor() { }
 
+  saveOption(str:string){
+    this.option.next(str)
+  }
+
   xmlCreate(table,dat){
-    
     if(Object.keys(dat.default).includes(table)){
       let jsonfile = dat.default[table]
       let docu = create({version:'1.0', encoding:'UTF-8'})

@@ -3,9 +3,9 @@ import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { Router } from '@angular/router'
 import {LayerService} from '../services/layer.service'
-import { AboutSelService } from '../services/about-sel.service'
+
 import { LogoutComponentComponent} from '../auth/logout-component/logout-component.component'
-// import 
+import { UtilitiesService } from '../services/utilities.service'
 import {
   MatSnackBar,
   MatSnackBarHorizontalPosition,
@@ -39,7 +39,7 @@ export class HeaderComponent {
     private router:Router,
     private layerServ: LayerService,
     public auth: AuthService,
-    public about: AboutSelService,
+    public util: UtilitiesService,
     // private _snackBar: MatSnackBar,
     ) {
        this.openSnackBar()
@@ -53,13 +53,13 @@ export class HeaderComponent {
       }
       if(feature==="about"){
         // console.log(feature)
-        this.about.saveOption(feature)
+        this.util.saveOption(feature)
       }
       if(feature==="partners"){
-        this.about.saveOption(feature)
+        this.util.saveOption(feature)
       }
       if(feature==="development"){
-        this.about.saveOption(feature)
+        this.util.saveOption(feature)
       }
       this.featureSelected.emit(feature)
       // if (feature==='map'){
@@ -68,6 +68,7 @@ export class HeaderComponent {
       // }
   }
   openSnackBar() {
+    // under construction banner
     this._snackBar.open('Under construction!🚧', 'Dismiss', {
       duration: this.durationInSeconds*1000,
       horizontalPosition: this.horizontalPosition,
