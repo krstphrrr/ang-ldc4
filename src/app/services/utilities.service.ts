@@ -15,7 +15,7 @@ export class UtilitiesService {
     
     if(Object.keys(dat.default).includes(table)){
       let jsonfile = dat.default[table]
-      let docu = create({version:'1.0'})
+      let docu = create({version:'1.0', encoding:'UTF-8'})
       .ele('metadata')
         .ele('idinfo')
           .ele('citation')
@@ -40,20 +40,30 @@ export class UtilitiesService {
                   .up()
                 .up()
                 .ele('current').txt(jsonfile.timeperd.current).up()
-            .up()
+              .up()
             .ele('status')
               .ele('progress').txt(jsonfile.status.progress).up()
-              .ele('update').txt(jsonfile.status.update).up()
-            .up()
+              .ele('update').txt(jsonfile.status.update).up().up()
             .ele("spdom")
               .ele("bounding")
-                .ele("westbc").up()
-                .ele("eastbc").up()
-                .ele("northbc").up()
-                .ele("southbc").up()
-              .up()
+                  .ele("westbc").up()
+                  .ele("eastbc").up()
+                  .ele("northbc").up()
+                  .ele("southbc").up()
+                .up()
             .ele("keywords")
-            return docu
+              .ele("theme")
+                .ele("themekt").txt(jsonfile.keywords.theme1.themekt).up()
+                .ele("themekey").txt(jsonfile.keywords.theme1.themekey1).up()
+                .ele("themekey").txt(jsonfile.keywords.theme1.themekey2).up()
+                .ele("themekey").txt(jsonfile.keywords.theme1.themekey3).up()
+                .up()
+              .ele("theme")
+                .ele("themekt").txt(jsonfile.keywords.theme2.themekt).up()
+                  .ele("themekey").txt(jsonfile.keywords.theme2.themekey1).up()
+            // end 
+            .up()
+            return docu.end({ prettyPrint: true })
     } else{
       console.log(`Table '${table}' not implemented!`)
     }    

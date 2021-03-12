@@ -11,7 +11,7 @@ import { P } from '@angular/cdk/keycodes';
 import * as convert from 'xml-js'
 import {UtilitiesService} from 'src/app/services/utilities.service' 
 import * as data from '../../../assets/xml_desc.json'
-import format from 'xml-formatter'
+// import format from 'xml-formatter'
 
 interface Res{
   tables:[]
@@ -41,6 +41,7 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
   public extract
   myObj = {}
   xmlObj
+  xmlList = {}
   csvPack:csvPacks = {}
 
   //table popu
@@ -69,8 +70,10 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
       // once schemaTable is updated, will pull field data from there 
       // and use this.util.xmlCreate
       if(this.tableChoice){
+        this.xmlObj = this.util.xmlCreate(this.tableChoice,data)
+        this.xmlList[this.tableChoice] = this.xmlObj
         // console.log(this.tableChoice)
-        console.log(format(`${this.util.xmlCreate(this.tableChoice,data)}`))
+        
         // console.log(format(`${this.util.xmlCreate(`${this.tableChoice}`,data)}`))
       }
       
@@ -270,10 +273,16 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
         zip.file(blobName+".csv",csvBlob)
       }
     }
-
-    if(this.xmlObj!=undefined){
-      zip.file("tableSchemas.xml",this.xmlObj)
+    
+    if(Object.keys(this.xmlList).length>=0){
+      // console.log(this.xmlList)
+      for(const [key,value] of Object.entries(this.xmlList)){
+        zip.file(`${key}.xml`,this.xmlList[key])
+      }
     }
+    // if(this.xmlObj!=undefined){
+    //   zip.file("tableSchemas.xml",this.xmlObj)
+    // }
     zip.generateAsync({type:'blob'}).then((content)=>{
       if(content){
         saveAs(content,zipName)

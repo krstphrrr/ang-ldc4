@@ -28,5 +28,5 @@
 </mat-tab-group>
 <button 
         mat-button
-        
-        (click)="testBtn()">TEST</button>
+        [ngStyle]="{'visibility':(xmlObj)? 'visible':'hidden'}"
+        (click)="testBtn()">Download</button>
