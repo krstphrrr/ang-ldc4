@@ -67,7 +67,48 @@
       },
       "datacred":"US Department of Agriculture’s Agricultural Research Service (ARS) and Natural Resources Conservation Service (NRCS), the Department of the Interior’s Bureau of Land Management (BLM) and US Geological Survey (USGS), the Department of Defense (DoD), and The Nature Conservancy (TNC).",
       "native":"Height data are stored in Database for Inventory, Monitoring and Assessment (DIMA) and uploaded to wind erosion network website (http://winderosionnetwork.org) using the Data Submission Portal. DIMA is a free customizable software tool for data collection, management, and interpretation, which can easily be used without extensive knowledge of Access."
-    }
+    },
+    "dataqual":{
+      "attracc":{
+        "attraccr":"Height data files have been error checked and are error free."
+      },
+      "logic":"Height data files have been error checked and are error free.",
+      "complete":{},
+      "lineage":{
+        "procstep":{
+          "procdesc":"",
+          "procdate":"20190610"
+        }
+      }
+    },
+    "spdoinfo":{
+      "direct":"Vector",
+      "ptvctinf":{
+        "sdtsterm":{
+          "sdtstype":"Entity point",
+          "ptvctcnt":"3"
+        }
+        
+      }
+    },
+    "spref":{
+      "horizsys":{
+        "geograph":{
+          "latres":"",
+          "longres":"",
+          "geogunit":"Decimal degrees"
+        },
+        "geodetic":{
+          "horizdn":"North American Datum of 1983 (NAD 83)",
+          "ellips":"Geodetic Reference System 1980",
+          "semiaxis":"6378137.0",
+          "denflat":"298.257223563"
+        }
+      }
+    },
+    "eainfo":{},
+    "distinfo":{},
+    "metainfo":{}
       
   },
   "dataGap":{
