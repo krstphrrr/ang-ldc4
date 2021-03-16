@@ -220,5 +220,114 @@
     "eainfo":{},
     "distinfo":{},
     "metainfo":{}
+  },
+  "dataLPI":{
+    "idinfo":{
+      "citation":{
+        "citeinfo":{
+          "origin":"Nicholas Webb, Jornada Experimental Range(JER)",
+          "pubupdate":"20190610",
+          "title":"Line Point Intercept (LPI) Data",
+          "geoform":"tabular digital data",
+          "onlink":"http://winderosionnetwork.org"
+        }
+      },
+      "descript":{
+        "abstract":"Measurements of soil biological crust cover and rock cover are captured in the Line Point Intercept (LPI) method. The Line-point intercept method can be used to quantify invasive species cover changes where the species is a significant component of the plant community (generally greater than five percent cover). Line-point intercept cover and composition indicators also often reflect the resistance of a site to invasive species establishment. The transect design enables detailed directional estimates of the fractional vegetation cover, vegetation canopy gap-size distribution and canopy height to be acquired in an efficient way that can be related to the meteorological tower measurements of aerodynamic roughness height (z0) and horizontal sediment mass flux from the MWAC samplers. References: a)Webb NP, Herrick JE, Van Zee, JW, Hugenholtz CH, Zobeck TM, Okin GS, 2015. Standard Methods for Wind Erosion Research and Model Development: Protocol for the National Wind Erosion Research Network. USDA ARS Jornada Experimental Range. Las Cruces, NM, USA. ISBN 978-0-9755552-4-8.)",
+        "purpose":"Line-point intercept (LPI) provides data that can be used to calculate plant cover and composition indicators, including the percentage bare ground, foliar and basal cover by species and plant functional or structural groups.",
+        "supplinf":"LPI measurements should be made at a sampling interval of 25 cm. This will ensure consistency in the measurements and ability to detect cover types at both cropland and rangeland sites. -Vegetation types should be recorded using the USDA plant codes, which can be found at: https://plants.sc.egov.usda.gov/java/ -Specimens of unknown plants should be kept for later identification. -The following soil surface codes should be used: rock fragment sizes: FG: 2-5mm, GR:&gt;5-76mm, CB:76-250mm, ST:250-600mm; BR (bedrock), LC (lichen crust), CY (cyanobacteria crust), D (duff), AG (soil aggregates/clods, &gt;2mm), LM (loose erodible soil, &lt;2mm), PC (physically crusted soil), EL (embedded litter), M (moss). -Note that AG, LM, and PC soil surface codes and DN/S (dung), AM (animal material, unattached) and HT (human trash) in the mid-layer codes are not specified in the Monitoring Manual, but should be used here. -Vegetation sampling should be conducted on three (3) 100 m transects at both cropland and rangeland sites. -The transects should follow bearings of 0°, 60° and 120°, intersecting at the center of the site (cropland sites; Figure 9) or at the meteorological tower (rangeland sites; Figure 10). -Data points for LPI falling on the concrete tower base should be recorded as “PADD” on the data recording sheets in the Top, Soil Surface, and Height columns. The concrete start and end distances should be recorded as PADD start and PADD end on top of the Gap recording sheet. -It is acceptable and not an issue if a whole transect falls in a row interspace at cropland sites. This will provide information required for model development. -Measurements along the transects will be treated as repeated measures. Where practical (e.g., rangeland sites), transect start and end points should be marked with rebar stakes to ensure that transect lines are in exactly the same place during each measurement. Markers on field boundaries may be used at cropland sites. Data recording and collection: -A detailed descriptions of both sample collection methods and data recording are available on the Documents page at http://winderosionnetwork.org. Quick guide for documents: -LPI data : stored in DIMA available on Data Portal page at http://winderosionnetwork.org. -LPI Recording Sheet: Documents page at http://winderosionnetwork.org. -LPI Protocol: Documents page at http://winderosionnetwork.org. References: a)N. Webb, Herrick, J., Van Zee, J., Courtright, E., Hugenholtz, C., Zobeck, T. M., Okin, G. S., Barchyn, T. E., Billings, B. J., Boyd, R., Clingan, S., Cooper, B., Duniway, M. C., Derner, J. D., Fox, F. A., Havstad, K. M., Heilman, P., LaPlante, V., Ludwig, N. A., Metz, L. J., Nearing, M. A., M. Norfleet, L., Pierson, F. B., Sanderson, M. A., Sharratt, B. S., Steiner, J. L., Tatarko, J., Tedela, N. H., Toledo, D., Unnasch, R. S., R. Van Pelt, S., and Wagner, L., The National Wind Erosion Research Network: Building a standardized long-term data resource for aeolian research, modeling and land management, Aeolian Research, vol. 22, pp. 23-36, 2016. b)Webb NP, Herrick JE, Van Zee, JW, Hugenholtz CH, Zobeck TM, Okin GS, 2015. Standard Methods for Wind Erosion Research and Model Development: Protocol for the National Wind Erosion Research Network. USDA ARS Jornada Experimental Range. Las Cruces, NM, USA. ISBN 978-0-9755552-4-8."
+      },
+      "timeperd":{
+        "timeinfo":{
+          "sngdate":{
+            "caldate":"20150814"
+          }
+        },
+        "current":"ground condition"
+      },
+      "status":{
+        "progress":"In work",
+        "update":"Continually"
+      },
+      "spdom":{},
+      "keywords":{
+        "theme1":{
+          "themekt":"ISO 19115 Topic Category",
+          "themekey1":"geoscientificInformation",
+          "themekey2":"climatologyMeteorologyAtmosphere",
+          "themekey3":"environment"
+        },
+        "theme2":{
+          "themekt":"LPI data",
+          "themekey1":"LPI",
+          "themekey2":"line point",
+          "themekey3":"intercept"
+        }
+      },
+      "accconst":"The National Wind Erosion Research Network is committed to providing access to data collected as part of Network activities to all stakeholders, collaborators and the general public. Anyone who wishes to access Network data should contact the Information Manager or relevant Site Contacts prior to doing so. Access to the National Wind Erosion Research Network resources is controlled by resource type to protect collaborator research and publishing requirements and sensitive material regarding the location of some Network sites.",
+      "useconst":"Use of National Wind Erosion Research Network data is subject to acceptance of the following terms: 1. User Affiliation: Network users including any person directly affiliated with the Network, either as a stakeholder (associated with running a Network site) or collaborator (person working with one or more Network sites on a related project). 2. Access Level: Data accessible following registration and login (Project Web). The user registers their name and contact details prior to accessing Network data. This information will be used to notify data users of any changes to content of the website, data, or protocols and for reporting purposes. 3. The user agrees to acknowledge the data source in any reports, presentation, publications, etc. arising from the data use and analyses by citing the following publication: a) N. Webb, Herrick, J., Van Zee, J., Courtright, E., Hugenholtz, C., Zobeck, T. M., Okin, G. S., Barchyn, T. E., Billings, B. J., Boyd, R., Clingan, S., Cooper, B., Duniway, M. C., Derner, J. D., Fox, F. A., Havstad, K. M., Heilman, P., LaPlante, V., Ludwig, N. A., Metz, L. J., Nearing, M. A., M. Norfleet, L., Pierson, F. B., Sanderson, M. A., Sharratt, B. S., Steiner, J. L., Tatarko, J., Tedela, N. H., Toledo, D., Unnasch, R. S., R. Van Pelt, S., and Wagner, L., The National Wind Erosion Research Network: Building a standardized long-term data resource for aeolian research, modeling and land management, Aeolian Research, vol. 22, pp. 23-36, 2016. b) Webb NP, Herrick JE, Van Zee, JW, Hugenholtz CH, Zobeck TM, Okin GS, 2015. Standard Methods for Wind Erosion Research and Model Development: Protocol for the National Wind Erosion Research Network. USDA ARS Jornada Experimental Range. Las Cruces, NM, USA. ISBN 978-0-9755552-4-8. 4. The user agrees to contact individual Network sites to discuss the nature of intended data use and collaboration before using the data. 5. The user agrees to include the following statement in any form of publication or presentation using Network data: “Datasets were provided by the USDA’s National Wind Erosion Research Network”. 6. The user agrees to send a copy of any publication or report based on Network data to the Information Manager prior to submitting it for publication. 7. The user agrees that publications, reports, presentations or links to those materials using Network data may be published on the Network website for access by stakeholders, collaborators and the general public. 8. All efforts are made for quality assurance and quality control of the online Network data, and that the data is up to date, but the National Wind Erosion Research Network program cannot take responsibility for any errors in the online data or in analysis or judgment resulting from the data use.",
+      "ptcontact":{
+         "cntinfo":{
+           "cntperp":{
+             "cntper":"Ericha Courtright",
+             "cntorg":"Jornada Experimental Range"
+           },
+           "cntpos": "Information Manager &amp; Website Developer",
+           "cntaddr":{
+             "addrtype": "mailing and physical",
+             "address": "P.O.Box 30003, MSC 3 JER, NMSU",
+             "city":"Las Cruces",
+             "state": "NM",
+             "postal":"88003",
+             "country":"US"
+           },
+           "cntvoice":"5756464147",
+           "cntemail":"ericha@nmsu.edu"
+         }
+      },
+      "datacred":"US Department of Agriculture’s Agricultural Research Service (ARS) and Natural Resources Conservation Service (NRCS), the Department of the Interior’s Bureau of Land Management (BLM) and US Geological Survey (USGS), the Department of Defense (DoD), and The Nature Conservancy (TNC).",
+      "native":"LPI data are stored in Database for Inventory, Monitoring and Assessment (DIMA) and uploaded to wind erosion network website (http://winderosionnetwork.org) using the Data Submission Portal. DIMA is a free customizable software tool for data collection, management, and interpretation, which can easily be used without extensive knowledge of Access."
+    },
+    "dataqual":{
+      "attracc":{
+        "attraccr":"LPI data files have been error checked and are error free."
+      },
+      "logic":"LPI data files have been error checked and are error free.",
+      "complete":{},
+      "lineage":{
+        "procstep":{
+          "procdesc":"",
+          "procdate":"20190610"
+        }
+      }
+    },
+    "spdoinfo":{
+      "direct":"Vector",
+      "ptvctinf":{
+        "sdtsterm":{
+          "sdtstype":"Entity point",
+          "ptvctcnt":"3"
+        }
+        
+      }
+    },
+    "spref":{
+      "horizsys":{
+        "geograph":{
+          "latres":"",
+          "longres":"",
+          "geogunit":"Decimal degrees"
+        },
+        "geodetic":{
+          "horizdn":"North American Datum of 1983 (NAD 83)",
+          "ellips":"Geodetic Reference System 1980",
+          "semiaxis":"6378137.0",
+          "denflat":"298.257223563"
+        }
+      }
+    },
+    "eainfo":{},
+    "distinfo":{},
+    "metainfo":{}
   }
 }

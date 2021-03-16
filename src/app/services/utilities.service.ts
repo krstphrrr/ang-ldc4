@@ -155,6 +155,54 @@ export class UtilitiesService {
     // .up()
     return xmlRoot
   }
+
+  dataqualXML(xmlRoot, table, dat){
+    let jsonfile = dat.default[table]
+    let root = xmlRoot.ele("dataqual")
+    if(Object.keys(jsonfile).includes('dataqual')){
+        root.ele("attracc")
+          .ele("attraccr").txt(jsonfile.dataqual.attracc.attraccr).up()
+            .ele("logic").txt(jsonfile.dataqual.attracc.logic).up()
+            .ele("complete").up()
+            .ele("lineage")
+                .ele("procstep")
+                  .ele("procdesc").up()
+                  .ele("procdate").txt(jsonfile.dataqual.lineage.procstep.procdate).up()
+                .up()
+    }
+    return root
+  }
+
+  spdoinfoXML(xmlRoot,table,dat){
+    let jsonfile = dat.default[table]
+    let root = xmlRoot.ele("spdoinfo")
+    if(Object.keys(jsonfile).includes('spdoinfo')){
+      root.ele("direct").txt(jsonfile.spdoinfo.direct).up()
+      .ele("ptvctinf")
+        .ele("sdtsterm")
+          .ele("sdtstype").txt(jsonfile.spdoinfo.ptvctinf.sdtsterm.sdtstype).up()
+          .ele("ptvctcnt").txt(jsonfile.spdoinfo.ptvctinf.sdtsterm.ptvctcnt).up()
+    }
+  return root
+  }
+
+  sprefXML(xmlRoot,table,dat){
+    let jsonfile = dat.default[table]
+    let root = xmlRoot.ele("spref")
+    if(Object.keys(jsonfile).includes('spref')){
+      root.ele("horizsys")
+        .ele("geograph")
+          .ele("latres").txt().up()
+          .ele("longres").txt().up()
+          .ele("geogunit").txt(jsonfile.spref.horizsys.geograph.geounit).up()
+          .up()
+        .ele("geodetic")
+          .ele("horizdn").txt(jsonfile.spref.horizsys.geodetic.horizdn).up()
+          .ele("ellips").txt(jsonfile.spref.horizsys.geodetic.ellips).up()
+          .ele("semiaxis").txt(jsonfile.spref.horizsys.geodetic.semiaxis).up()
+          .ele("denflat").txt(jsonfile.spref.horizsys.geodetic.denflat).up()
+    }
+  }
   finishXML(incXML){
     return incXML.end({pretty:true})
   }
