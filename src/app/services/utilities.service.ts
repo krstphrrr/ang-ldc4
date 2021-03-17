@@ -21,7 +21,7 @@ export class UtilitiesService {
     this.option.next(str)
   }
 
-  xmlAssembler(table, json){
+  xmlAssembler(table, json, coljson){
     console.log(table,json)
     let setup = this.setupXML(table,json)
     console.log(setup)
@@ -32,8 +32,12 @@ export class UtilitiesService {
     let spdoinfo = this.spdoinfoXML(dataqual, table, json)
     console.log(spdoinfo)
     let spref = this.sprefXML(spdoinfo,table, json)
-    console.log(spref)
-    let finalxml = this.finishXML(spref)
+    console.log({"cosa1":spref, "cosa2":table, "cosa3":coljson, "cosa4":json})
+    let colset = this.columnsXML(spref,table,coljson,json)
+
+    let distinfo = this.distinfoXML(colset,table,json)
+    let metainfo = this.metainfoXML(distinfo, table, json)
+    let finalxml = this.finishXML(metainfo)
     console.log(finalxml)
     return finalxml
   }
@@ -169,6 +173,120 @@ export class UtilitiesService {
     }
     return root
   }
+
+  columnsXML(rootXml,table,columns, dat){
+    let json = dat.default[table]
+    
+    let full = columns
+    let root = rootXml.ele("eainfo")
+    let det = root.ele("detailed")
+      .ele("enttyp")
+        .ele("enttypl").txt(json.eainfo.detailed.enttyp.enttypl).up()
+        .ele("enttypd").up()
+        .ele("enttypds").txt(json.eainfo.detailed.enttyp.enttypds).up()
+        .up()
+    
+    full.forEach(element => {
+      if(element["Table"]===table){
+        console.log(element)
+        let atr = det.ele("attr")
+                      .ele("attrlabl").txt(element.Field).up()
+                      .ele("attrdef").txt(element.Description).up()
+                      .ele("attrdefs").txt(element["Notes/Updates"]?element["Notes/Updates"]:"").up()
+                      .ele("attrdomv")
+            if(element.DataType==="Date"){
+              atr.ele("udom").txt("MM/DD/YYYY MM:SS").up()
+            } else{
+              atr.ele("rdom")
+                .ele("rdommin").txt(element["Range Minimum"]?element["Range Minimum"]:"").up()
+                .ele("rdommax").txt(element["Range Maximum"]?element["Range Maximum"]:"").up()
+                .ele("attrunit").txt(element["Units of Measure"]?element["Units of Measure"]:"").up()
+            }
+      }
+    });
+    return root
+  }
+
+  distinfoXML(xmlRoot,table,dat){
+    let jsonfile = dat.default[table]
+    let root = xmlRoot.ele("distinfo")
+    if(Object.keys(jsonfile).includes('distinfo')){
+      root.ele("distrib")
+            .ele("cntinfo")
+              .ele("cntperp")
+                .ele("cntper").txt(jsonfile.distinfo.distrib.cntinfo.cntperp.cntper).up()
+                .ele("cntorg").txt(jsonfile.distinfo.distrib.cntinfo.cntperp.cntorg).up()
+                .up()
+              .ele("cntpos").txt(jsonfile.distinfo.distrib.cntinfo.cntpos).up()
+              .ele("cntaddr")
+                .ele("addrtype").txt(jsonfile.distinfo.distrib.cntinfo.cntaddr.addrtype).up()
+                .ele("address").txt(jsonfile.distinfo.distrib.cntinfo.cntaddr.address).up()
+                .ele("city").txt(jsonfile.distinfo.distrib.cntinfo.cntaddr.city).up()
+                .ele("state").txt(jsonfile.distinfo.distrib.cntinfo.cntaddr.state).up()
+                .ele("postal").txt(jsonfile.distinfo.distrib.cntinfo.cntaddr.postal).up()
+                .ele("country").txt(jsonfile.distinfo.distrib.cntinfo.cntaddr.country).up()
+                .up()
+              .ele("cntvoice").txt(jsonfile.distinfo.distrib.cntinfo.cntvoice).up()
+              .ele("cntemail").txt(jsonfile.distinfo.distrib.cntinfo.cntemail).up()
+              .up()
+            .up()
+          // .up()
+          .ele("distliab").txt(jsonfile.distinfo.distliab).up()
+          .ele("storder")
+            .ele("digform")
+              .ele("digtinfo")
+                .ele("formname").txt(jsonfile.distinfo.stdorder.digform.digtinfo.formname).up()
+              .up()
+              .ele("digtopt")
+                .ele("onlinopt")
+                  .ele("computer")
+                    .ele("networka")
+                      .ele("networkr").txt(jsonfile.distinfo.stdorder.digform.digtopt.onlinopt.computer.networka.networkr).up()
+                    .up()
+                  .up()
+                .up()
+              .up()
+            .up()
+            .ele("fees").txt(jsonfile.distinfo.stdorder.fees).up()
+          .up()
+    }
+    return root
+  }
+
+  metainfoXML(xmlRoot,table,dat){
+    let jsonfile = dat.default[table]
+    let root = xmlRoot.ele("metainfo")
+    // console.log(jsonfile)
+    if(Object.keys(jsonfile).includes('metainfo')){
+      console.log(jsonfile.metainfo)
+      root.ele("metd").txt(jsonfile.metainfo.metd).up() 
+      .ele("metc")
+        .ele("cntinfo")
+          .ele("cntperp")
+            .ele("cntper").txt(jsonfile.metainfo.metc.cntinfo.cntperp.cntper).up()
+            .ele("cntorg").txt(jsonfile.metainfo.metc.cntinfo.cntperp.cntorg).up()
+          .up()
+          .ele("cntpos").txt(jsonfile.metainfo.metc.cntinfo.cntpos).up()
+          .ele("cntaddr")
+            .ele("addrtype").txt(jsonfile.metainfo.metc.cntinfo.cntaddr.addrtype).up()
+            .ele("address").txt(jsonfile.metainfo.metc.cntinfo.cntaddr.address).up()
+            .ele("city").txt(jsonfile.metainfo.metc.cntinfo.cntaddr.city).up()
+            .ele("state").txt(jsonfile.metainfo.metc.cntinfo.cntaddr.state).up()
+            .ele("postal").txt(jsonfile.metainfo.metc.cntinfo.cntaddr.postal).up()
+            .ele("country").txt(jsonfile.metainfo.metc.cntinfo.cntaddr.country).up()
+          .up()
+          .ele("cntvoice").txt(jsonfile.metainfo.metc.cntinfo.cntvoice).up()
+          .ele("cntemail").txt(jsonfile.metainfo.metc.cntinfo.cntemail).up()
+        .up()
+      .up()
+      .ele("metstdn").txt(jsonfile.metainfo.metstdn).up()
+      .ele("metstdv").txt(jsonfile.metainfo.metstdv).up()
+        
+    }
+    return root
+  }
+
+
   finishXML(incXML){
     return incXML.end({pretty:true})
   }

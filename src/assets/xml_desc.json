@@ -106,9 +106,78 @@
         }
       }
     },
-    "eainfo":{},
-    "distinfo":{},
-    "metainfo":{}
+    "eainfo":{
+      "detailed":{
+        "enttyp":{
+          "enttypl":"Height Recording Sheet",
+          "enttypd":"",
+          "enttypds":"Producer defined"
+        }
+      }
+    },
+    "distinfo":{
+      "distrib":{
+        "cntinfo":{
+          "cntperp":{
+            "cntper":"Nicholas Webb",
+            "cntorg":"Jornada Experimental Range"
+          },
+          "cntpos":"Principal Investigator",
+          "cntaddr":{
+            "addrtype":"mailing and physical",
+            "address":"P.O. Box 30003, MSC 3JER, NMSU",
+            "city":"Las Cruces",
+            "state":"NM",
+            "postal":"88003",
+            "country":"US"
+          },
+          "cntvoice":"575 646 2263",
+          "cntemail":"nwebb@nmsu.edu"
+        }
+      },
+      "distliab":"Unless otherwise stated, all data, metadata and related materials are considered to satisfy the quality standards relative to the purpose for which the data were collected.",
+      "stdorder":{
+        "digform":{
+          "digtinfo":{
+            "formname":"Digital Data"
+          },
+          "digtopt":{
+            "onlinopt":{
+              "computer":{
+                "networka":{
+                  "networkr":"http://winderosionnetwork.org"
+                }
+              }
+            }
+          }
+        },
+        "fees":"None"
+      }
+    },
+    "metainfo":{
+      "metd":"20190610",
+      "metc":{
+        "cntinfo":{
+          "cntperp":{
+            "cntper":"Ericha Courtright",
+            "cntorg":"USDA-ARS Jornada Experimental Range"
+          },
+          "cntpos":"Information Manager",
+          "cntaddr":{
+            "addrtype":"mailing and physical",
+            "address":"2995 Knox St",
+            "city":"Las Cruces",
+            "state":"NM",
+            "postal":"88003",
+            "country":"United States"
+          },
+          "cntvoice":"5756464147",
+          "cntemail":"ericha@nmsu.edu"
+        }
+      },
+      "metstdn":"FGDC Content Standard for Digital Geospatial Metadata",
+      "metstdv":"FGDC-STD-001-1998"
+    }
       
   },
   "dataGap":{
