@@ -22,30 +22,39 @@ export class UtilitiesService {
   }
 
   xmlAssembler(table, json, coljson){
-    console.log(table,json)
-    let setup = this.setupXML(table,json)
-    console.log(setup)
-    let variablePart = this.variableXML(setup,table,json)
-    console.log(variablePart)
-    let dataqual = this.dataqualXML(variablePart, table, json)
-    console.log(dataqual)
-    let spdoinfo = this.spdoinfoXML(dataqual, table, json)
-    console.log(spdoinfo)
-    let spref = this.sprefXML(spdoinfo,table, json)
-    console.log({"cosa1":spref, "cosa2":table, "cosa3":coljson, "cosa4":json})
-    let colset = this.columnsXML(spref,table,coljson,json)
 
-    let distinfo = this.distinfoXML(colset,table,json)
-    let metainfo = this.metainfoXML(distinfo, table, json)
-    let finalxml = this.finishXML(metainfo)
-    console.log(finalxml)
+    let setup = this.setupXML(table,json)
+
+    let idinfo = this.idinfoXML(setup,table,json)
+
+    let dataqual = this.dataqualXML(idinfo, table, json)
+
+    let spdoinfo = this.spdoinfoXML(dataqual, table, json)
+ 
+    let spref = this.sprefXML(spdoinfo,table, json)
+
+    let cols = this.columnsXML(spref, table,coljson,json)
+
+    let dist = this.distinfoXML(cols,table,json)
+
+    let meta = this.metainfoXML(dist,table,json)
+  
+    let finalxml = this.finishXML(meta)
     return finalxml
   }
   setupXML(table,dat){
     let jsonfile = dat.default[table]
     let root = create({version:'1.0', encoding:'UTF-8'})
-    .ele('metadata')
-      .ele('idinfo')
+    return root
+  }
+
+  idinfoXML(xmlRoot,table,dat){
+    let jsonfile = dat.default[table]
+    // console.log(jsonfile)
+    // let root = create({version:'1.0', encoding:'UTF-8'})
+    let level1 = xmlRoot.ele('metadata')
+        // .ele('metadata')
+      let level2 = level1.ele('idinfo')
         .ele('citation')
           .ele('citeinfo')
             .ele('origin').txt(jsonfile.idinfo.citation.citeinfo.origin).up()
@@ -53,112 +62,103 @@ export class UtilitiesService {
             .ele('title').txt(jsonfile.idinfo.citation.citeinfo.title).up()
             .ele('geoform').txt(jsonfile.idinfo.citation.citeinfo.geoform).up()
             .ele('onlink').txt(jsonfile.idinfo.citation.citeinfo.onlink).up()
-            .up()
           .up()
         .up()
+        // .up()
         .ele('descript')
           .ele('abstract').txt(jsonfile.idinfo.descript.abstract).up()
           .ele('purpose').txt(jsonfile.idinfo.descript.purpose).up()
           .ele('supplinf').txt(jsonfile.idinfo.descript.supplinf).up()
+        .up()
+        .ele('timeperd')
+          .ele('timeinfo')
+            .ele('sngdate')
+              .ele('caldate').txt(jsonfile.idinfo.timeperd.timeinfo.sngdate.caldate).up()
+            .up()
           .up()
-          .ele('timeperd')
-            .ele('timeinfo')
-              .ele('sngdate')
-                .ele('caldate').txt(jsonfile.idinfo.timeperd.timeinfo.sngdate.caldate).up()
-                .up()
-              .up()
-              .ele('current').txt(jsonfile.idinfo.current).up()
-          .up()
-          .ele('status')
-            .ele('progress').txt(jsonfile.idinfo.status.progress).up()
-            .ele('update').txt(jsonfile.idinfo.status.update).up()
-          .up()
-    return root
-  }
-
-  variableXML(xmlRoot, table, dat){
-    // xml section of variable structure
-    let full = dat.default[table]
-    if(Object.keys(full.idinfo).includes('keywords')){
-      // inside the keywords section of the json
-      let themeCount = 0
-      for(let i of Object.keys(full.idinfo.keywords)){
-        // creating however many 'theme' 
-        xmlRoot.ele("theme")
-          if(Object.keys(full.idinfo.keywords[i]).includes('themekt')){
-            for(let j of Object.keys(full.idinfo.keywords[i])){
-              if(j.includes('themekt')){
-                console.log(full.idinfo.keywords[i])
-                xmlRoot.ele(j).txt(full.idinfo.keywords[i][j]).up()
-              } else if(/[0-9]/g.test(j)){
-                xmlRoot.ele(j.replace(/[0-9]/g,'')).txt(full.idinfo.keywords[i][j]).up()
+          .ele('current').txt(jsonfile.idinfo.current).up()
+        .up()
+        .ele('status')
+          .ele('progress').txt(jsonfile.idinfo.status.progress).up()
+          .ele('update').txt(jsonfile.idinfo.status.update).up()
+        .up()
+        for(let i of Object.keys(jsonfile.idinfo.keywords)){
+          // creating however many 'theme' 
+          level2.ele("theme")
+            if(Object.keys(jsonfile.idinfo.keywords[i]).includes('themekt')){
+              for(let j of Object.keys(jsonfile.idinfo.keywords[i])){
+                if(j.includes('themekt')){
+                  console.log(jsonfile.idinfo.keywords[i])
+                  level2.ele(j).txt(jsonfile.idinfo.keywords[i][j]).up()
+                } else if(/[0-9]/g.test(j)){
+                  level2.ele(j.replace(/[0-9]/g,'')).txt(jsonfile.idinfo.keywords[i][j]).up()
+                }
               }
             }
-          }
-      }
-    //
-    xmlRoot.ele("accconst").txt(full.idinfo["accconst"]).up()
-    xmlRoot.ele("useconst").txt(full.idinfo["useconst"]).up()
-    xmlRoot.ele("ptcontact")
+        }
+        level2.ele("accconst").txt(jsonfile.idinfo["accconst"]).up()
+        level2.ele("useconst").txt(jsonfile.idinfo["useconst"]).up()
+        level2.ele("ptcontact")
             .ele("cntinfo")
               .ele("cntperp")
-                .ele("cntper").txt(full.idinfo.ptcontact.cntinfo.cntperp.cntper).up()
-                .ele("cntorg").txt(full.idinfo.ptcontact.cntinfo.cntperp.cntorg).up().up()
-              .ele("cntpos").txt(full.idinfo.ptcontact.cntinfo.cntpos).up()
-              .ele("cntaddr")
-                .ele("addrtype").txt(full.idinfo.ptcontact.cntinfo.cntaddr.addrtype).up()
-                .ele("address").txt(full.idinfo.ptcontact.cntinfo.cntaddr.address).up()
-                .ele("city").txt(full.idinfo.ptcontact.cntinfo.cntaddr.city).up()
-                .ele("state").txt(full.idinfo.ptcontact.cntinfo.cntaddr.state).up()
-                .ele("postal").txt(full.idinfo.ptcontact.cntinfo.cntaddr.postal).up()
-                .ele("country").txt(full.idinfo.ptcontact.cntinfo.cntaddr.country).up().up()
-    xmlRoot.ele("datacred").txt(full.idinfo.datacred)
-    xmlRoot.ele("native").txt(full.idinfo.native).up().up()
-
-    } else {
-      console.log('no')
-    }
-    // .up()
-    return xmlRoot
+                .ele("cntper").txt(jsonfile.idinfo.ptcontact.cntinfo.cntperp.cntper).up()
+                .ele("cntorg").txt(jsonfile.idinfo.ptcontact.cntinfo.cntperp.cntorg).up()
+              .up()
+            .ele("cntpos").txt(jsonfile.idinfo.ptcontact.cntinfo.cntpos).up()
+            .ele("cntaddr")
+              .ele("addrtype").txt(jsonfile.idinfo.ptcontact.cntinfo.cntaddr.addrtype).up()
+              .ele("address").txt(jsonfile.idinfo.ptcontact.cntinfo.cntaddr.address).up()
+              .ele("city").txt(jsonfile.idinfo.ptcontact.cntinfo.cntaddr.city).up()
+              .ele("state").txt(jsonfile.idinfo.ptcontact.cntinfo.cntaddr.state).up()
+              .ele("postal").txt(jsonfile.idinfo.ptcontact.cntinfo.cntaddr.postal).up()
+              .ele("country").txt(jsonfile.idinfo.ptcontact.cntinfo.cntaddr.country).up()
+            .up()
+        level2.ele("datacred").txt(jsonfile.idinfo.datacred)
+        level2.ele("native").txt(jsonfile.idinfo.native)
+      
+    return level1
   }
 
   dataqualXML(xmlRoot, table, dat){
     let jsonfile = dat.default[table]
     let root = xmlRoot.ele("dataqual")
-    if(Object.keys(jsonfile).includes('dataqual')){
-        root.ele("attracc")
+    // if(Object.keys(jsonfile).includes('dataqual')){
+    let root2 = root.ele("attracc")
           .ele("attraccr").txt(jsonfile.dataqual.attracc.attraccr).up()
             .ele("logic").txt(jsonfile.dataqual.attracc.logic).up()
             .ele("complete").up()
             .ele("lineage")
-                .ele("procstep")
-                  .ele("procdesc").up()
-                  .ele("procdate").txt(jsonfile.dataqual.lineage.procstep.procdate).up()
-                .up()
-    }
-    return root
+              .ele("procstep")
+                .ele("procdesc").up()
+                .ele("procdate").txt(jsonfile.dataqual.lineage.procstep.procdate).up()
+              .up()
+            .up()
+          .up()
+        .up()
+    // }
+    return root2
   }
 
   spdoinfoXML(xmlRoot,table,dat){
     let jsonfile = dat.default[table]
-    let root = xmlRoot.ele("spdoinfo")
-    if(Object.keys(jsonfile).includes('spdoinfo')){
-      root.ele("direct").txt(jsonfile.spdoinfo.direct).up()
-      .ele("ptvctinf")
-        .ele("sdtsterm")
-          .ele("sdtstype").txt(jsonfile.spdoinfo.ptvctinf.sdtsterm.sdtstype).up()
-          .ele("ptvctcnt").txt(jsonfile.spdoinfo.ptvctinf.sdtsterm.ptvctcnt).up()
-    }
-  return root
+    xmlRoot.ele("spdoinfo")
+    // if(Object.keys(jsonfile).includes('spdoinfo')){
+   .ele("direct").txt(jsonfile.spdoinfo.direct).up()
+    .ele("ptvctinf")
+      .ele("sdtsterm")
+        .ele("sdtstype").txt(jsonfile.spdoinfo.ptvctinf.sdtsterm.sdtstype).up()
+       .ele("ptvctcnt").txt(jsonfile.spdoinfo.ptvctinf.sdtsterm.ptvctcnt).up()
+// }
+  return xmlRoot
   }
+
 
   sprefXML(xmlRoot,table,dat){
     let jsonfile = dat.default[table]
-    let root = xmlRoot.ele("spref")
-
-    if(Object.keys(jsonfile).includes('spref')){
-      root.ele("horizsys")
-        .ele("geograph")
+    xmlRoot.ele("spref")
+    // if(Object.keys(jsonfile).includes('spref')){
+      .ele("horizsys")
+      .ele("geograph")
           .ele("latres").txt().up()
           .ele("longres").txt().up()
           .ele("geogunit").txt(jsonfile.spref.horizsys.geograph.geounit).up()
@@ -168,24 +168,21 @@ export class UtilitiesService {
           .ele("ellips").txt(jsonfile.spref.horizsys.geodetic.ellips).up()
           .ele("semiaxis").txt(jsonfile.spref.horizsys.geodetic.semiaxis).up()
           .ele("denflat").txt(jsonfile.spref.horizsys.geodetic.denflat).up()
-    } else { 
-      console.log("NO HAY SPREF")
-    }
-    return root
+    // }
+    return xmlRoot
   }
 
-  columnsXML(rootXml,table,columns, dat){
-    let json = dat.default[table]
-    
-    let full = columns
-    let root = rootXml.ele("eainfo")
-    let det = root.ele("detailed")
+  columnsXML(rootXml,table,dat, jsonfile){
+    let json = jsonfile.default[table]
+    let full = dat
+    let det = rootXml.ele("eainfo")
+    .ele("detailed")
       .ele("enttyp")
         .ele("enttypl").txt(json.eainfo.detailed.enttyp.enttypl).up()
         .ele("enttypd").up()
         .ele("enttypds").txt(json.eainfo.detailed.enttyp.enttypds).up()
         .up()
-    
+      // console.log(full)
     full.forEach(element => {
       if(element["Table"]===table){
         console.log(element)
@@ -204,14 +201,14 @@ export class UtilitiesService {
             }
       }
     });
-    return root
+    return rootXml
   }
 
   distinfoXML(xmlRoot,table,dat){
     let jsonfile = dat.default[table]
-    let root = xmlRoot.ele("distinfo")
-    if(Object.keys(jsonfile).includes('distinfo')){
-      root.ele("distrib")
+    xmlRoot.ele("distinfo")
+    // if(Object.keys(jsonfile).includes('distinfo')){
+    .ele("distrib")
             .ele("cntinfo")
               .ele("cntperp")
                 .ele("cntper").txt(jsonfile.distinfo.distrib.cntinfo.cntperp.cntper).up()
@@ -249,8 +246,8 @@ export class UtilitiesService {
             .up()
             .ele("fees").txt(jsonfile.distinfo.stdorder.fees).up()
           .up()
-    }
-    return root
+    // }
+    return xmlRoot
   }
 
   metainfoXML(xmlRoot,table,dat){
