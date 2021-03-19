@@ -1,6 +1,10 @@
 name: CI_workflow_test
 
-on: [push]
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
   
 
 jobs:
