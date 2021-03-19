@@ -70,7 +70,7 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
       // once schemaTable is updated, will pull field data from there 
       // and use this.util.xmlCreate
       if(this.tableChoice){
-        // testing new repo owner
+        // testing new repo jobs
         this.xmlObj = this.util.xmlAssembler(this.tableChoice,data,json)
         this.xmlList[this.tableChoice] = this.xmlObj
         // console.log(this.tableChoice)
