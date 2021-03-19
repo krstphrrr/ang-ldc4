@@ -48,7 +48,7 @@ export class PopupForTableComponent implements OnInit, OnDestroy, OnChanges {
       }
     })
     this.auth.idTokenClaims$.subscribe(hmm =>{
-      console.log(hmm)
+      console.log("testing automation script")
     })
     
     
