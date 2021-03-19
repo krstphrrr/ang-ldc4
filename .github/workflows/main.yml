@@ -41,7 +41,7 @@ jobs:
           npm i
           npm run build
       - name: Push Build to Releases
-        uses: ldc_portal/release-action@v1
+        uses: ncipollo/release-action@v1
         with:
           artifacts: "dist/angular-githubaction/*"
-          token: ${{ secrets.TOKEN }}
+          token: ${{ secrets.LDC }}
