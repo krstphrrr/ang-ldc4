@@ -44,4 +44,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "dist/angular-githubaction/*"
+          tag: v1.0.*
           token: ${{ secrets.LDC }}
