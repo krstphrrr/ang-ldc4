@@ -11,6 +11,8 @@ import { P } from '@angular/cdk/keycodes';
 import * as convert from 'xml-js'
 import {UtilitiesService} from 'src/app/services/utilities.service' 
 import * as data from '../../../assets/xml_desc.json'
+
+
 // import format from 'xml-formatter'
 
 interface Res{
@@ -199,7 +201,10 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
     return ret
   }
   ngOnDestroy(): void {
-    this.dataSupplier.unsubscribe()
+    if(this.dataSupplier && !this.dataSupplier.closed){
+      this.dataSupplier.unsubscribe()
+    }
+    
     this.tableTrimmerSubscription.unsubscribe()
     this.csvFillerSubscription.unsubscribe()
     this.subscription.unsubscribe()
