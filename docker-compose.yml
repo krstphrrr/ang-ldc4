@@ -8,13 +8,15 @@ services:
     image: dima_api 
     ports: 
       - "5005:5005"
+    env_file: 
+      - /home/kris/dima_api/.env
     deploy:
       replicas: 2
       update_config:
         parallelism: 1
 
         failure_action: rollback
-        delay: 10s
+        delay: 20s
       
       restart_policy:
         condition: any
@@ -41,7 +43,7 @@ services:
         window: 120s
 
   main_api:
-    image: api2
+    image: main_api:latest
     ports: 
       - "5002:5002"
     env_file: 
