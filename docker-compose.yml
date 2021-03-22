@@ -41,7 +41,7 @@ services:
         window: 120s
 
   main_api:
-    image: api2
+    image: main_api:latest
     ports: 
       - "5002:5002"
     env_file: 
