@@ -135,7 +135,7 @@ const appRoutes: Routes = [
     MatSelectModule,
     MatTabsModule,
     MatIconModule,
-    RouterModule.forRoot(appRoutes),
+    RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
     CdkTableModule,
     HttpClientModule,
     FormsModule,

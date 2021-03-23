@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { DragpopComponent } from './dragpop.component';
 
@@ -6,7 +6,7 @@ describe('DragpopComponent', () => {
   let component: DragpopComponent;
   let fixture: ComponentFixture<DragpopComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ DragpopComponent ]
     })
