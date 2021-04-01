@@ -258,7 +258,8 @@ export class ApiService implements OnDestroy {
 
     this.httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':'application/json'
+        'Content-Type':'application/json',
+        'Access-Control-Allow-Origin':['http://localhost:4200','https://api.landscapedatacommons.org']
       }),
     }
     return this.http.get(this.tables, this.httpOptions).pipe(
