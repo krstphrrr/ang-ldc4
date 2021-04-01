@@ -123,7 +123,7 @@ services:
         window: 120s
 
   ldc_backend:
-  command: node app.js
+    command: node app.js
     image: ldc_backend 
     ports:
       - "5000:5000"
