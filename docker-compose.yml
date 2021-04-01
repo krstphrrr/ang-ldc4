@@ -121,6 +121,29 @@ services:
         delay: 5s
         max_attempts: 3
         window: 120s
+
+  ldc_backend:
+  command: node app.js
+    image: ldc_backend 
+    ports:
+      - "5000:5000"
+    env_file:
+      - /home/kris/ldc_backend/.env
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+
+        failure_action: rollback
+        delay: 10s
+      
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+
 # 
 # sudo docker stack deploy --compose-file docker-compose.yml api_services
 # to check stack:

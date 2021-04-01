@@ -11,8 +11,10 @@ export class socketDataService {
   
 
   constructor(){
-    this.socket = io(this.url,{path:'/ws2'}).connect()
-    // this.socket = io.connect(this.url) DEV
+    this.socket = io(this.url,{
+      path:'/ws2',
+      withCredentials:true
+    }).connect()
   }
 
 // this.socket.listen(eventname) to
