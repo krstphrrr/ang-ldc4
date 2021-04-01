@@ -12,6 +12,7 @@ export class socketDataService {
 
   constructor(){
     this.socket = io(this.url,{
+      transports: ['websocket'],
       path:'/ws2',
       withCredentials:true
     }).connect()
