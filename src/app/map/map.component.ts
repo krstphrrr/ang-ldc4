@@ -140,11 +140,12 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
         1. enable draggable popup (this.dragger = true)
         2. 
          */
-        // console.log(this.dragger)
+        console.log(this.dragger)
         if(this.dragger==false){
           //sending initial value to child component 
           this.message = dropdownOption.overlay.value
           this.dragger=true
+         
         }
         // console.log(`from dropdown to map. you chose: ${dropdownOption.overlay.value}`)
       })
@@ -322,6 +323,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
                   /* initial layer */
                   layers:[(initLayer?initLayer:this.sat)]
   })
+   
 
     this.mymap.on(L.Draw.Event.CREATED,(e)=>{
         this.layers2delete = e.layer
@@ -371,6 +373,14 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     })
 
     
+  }
+  onFocus(){
+    console.log("tiene el foco")
+    this.mymap.dragging.disable()
+  }
+
+  offFocus(){
+    this.mymap.dragging.enable()
   }
 
   backendGet(data){

@@ -99,25 +99,12 @@
 </div>
 <div id="container" #container >
   <div id="map">
-    <app-dragpop 
-      [message] = 'message'
-      *ngIf="dragger" 
-      class="example-box" 
-      cdkDrag
-      cdkDragBoundary="#container"
-      
-      style="position: absolute; top:0;left:50%;z-index: 3000;"
-      >
-      <ng-container>
-        <ng-content select="[slot=drag-handle]">
-        </ng-content>
-    </ng-container>
-
-    </app-dragpop>
     <app-popup-for-table
     *ngIf="tablepopup && tableData"
     class="table-popup"
-    style="position: absolute; top:0;left:50%;z-index: 3000;"
+    
+    (mousedown)="onFocus()"
+    (mouseup)="offFocus()"
     cdkDrag
       cdkDragBoundary="#container">
       

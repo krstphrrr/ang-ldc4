@@ -61,6 +61,7 @@ import { TableDropdownComponent } from './map/table-dropdown/table-dropdown.comp
 import { ChipsComponent } from './popup_for_table/chips/chips.component';
 import { TabsComponent } from './popup_for_table/tabs/tabs.component';
 import { SpinnerComponent } from './utils/spinner/spinner.component';
+import { ResizeDirective } from './directives/resize.directive';
 
 // token test
 export function tokenGetter() {
@@ -115,7 +116,8 @@ const appRoutes: Routes = [
     TableDropdownComponent,
     ChipsComponent,
     TabsComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    ResizeDirective
     
   ],
   imports: [

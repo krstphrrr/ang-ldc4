@@ -5,7 +5,7 @@ services:
   #   ports:
   #     - 4200:4200
   dima_api:
-    image: dima_api 
+    image: krstphr/dima_api 
     ports: 
       - "5005:5005"
     env_file: 

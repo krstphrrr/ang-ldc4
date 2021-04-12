@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, OnChanges, HostListener } from '@angular/core';
 import {Subscription} from 'rxjs'
 import { ApiService } from 'src/app/services/api.service';
 import { StringService } from 'src/app/services/string.service';
@@ -17,6 +17,21 @@ export class PopupForTableComponent implements OnInit, OnDestroy, OnChanges {
   public tabledataSubscription:Subscription
   public unsubscribeSubscription:Subscription
   public dataFlag
+
+  // component size
+  @Input('width') public width: number;
+  @Input('height') public height: number;
+  @Input('left') public left: number;
+  @Input('top') public top: number;
+  mouse 
+  @HostListener('window:mouseclick', ['$event'])
+  onMouseMove(event:MouseEvent){
+    this.mouse={
+      x: event.clientX,
+      y: event.clientY
+    }
+    console.log(event)
+  }
 
   //table popu
   tableCols = []

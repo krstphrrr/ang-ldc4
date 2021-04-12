@@ -22,6 +22,11 @@ export class UtilitiesService {
   }
 
   xmlAssembler(table, json, coljson){
+    /* Assembles an XML file from 
+    templates found locally ( arg: json ), 
+    and per table dynamic field values (args:table and coljson)
+    
+    */
 
     let setup = this.setupXML(table,json)
 
