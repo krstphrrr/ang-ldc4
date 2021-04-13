@@ -17,6 +17,9 @@ export class UtilitiesService {
   private mapDrag = new Subject()
   public mapDrag$ = this.mapDrag.asObservable()
 
+  private scrollGuard = new Subject()
+  public scrollGuard$ = this.scrollGuard.asObservable()
+
 
   constructor() { }
 
@@ -24,16 +27,11 @@ export class UtilitiesService {
     this.mapDrag.next(sig)
   }
 
-  disableMapDragging(mapObj, option){
-    if(mapObj && option){
-      if(option!==false){
-        mapObj.dragging.disable()
-      } else {
-        mapObj.dragging.enable()
-      }
-    }
+  scrollGuardSignal(sig:Boolean){
+    this.scrollGuard.next(sig)
   }
 
+  
   saveOption(str:string){
     this.option.next(str)
   }

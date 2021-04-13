@@ -4,7 +4,7 @@ table {
 
 
 .size-container{
-  max-width: 500px;
+  max-width:1000px;
   height:400px;
   width:auto;
   overflow: auto;
@@ -32,9 +32,9 @@ table {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.row{
-  max-height: 600px;
-  max-width: 600px;
+.contents{
+  max-height: auto;
+  max-width: auto;
   justify-content: center;
 }
 

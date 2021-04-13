@@ -105,7 +105,8 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public unsubscribeSubscription:Subscription;
   public dragTracker:Subscription;
   public popupTracker:Subscription;
-  public mapDragTracker:Subscription
+  public mapDragTracker:Subscription;
+  public scrollGuardTracker:Subscription;
 
   constructor(
     // service - dependency injections
@@ -129,14 +130,22 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       - overlay subs: keeps track of changes in overlay dropdown
       
       */
+
+      this.scrollGuardTracker = this.util.scrollGuard$.subscribe(scroll=>{
+        if(scroll!==false){
+          this.mymap.scrollWheelZoom.disable()
+        } else {
+          this.mymap.scrollWheelZoom.enable()
+        }
+      })
       this.mapDragTracker = this.util.mapDrag$.subscribe( mapdrag =>{
-        console.log("DRAGGEO TRACKER", mapdrag)
+        
         if(mapdrag!==false){
           this.mymap.dragging.disable()
         } else{
           this.mymap.dragging.enable()
         }
-        // this.util.disableMapDragging(this.mymap,mapdrag)
+        
         }
       )
       this.backendSubscription = this.socket.listen('pointssend').subscribe(data=>{

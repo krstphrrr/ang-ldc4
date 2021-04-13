@@ -62,6 +62,7 @@ import { ChipsComponent } from './popup_for_table/chips/chips.component';
 import { TabsComponent } from './popup_for_table/tabs/tabs.component';
 import { SpinnerComponent } from './utils/spinner/spinner.component';
 import { ResizeDirective } from './directives/resize.directive';
+import { ScrollfocusDirective } from './directives/scrollfocus.directive';
 
 // token test
 export function tokenGetter() {
@@ -117,7 +118,8 @@ const appRoutes: Routes = [
     ChipsComponent,
     TabsComponent,
     SpinnerComponent,
-    ResizeDirective
+    ResizeDirective,
+    ScrollfocusDirective
     
   ],
   imports: [

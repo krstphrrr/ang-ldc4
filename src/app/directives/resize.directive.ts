@@ -12,10 +12,8 @@ export class ResizeDirective implements OnInit {
               private el:ElementRef,
               private util:UtilitiesService
               ) { 
-    const self = this 
-    const EventListenerMode = { capture:true}
-
-
+    
+    // enabling + disabling mouse events
     function preventGlobalMouseEvents(){
       document.body.style['pointer-events']='none'
     }
@@ -25,29 +23,33 @@ export class ResizeDirective implements OnInit {
     }
 
     const newWidth = (wid)=>{
-      let boxPos = this.el.nativeElement.getBoundingClientRect().x
-      let boxWid = this.el.nativeElement.clientWidth
-      
+      // function to calculate the floating div's new width
       const newWidth = Math.max(this.resizableMinWidth, wid)
-      // console.log(newWidth, wid)
       el.nativeElement.style.width = (newWidth) + "px"
       
     }
 
     const mouseUpG = (evt) => {
+      // function to handle releasing mouse drag
       if (!this.dragging) {
         return;
       }
       restoreGlobalMouseEvents();
+      // sets drag to false and disables map dragging on main map
       this.dragging = false;
       this.util.mapDragSignal(false)
       evt.stopPropagation();
     };
 
     const mouseMoveG = (evt) => {
+
+      // function that runs when mouse is moving ( and calculates new div size)
+
+      // floating div position
       let boxPos = this.el.nativeElement.getBoundingClientRect().x
+      // mouse position
       let mousePos = evt.clientX
-      let boxWid = this.el.nativeElement.clientWidth
+      
       if (!this.dragging) {
         return;
       }
@@ -56,6 +58,7 @@ export class ResizeDirective implements OnInit {
     };
 
     const mouseMove = (evt) => {
+      //function to 
       if (this.inDragRegion(evt)) {
         el.nativeElement.style.cursor = "col-resize";
       } else {
