@@ -131,7 +131,12 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       */
       this.mapDragTracker = this.util.mapDrag$.subscribe( mapdrag =>{
         console.log("DRAGGEO TRACKER", mapdrag)
-        this.util.disableMapDragging(this.mymap,mapdrag)
+        if(mapdrag!==false){
+          this.mymap.dragging.disable()
+        } else{
+          this.mymap.dragging.enable()
+        }
+        // this.util.disableMapDragging(this.mymap,mapdrag)
         }
       )
       this.backendSubscription = this.socket.listen('pointssend').subscribe(data=>{
