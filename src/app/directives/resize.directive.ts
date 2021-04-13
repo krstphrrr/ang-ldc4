@@ -1,16 +1,21 @@
 import { Directive, OnInit, ElementRef, Input } from '@angular/core';
-
+import {UtilitiesService} from '../services/utilities.service'
 @Directive({
   selector: '[appResize]'
 })
 export class ResizeDirective implements OnInit {
   @Input() resizableGrabWidth = 8;
-  @Input() resizableMinWidth = 10;
+  @Input() resizableMinWidth = 192;
   dragging=false
 
-  constructor(private el:ElementRef) { 
+  constructor(
+              private el:ElementRef,
+              private util:UtilitiesService
+              ) { 
     const self = this 
     const EventListenerMode = { capture:true}
+
+
     function preventGlobalMouseEvents(){
       document.body.style['pointer-events']='none'
     }
@@ -20,30 +25,60 @@ export class ResizeDirective implements OnInit {
     }
 
     const newWidth = (wid)=>{
+      let boxPos = this.el.nativeElement.getBoundingClientRect().x
+      let boxWid = this.el.nativeElement.clientWidth
+      
       const newWidth = Math.max(this.resizableMinWidth, wid)
+      // console.log(newWidth, wid)
       el.nativeElement.style.width = (newWidth) + "px"
+      
     }
 
-    const mouseMoveG = (evt) => {
-      
+    const mouseUpG = (evt) => {
       if (!this.dragging) {
         return;
       }
-      newWidth(evt.clientX - el.nativeElement.offsetLeft)
+      restoreGlobalMouseEvents();
+      this.dragging = false;
+      this.util.mapDragSignal(false)
+      evt.stopPropagation();
+    };
+
+    const mouseMoveG = (evt) => {
+      let boxPos = this.el.nativeElement.getBoundingClientRect().x
+      let mousePos = evt.clientX
+      let boxWid = this.el.nativeElement.clientWidth
+      if (!this.dragging) {
+        return;
+      }
+      newWidth(mousePos-boxPos )
       evt.stopPropagation();
     };
 
     const mouseMove = (evt) => {
-      if (this.inDragRegion(evt) || this.dragging) {
+      if (this.inDragRegion(evt)) {
         el.nativeElement.style.cursor = "col-resize";
       } else {
         el.nativeElement.style.cursor = "default";
       }
     }
 
-    document.addEventListener('mousemove', mouseMoveG, true);
+    const mouseDown = (evt) => {
 
+      // has to also send signal to main map to STOP MAP DRAGGING..
+      if (this.inDragRegion(evt)) {
+        this.dragging = true;
+        this.util.mapDragSignal(true)
+        preventGlobalMouseEvents();
+        evt.stopPropagation();
+      }
+    };
+
+    document.addEventListener('mousemove', mouseMoveG, true);
+    document.addEventListener('mouseup', mouseUpG, true);
     el.nativeElement.addEventListener('mousemove', mouseMove, true);
+    // native element (dragbox) reacts to click ONLY WHEN mouse in "drag region"
+    el.nativeElement.addEventListener('mousedown', mouseDown, true);
   }
 
   
@@ -56,8 +91,11 @@ export class ResizeDirective implements OnInit {
   }
 
   inDragRegion(evt) {
-    console.log(this.el.nativeElement.clientWidth-evt.clientX + this.el.nativeElement.offsetLeft)
-    return this.el.nativeElement.clientWidth - evt.clientX + this.el.nativeElement.offsetLeft < this.resizableGrabWidth;
+    let boxPos = this.el.nativeElement.getBoundingClientRect().x
+    let mousePos = evt.clientX
+    let boxWid = this.el.nativeElement.clientWidth
+
+    return boxWid-(mousePos-boxPos) < this.resizableGrabWidth;
   }
 
 }

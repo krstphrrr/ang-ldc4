@@ -34,7 +34,7 @@ import { DragpopComponent } from './dragpop/dragpop.component'
 import {TabledataService} from '../services/tabledata.service'
 import {ApiService} from '../services/api.service'
 import { StringService } from '../services/string.service';
-
+import { UtilitiesService } from '../services/utilities.service'
 // interface Project {
 //   project: string;
 //   length: string;
@@ -105,6 +105,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public unsubscribeSubscription:Subscription;
   public dragTracker:Subscription;
   public popupTracker:Subscription;
+  public mapDragTracker:Subscription
 
   constructor(
     // service - dependency injections
@@ -116,6 +117,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     private tabledata: TabledataService,
     private apiservice: ApiService,
     private str: StringService,
+    private util: UtilitiesService
 
     ) {
       let pre = ['a']
@@ -127,6 +129,11 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       - overlay subs: keeps track of changes in overlay dropdown
       
       */
+      this.mapDragTracker = this.util.mapDrag$.subscribe( mapdrag =>{
+        console.log("DRAGGEO TRACKER", mapdrag)
+        this.util.disableMapDragging(this.mymap,mapdrag)
+        }
+      )
       this.backendSubscription = this.socket.listen('pointssend').subscribe(data=>{
         this.backendGet(data)
       })

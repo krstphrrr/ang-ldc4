@@ -14,8 +14,25 @@ export class UtilitiesService {
   private option = new Subject<string>()
   public option$ = this.option.asObservable()
 
+  private mapDrag = new Subject()
+  public mapDrag$ = this.mapDrag.asObservable()
+
 
   constructor() { }
+
+  mapDragSignal(sig:Boolean){
+    this.mapDrag.next(sig)
+  }
+
+  disableMapDragging(mapObj, option){
+    if(mapObj && option){
+      if(option!==false){
+        mapObj.dragging.disable()
+      } else {
+        mapObj.dragging.enable()
+      }
+    }
+  }
 
   saveOption(str:string){
     this.option.next(str)
