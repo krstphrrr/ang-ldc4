@@ -20,8 +20,15 @@ export class UtilitiesService {
   private scrollGuard = new Subject()
   public scrollGuard$ = this.scrollGuard.asObservable()
 
+  private clkGuard = new Subject()
+  public clkGuard$ = this.clkGuard.asObservable()
+
 
   constructor() { }
+
+  clickGuardSignal(sig:Boolean){
+    this.clkGuard.next(sig)
+  }
 
   mapDragSignal(sig:Boolean){
     this.mapDrag.next(sig)

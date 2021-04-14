@@ -16,10 +16,10 @@ export class ScrollfocusDirective {
       // function to send scroll-disabling-signal if mouse 
       // falls within the table div region
       if (this.inScrollRegion(evt)) {
-        this.util.scrollGuardSignal(true)
+        this.util.clickGuardSignal(true)
         
       } else {
-        this.util.scrollGuardSignal(false)
+        this.util.clickGuardSignal(false)
         
       }
     }

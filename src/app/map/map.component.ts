@@ -107,6 +107,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
   public popupTracker:Subscription;
   public mapDragTracker:Subscription;
   public scrollGuardTracker:Subscription;
+  public clickGuardTracker: Subscription;
 
   constructor(
     // service - dependency injections
@@ -130,12 +131,24 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       - overlay subs: keeps track of changes in overlay dropdown
       
       */
+     this.clickGuardTracker = this.util.clkGuard$.subscribe(clk =>{
+       if(clk!==false){
+         
+        this.mymap.doubleClickZoom.disable()
+       } else {
+         
+        this.mymap.doubleClickZoom.enable()
+       }
+     })
 
       this.scrollGuardTracker = this.util.scrollGuard$.subscribe(scroll=>{
         if(scroll!==false){
+          
           this.mymap.scrollWheelZoom.disable()
+          
         } else {
           this.mymap.scrollWheelZoom.enable()
+          
         }
       })
       this.mapDragTracker = this.util.mapDrag$.subscribe( mapdrag =>{
@@ -392,16 +405,23 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     this.mymap.on('movestart', event=>{
       // here goes logic to start as one moves the map around
     })
-
-    
   }
+
+  refocusMap(){
+    console.log("REFOCUSED")
+    this.mymap.doubleClickZoom.enable()
+  }
+
   onFocus(){
-    console.log("tiene el foco")
+    
     this.mymap.dragging.disable()
   }
 
   offFocus(){
+    
     this.mymap.dragging.enable()
+    // this.mymap.doubleClickZoom.enable()
+    this.mymap.scrollWheelZoom.enable()
   }
 
   backendGet(data){

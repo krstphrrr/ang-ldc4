@@ -63,6 +63,7 @@ import { TabsComponent } from './popup_for_table/tabs/tabs.component';
 import { SpinnerComponent } from './utils/spinner/spinner.component';
 import { ResizeDirective } from './directives/resize.directive';
 import { ScrollfocusDirective } from './directives/scrollfocus.directive';
+import { DoubleclickDirective } from './directives/doubleclick.directive';
 
 // token test
 export function tokenGetter() {
@@ -119,7 +120,8 @@ const appRoutes: Routes = [
     TabsComponent,
     SpinnerComponent,
     ResizeDirective,
-    ScrollfocusDirective
+    ScrollfocusDirective,
+    DoubleclickDirective
     
   ],
   imports: [
