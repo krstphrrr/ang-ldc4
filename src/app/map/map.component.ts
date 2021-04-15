@@ -285,6 +285,9 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
       position:'left'
     })
     .addTo(this.mymap)
+
+    
+    
     L.control.scale({
       "metric":true,
       "imperial":false,
@@ -292,8 +295,13 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
     this.drawingControl(this.mymap)
   }
+   
+
+  // this.mymap.addControl(new this.NewCircleControl())
+
 
   ngAfterViewChecked(){
+    
   }
 
   ngOnDestroy(){
@@ -421,7 +429,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     
     this.mymap.dragging.enable()
     // this.mymap.doubleClickZoom.enable()
-    this.mymap.scrollWheelZoom.enable()
+    // this.mymap.scrollWheelZoom.enable()
   }
 
   backendGet(data){

@@ -287,8 +287,49 @@
       }
     },
     "eainfo":{},
-    "distinfo":{},
-    "metainfo":{}
+    "distinfo":{
+      "distrib":{
+        "cntinfo":{
+          "cntperp":{},
+          "cntpos":"Computational Biologist",
+          "cntaddr":{
+            "addrtype":"mailing and physical",
+            "address":"P.O. Box 30003, MSC 3JER, NMSU",
+            "city":"Las Cruces",
+            "state":"NM",
+            "postal":"88003",
+            "country":"United States"
+          },
+          "cntvoice":"575 636 7527",
+          "cntemail":"sarah.mccord@usda.gov"
+        }
+      },
+      "distliab": "Unless otherwise stated, all data, metadata and related materials are considered to satisfy the quality standards relative to the purpose for which the data were collected. "
+    },
+    "metainfo":{
+      "metd":"",
+      "metc":{
+        "cntinfo":{
+          "cntperp":{
+            "cntper":"Sarah McCord",
+            "cntorg":"USDA-ARS Jornada Experimental Range"
+          },
+          "cntpos":"Computational Biologist",
+          "cntaddr":{
+            "addrtype":"mailing and physical",
+            "address":"P.O. Box 30003, MSC 3JER, NMSU",
+            "city":"Las Cruces",
+            "state":"NM",
+            "postal":"88003",
+            "country":"United States"
+          },
+          "cntvoice":"575 636 7527",
+          "cntemail":"sarah.mccord@usda.gov"
+        }
+      },
+      "metstdn":"FGDC Content Standard for Digital Geospatial Metadata",
+      "metstdv":"FGDC-STD-001-1998"
+    }
   },
   "dataLPI":{
     "idinfo":{
@@ -396,7 +437,68 @@
       }
     },
     "eainfo":{},
-    "distinfo":{},
-    "metainfo":{}
+    "distinfo":{
+      "distrib":{
+        "cntinfo":{
+          "cntperp":{
+            "cntper":"Sarah McCord",
+            "cntorg":"Jornada Experimental Range"
+          },
+          "cntpos":"Computational Biologist",
+          "cntaddr":{
+            "addrtype":"mailing and physical",
+            "address":"P.O. Box 30003, MSC 3JER, NMSU",
+            "city":"Las Cruces",
+            "state":"NM",
+            "postal":"88003",
+            "country":"United States"
+          },
+          "cntvoice":"575 636 7527",
+          "cntemail":"sarah.mccord@usda.gov"
+        }
+      },
+      "distliab":"",
+      "stdorder":{
+        "digform":{
+          "digtinfo":{
+            "formname":"Digital Data"
+          },
+          "digtopt":{
+            "onlinopt":{
+              "computer":{
+                "networka":{
+                  "networkr":"www.landscapedatacommons.org"
+                }
+              }
+            }
+          }
+        },
+        "fees":""
+      }
+    },
+    "metainfo":{
+      "metd":"",
+      "metc":{
+        "cntinfo":{
+          "cntperp":{
+            "cntper":"Sarah McCord",
+            "cntorg":"USDA-ARS Jornada Experimental Range"
+          },
+          "cntpos":"Computational Biologist",
+          "cntaddr":{
+            "addrtype":"mailing and physical",
+            "address":"P.O. Box 30003, MSC 3JER",
+            "city":"Las Cruces",
+            "state":"NM",
+            "postal":"88003",
+            "country":"United States"
+          },
+          "cntvoice":"575 636 7527",
+          "cntemail":"sarah.mccord@usda.gov"
+        }
+      },
+      "metstdn":"FGDC Content Standard for Digital Geospatial Metadata",
+      "metstdv":"FGDC-STD-001-1998"
+    }
   }
 }
