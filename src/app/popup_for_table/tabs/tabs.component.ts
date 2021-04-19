@@ -250,7 +250,7 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   testBtn(){
     this.creatingCSVs()
-    this.creatingZipFile("testPack")
+    this.creatingZipFile("LDC_Data")
   }
 
   creatingCSVs(){
@@ -271,11 +271,19 @@ export class TabsComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
   }
 
+
+  // button for baselayers 
+  // pop up, docked 
+  // resizable but not draggable 
+
   creatingZipFile( zipname:string){
     let zip: JSZip = new JSZip();
-    let zipName = zipname+'.zip'
+    let now = new Date()
+    let iso = now.toISOString()
+    let zipName = zipname+`_${iso}`+'.zip'
     for(let [blobName,csvBlob] of Object.entries(this.csvPack)){
       if(csvBlob!==null){
+        
         zip.file(blobName+".csv",csvBlob)
       }
     }

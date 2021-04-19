@@ -304,7 +304,24 @@
           "cntemail":"sarah.mccord@usda.gov"
         }
       },
-      "distliab": "Unless otherwise stated, all data, metadata and related materials are considered to satisfy the quality standards relative to the purpose for which the data were collected. "
+      "distliab": "Unless otherwise stated, all data, metadata and related materials are considered to satisfy the quality standards relative to the purpose for which the data were collected. ",
+      "stdorder":{
+        "digform":{
+          "digtinfo":{
+            "formname":"Digital Data"
+          },
+          "digtopt":{
+            "onlinopt":{
+              "computer":{
+                "networka":{
+                  "networkr":"www.landscapedatacommons.org"
+                }
+              }
+            }
+          }
+        },
+        "fees":""
+      }
     },
     "metainfo":{
       "metd":"",

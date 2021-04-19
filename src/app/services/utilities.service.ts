@@ -203,12 +203,17 @@ export class UtilitiesService {
     let json = jsonfile.default[table]
     let full = dat
     let det = rootXml.ele("eainfo")
-    .ele("detailed")
+    console.log()
+    if("detailed" in json){
+
+      det.ele("detailed")
       .ele("enttyp")
         .ele("enttypl").txt(json.eainfo.detailed.enttyp.enttypl).up()
         .ele("enttypd").up()
         .ele("enttypds").txt(json.eainfo.detailed.enttyp.enttypds).up()
         .up()
+    }
+    
       // console.log(full)
     full.forEach(element => {
       if(element["Table"]===table){
