@@ -725,12 +725,192 @@
     }
   },
   "dataSoilStability":{
-    "idinfo":{},
-    "dataqual":{},
-    "spdoinfo":{},
-    "spref":{},
-    "eainfo":{},
-    "distinfo":{},
-    "metainfo":{}
+    "idinfo":{
+      "citation":{
+        "citeinfo":{
+          "origin":"Please refer to Dataset Point of Contact.",
+          "pubdate":"",
+          "title":"Soil Stability Data",
+          "geoform":"tabular digital data",
+          "onlink":"www.landscapedatacommons.org",
+          "lworkcit":{
+            "citeinfo":{
+              "origin":"Please refer to Dataset Point of Contact.",
+              "pubdate":"",
+              "title":"Please refer to the Projects table in Landscape Data Commons database.",
+              "geoform":"tabular digital data"
+            }
+          }
+        }
+      },
+      "descript":{
+        "abstract":"Two core indicators are calculated from this test: the average surface stability value and the average sub-surface stability value. The percentage of the surface samples tested that are equal to 6 (very stable) is another useful indicator that is easy to calculate. Both are correlated with all three ecosystem attributes. Higher stability has been directly correlated with reductions in erosion. Reference(s): Herrick, J.E., J. Van Zee, S.E. McCord, J.W. Karl, E. Courtright, and L. Burkett. 2018. The Monitoring Manual for Grassland, Shrubland, and Savanna Ecosystems. USDA-ARS.",
+        "purpose":"The soil stability test is a relatively simple test that is sensitive to complex changes in physical, chemical and biological processes. These are the processes that glue soil particles together. Soil stability at different depths and under different types of vegetation can be used to reflect changes in organic matter cycling."
+      },
+      "timeperd":{
+        "timeinfo":{
+          "rngdates":{
+            "begdate":"",
+            "enddate":""
+          }
+        },
+        "current":"observed"
+      },
+      "status":{
+        "progress":"In work",
+        "update":"Continually"
+      },
+      "spdom":{
+        "bounding":{
+          "westbc":"",
+          "eastbc":"",
+          "northbc":"",
+          "southbc":""
+        }
+      },
+      "keywords":{
+        "theme1":{
+          "themekt":"ISO 19115 Topic Category",
+          "themekey1":"geoscientificInformation",
+          "themekey2":"environment"
+        },
+        "theme2":{
+          "themekt":"Soil Stability",
+          "themekey1":"surface stability",
+          "themekey2":"soil"
+        }
+      },
+      "accconst":"Please refer to the Projects table in the Landscape Data Commons database.",
+      "useconst":"Please refer to the Projects table in the Landscape Data Commons database.",
+      "ptcontact":{
+        "cntinfo":{
+          "cntperp":{
+            "cntper":"Sarah McCord",
+            "cntorg":"USDA-ARS Jornada Experimental Range"
+          },
+          "cntpos":"Computational Biologist",
+          "cntaddr":{
+            "addrtype":"mailing and physical",
+            "address":"P.O.Box 30003, MSC 3 JER, NMSU",
+            "city":"Las Cruces",
+            "state":"NM",
+            "postal":"88003",
+            "country":"US"
+          },
+          "cntvoice":"575 636 7527",
+          "cntemail":"sarah.mccord@usda.gov"
+        }
+      },
+      "datacred":"Please reference \"Data Use Agreements\" located in the Projects table."
+    },
+    "dataqual":{
+      "attracc":{
+        "attraccr":"Please refer to Dataset Point of Contact."
+      },
+      "logic":"Please refer to Dataset Point of Contact.",
+      "complete":"",
+      "lineage":{
+        "procstep":{
+          "procdesc":"",
+          "procdate":""
+        }
+      }
+    },
+    "spdoinfo":{
+      "direct":"Vector",
+      "ptvctinf":{
+        "sdtsterm":{
+          "sdtstype":"Entity point",
+          "ptvctcnt":"3"
+        }
+      }
+    },
+    "spref":{
+      "horizsys":{
+        "geograph":{
+          "latres":"",
+          "longres":"",
+          "geogunit":"Decimal degrees"
+        },
+        "geodetic":{
+          "horizdn":"North American Datum of 1983 (NAD 83)",
+          "ellips":"Geodetic Reference System 1980",
+          "semiaxis":"6378137.000000",
+          "denflat":"298.257222"
+        }
+      }
+    },
+    "eainfo":{
+      "detailed":{
+        "enttyp":{
+          "enttypl":"Soil Stability Metadata",
+          "enttypd":"",
+          "enttypds":""
+        }
+      }
+    },
+    "distinfo":{
+      "distrib":{
+        "cntinfo":{
+          "cntperp":{
+            "cntper":"Sarah McCord",
+            "cntorg":"Jornada Experimental Range"
+          },
+          "cntpos":"Computational Biologist",
+          "cntaddr":{
+            "addrtype":"mailing and physical",
+            "address":"P.O.Box 30003, MSC 3 JER, NMSU",
+            "city":"Las Cruces",
+            "state":"NM",
+            "postal":"88003",
+            "country":"United States"
+          },
+          "cntvoice":"575 636 7527",
+          "cntemail":"sarah.mccord@usda.gov"
+        }
+      },
+      "distliab":"Unless otherwise stated, all data, metadata and related materials are considered to satisfy the quality standards relative to the purpose for which the data were collected. ",
+      "stdorder":{
+        "digform":{
+          "digtinfo":{
+            "formname":"Digital Data"
+          },
+          "digtopt":{
+            "onlinopt":{
+              "computer":{
+                "networka":{
+                  "networkr":"www.landscapedatacommons.org"
+                }
+              }
+            }
+          }
+        },
+        "fees":"None"
+      }
+    },
+    "metainfo":{
+      "metd":"",
+      "metc":{
+        "cntinfo":{
+          "cntperp":{
+            "cntper":"Sarah McCord",
+            "cntorg":"USDA-ARS Jornada Experimental Range"
+          },
+          "cntpos":"Computational Biologist",
+          "cntaddr":{
+            "addrtype":"mailing and physical",
+            "address":"P.O.Box 30003, MSC 3 JER, NMSU",
+            "city":"Las Cruces",
+            "state":"NM",
+            "postal":"88003",
+            "country":"United States"
+          },
+          "cntvoice":"575 636 7527",
+          "cntemail":"sarah.mccord@usda.gov"
+        }
+      },
+      "metstdn":"FGDC Content Standard for Digital Geospatial Metadata",
+      "metstdv":"FGDC-STD-001-1998"
+    }
   }
 }
