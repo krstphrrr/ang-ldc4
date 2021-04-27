@@ -143,10 +143,11 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
       this.scrollGuardTracker = this.util.scrollGuard$.subscribe(scroll=>{
         if(scroll!==false){
-          
+          console.log("ELSERVICIO OFF")
           this.mymap.scrollWheelZoom.disable()
           
         } else {
+          console.log("el servicio on")
           this.mymap.scrollWheelZoom.enable()
           
         }
