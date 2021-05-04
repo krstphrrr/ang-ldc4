@@ -28,7 +28,7 @@ export class SpinnerService {
     this.spin$
     .asObservable()
     .pipe(
-      scan((acc, next) => {
+      scan((acc:any, next:any) => {
         if(!next) return 0;
         return (acc + next) >= 0 ? acc + next : 0;
       }, 0),

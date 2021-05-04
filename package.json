@@ -29,7 +29,7 @@
     "@auth0/auth0-spa-js": "^1.15.0",
     "@compodoc/compodoc": "^1.1.11",
     "@fortawesome/fontawesome-free": "^5.15.3",
-    "@turf/turf": "^6.3.0",
+    "@turf/turf": "^5.1.6",
     "@types/geojson": "^7946.0.7",
     "@types/jquery": "^3.5.5",
     "@types/jqueryui": "^1.12.15",
