@@ -1,7 +1,7 @@
 import { Injectable, ElementRef } from '@angular/core';
 import * as d3 from 'd3'
 import * as L from 'leaflet'
-import * as turf from '@turf/turf'
+// import * as turf from '@turf/turf'
 import { MoveEndService } from '../services/move-end.service'
 import { socketDataService } from '../services/socketTest.service'
 import { MarkerService } from '../services/marker.service'

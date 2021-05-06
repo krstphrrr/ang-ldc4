@@ -24,7 +24,7 @@ import { GeoJsonObject } from 'geojson';
 import { PanelComponent } from './controls/panel/panel/panel.component';
 import { MoveEndService } from '../services/move-end.service'
 import { CustomControlService } from '../services/custom-control.service'
-import * as turf from '@turf/turf'
+// import * as turf from '@turf/turf'
 import {LayerService} from '../services/layer.service'
 import { MapLoadService } from '../services/mapLoad.service'
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
