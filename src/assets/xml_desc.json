@@ -912,5 +912,175 @@
       "metstdn":"FGDC Content Standard for Digital Geospatial Metadata",
       "metstdv":"FGDC-STD-001-1998"
     }
+  },
+  "dataSpeciesInventory":{
+    "idinfo":{
+      "citation":{
+        "citeinfo":{
+          "origin":"Please refer to Dataset Point of Contact.",
+          "pubdate":{},
+          "title":"Species Inventory Data",
+          "geoform":"tabular digital data",
+          "onlink":"www.landscapedatacommons.org",
+          "lworkcit":{
+            "citeinfo":{
+              "origin":"Please refer to Dataset Point of Contact.",
+              "pubdate":"",
+              "title":"Please refer to the Projects table in Landscape Data Commons database.",
+              "geoform":"tabular digital data"
+            }
+          }
+        }
+      },
+      "descript":{
+        "abstract":"This dataset includes observations of plant species found within the monitoring plot during a systematic survey of the plot. Reference(s): Herrick, J.E., J. Van Zee, S.E. McCord, J.W. Karl, E. Courtright, and L. Burkett. 2018. The Monitoring Manual for Grassland, Shrubland, and Savanna Ecosystems. USDA-ARS.",
+        "purpose": "This dataset should be used to determine plant species presence and species richness."
+      },
+      "timeperd":{
+        "timeinfo":{
+          "rngdates":{
+            "begdate":"",
+            "enddate":""
+          }
+        },
+        "current":"observed"
+      },
+      "status":{
+        "progress":"In work",
+        "update":"Continually"
+      },
+      "spdom":{
+        "bounding":{
+          "westbc":"",
+          "eastbc":"",
+          "northbc":"",
+          "southbc":""
+        }
+      },
+      "keywords":{
+        "theme1":{
+          "themekt":"ISO 19115 Topic Category",
+          "themekey1":"geoscientificInformation",
+          "themekey2":"environment"
+        },
+        "theme2":{
+          "themekt":"Species Inventory",
+          "themekey1":""
+        }
+      },
+      "accconst":"Please refer to the Projects table in the Landscape Data Commons database.",
+      "useconst":"Please refer to the Projects table in the Landscape Data Commons database.",
+      "ptcontact":{},
+      "datacred":"Please reference \"Data Use Agreements\" located in the Projects table."
+    },
+    "dataqual":{
+      "attracc":{
+        "attraccr":"Please refer to Dataset Point of Contact."
+      },
+      "logic":"Please refer to Dataset Point of Contact.",
+      "complete":"",
+      "lineage":{
+        "procstep":{
+          "procdesc":"",
+          "procdate":""
+        }
+      }
+    },
+    "spdoinfo":{
+      "direct":"Vector",
+      "ptvctinf":{
+        "sdtsterm":{
+          "sdtstype":"Entity point",
+          "ptvctcnt":"3"
+        }
+      }
+    },
+    "spref":{
+      "horizsys":{
+        "geograph":{
+          "latres":"",
+          "longres":"",
+          "geogunit":"Decimal degrees"
+        },
+        "geodetic":{
+          "horizdn":"North American Datum of 1983 (NAD 83)",
+          "ellips":"Geodetic Reference System 1980",
+          "semiaxis":"6378137.000000",
+          "denflat":"298.257222"
+        }
+      }
+    },
+    "eainfo":{
+      "detailed":{
+        "enttyp":{
+          "enttypl":"Species Inventory Metadata",
+          "enttypd":"",
+          "enttypds":""
+        }
+      }
+    },
+    "distinfo":{
+      "distrib":{
+        "cntinfo":{
+          "cntperp":{
+            "cntper":"Sarah McCord",
+            "cntorg":"Jornada Experimental Range"
+          },
+          "cntpos":"Computational Biologist",
+          "cntaddr":{
+            "addrtype":"mailing and physical",
+            "address":"P.O. Box 30003, MSC 3JER, NMSU",
+            "city":"Las Cruces",
+            "state":"NM",
+            "postal":"88003",
+            "country":"United States"
+          },
+          "cntvoice":"575 636 7527",
+          "cntemail":"sarah.mccord@usda.gov"
+        }
+      },
+      "distliab":"Unless otherwise stated, all data, metadata and related materials are considered to satisfy the quality standards relative to the purpose for which the data were collected. ",
+      "stdorder":{
+        "digform":{
+          "digtinfo":{
+            "formname":"Digital Data"
+          },
+          "digtopt":{
+            "onlinopt":{
+              "computer":{
+                "networka":{
+                  "networkr":"www.landscapedatacommons.org"
+                }
+              }
+            }
+          }
+        },
+        "fees":"None"
+      }
+    },
+    "metainfo":{
+      "metd":"",
+      "metc":{
+        "cntinfo":{
+          "cntperp":{
+            "cntper":"Sarah McCord",
+            "cntorg":"USDA-ARS Jornada Experimental Range"
+          },
+          "cntpos":"Computational Biologist",
+          "cntaddr":{
+            "addrtype":"mailing and physical",
+            "address":"P.O. Box 30003, MSC 3JER, NMSU",
+            "city":"Las Cruces",
+            "state":"NM",
+            "postal":"88003",
+            "country":"United States"
+          },
+          "cntvoice":"575 636 7527",
+          "cntemail":"sarah.mccord@usda.gov"
+        }
+      },
+      "metstdn":"FGDC Content Standard for Digital Geospatial Metadata",
+      "metstdv":"FGDC-STD-001-1998"
+    }
   }
 }
