@@ -4,7 +4,8 @@ import { Observable, Subscription } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { StringService } from 'src/app/services/string.service';
 import { TabledataService } from 'src/app/services/tabledata.service';
-import * as JSZip from 'jszip';
+import JSZip from 'jszip';
+// const JSZip = require("jszip")
 import {saveAs} from 'file-saver/dist/FileSaver'
 import { retryWhen } from 'rxjs/operators';
 import { P } from '@angular/cdk/keycodes';

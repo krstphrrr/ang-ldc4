@@ -8,6 +8,7 @@ import { MarkerService } from '../services/marker.service'
 import { GeoJsonObject } from 'geojson'
 import { SpinnerService } from '../services/spinner.service'
 
+
 @Injectable({
   providedIn: 'root'
 })

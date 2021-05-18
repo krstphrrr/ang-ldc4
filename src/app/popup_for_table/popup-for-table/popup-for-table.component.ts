@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, OnDestroy, OnChanges, HostListener } from '@angular/core';
 import {Subscription} from 'rxjs'
-import { ApiService } from 'src/app/services/api.service';
-import { StringService } from 'src/app/services/string.service';
-import {TabledataService} from '../../services/tabledata.service'
+// import { ApiService } from './src/app/services/api.service';
+import {ApiService } from '../../services/api.service'
+import { StringService } from '../../services/string.service';
+import {TabledataService} from '../../services/tabledata.service';
 import { AuthService } from '@auth0/auth0-angular';
 // import {CdkDragDrop} from '@angular/cdk/drag-drop';
 

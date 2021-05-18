@@ -12,6 +12,7 @@
     "module": "es2020",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "esModuleInterop": true,
     "importHelpers": true,
     "target": "es2015",
     "typeRoots": [
@@ -22,8 +23,10 @@
       "dom"
     ]
   },
+  // "allowSyntheticDefaultImports": true,
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true
   }
+  
 }

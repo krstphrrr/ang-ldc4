@@ -1,4 +1,5 @@
 import { domain, clientId, audience, serverUrl_p } from '../../auth_config.json';
+
 let serverUrl = serverUrl_p
 
 export const environment = {
