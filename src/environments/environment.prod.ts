@@ -1,6 +1,11 @@
-import { domain, clientId, audience, serverUrl_p } from '../../auth_config.json';
+import {settings} from '../app/services/a_settings'
 
-let serverUrl = serverUrl_p
+let domain = settings.domain
+let clientId = settings.clientId
+let audience = settings.audience
+let serverUrl = settings.serverUrl_p
+
+// let serverUrl = serverUrl_p
 
 export const environment = {
   production: true,
