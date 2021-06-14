@@ -1,0 +1,7 @@
+a {
+	text-decoration: none;
+	color: rgb(0,0,0,.5);
+}
+a:hover,a:active{
+	color: light-grey;
+}

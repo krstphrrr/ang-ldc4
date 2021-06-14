@@ -23,6 +23,9 @@ export class HeaderComponent {
   @ViewChild(LogoutComponentComponent) childComponentMenu: LogoutComponentComponent;
   // x
   @Output() featureSelected = new EventEmitter<string>()
+  @Output() sidenavToggle = new EventEmitter<void>()
+
+
   isCollapsed: boolean = true;
   whichPage;
   durationInSeconds = 60;
@@ -45,6 +48,10 @@ export class HeaderComponent {
        this.openSnackBar()
 
      }
+
+     onToggleSidenav(){
+      this.sidenavToggle.emit()
+    }
 
   onSelect(feature:string){
       if(feature==="map"){

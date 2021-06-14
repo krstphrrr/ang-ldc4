@@ -1,21 +1,15 @@
-<app-header>
-  
+<mat-sidenav-container>
 
-</app-header>
-<!-- <app-navbar></app-navbar> -->
-<div class="container">
-  <!-- <app-navbar></app-navbar> -->
-  <router-outlet>
-  </router-outlet>
-</div>
+  <mat-sidenav #sidenav role="navigation">
+    <app-sidenav (closeSidenav)="sidenav.close()"></app-sidenav>
+  </mat-sidenav>
 
-
-
-
-
-<!-- <app-map-ol *ngIf="loadedFeature === 'map'"></app-map-ol> -->
-<!-- <div class="row" style="padding-top: 150px;"> -->
-  <!-- <div class="col-xs-12 item"> -->
+  <mat-sidenav-content style="overflow-y: hidden;">
+    <app-header (sidenavToggle)="sidenav.toggle()"></app-header>
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
     
+  </mat-sidenav-content>
 
-<!-- </div> -->
+</mat-sidenav-container>

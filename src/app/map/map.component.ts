@@ -258,6 +258,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     //4.
     
     this.initMap(this.initLay)
+    this.mymap.invalidateSize()
 
   }
 
@@ -271,7 +272,9 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     5. adds sidebar
     */
 
-    this.mymap.on('load', this.onMapLoad_TEST())
+    this.mymap.on('load', 
+    this.onMapLoad_TEST()
+    )
     this.mymap.on('draw:deleted',(e)=>{
       // console.log(e.layers)
       // this.layers2delete = e.layers
@@ -295,6 +298,7 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
     }).addTo(this.mymap);
 
     this.drawingControl(this.mymap)
+    
   }
    
 
@@ -365,7 +369,9 @@ export class MapComponent implements OnInit, AfterViewInit, AfterViewChecked {
                   preferCanvas:true,
                   /* initial layer */
                   layers:[(initLayer?initLayer:this.sat)]
-  })
+    })
+    
+    
    
 
     this.mymap.on(L.Draw.Event.CREATED,(e)=>{

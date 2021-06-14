@@ -1,0 +1,19 @@
+<mat-nav-list>
+  <a mat-list-item routerLink="/" (click)="onClose()">
+    <mat-icon>map</mat-icon>
+    <span class="nav-caption">Home</span>
+  </a>
+  <a mat-list-item [matMenuTriggerFor]="menu">
+    <mat-icon>input</mat-icon>
+    <span class="nav-caption">About</span>
+    
+  </a>
+  <mat-menu #menu="matMenu">
+    <a mat-menu-item routerLink="/about" (click)="onSelect('about')" >About</a>
+    <a mat-menu-item routerLink="/about" (click)="onSelect('partners')">Partners</a>
+    <a mat-menu-item routerLink="/about" (click)="onSelect('development')">Developer Resources</a>
+
+  </mat-menu>
+  
+
+</mat-nav-list>

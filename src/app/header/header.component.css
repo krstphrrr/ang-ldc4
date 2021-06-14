@@ -25,3 +25,21 @@
   color: black !important;
   background-color: beige !important;
 }
+
+a {	
+  text-decoration: none;
+	color: rgb(0,0,0,.5);
+}
+a:hover,a:active{
+	color: light-grey;
+}
+  
+.navigation-items{
+	list-style: none ;
+	padding: 0;
+	margin: 0;
+}
+.nav-caption{
+	display: inline-block;
+	padding-left: 6px;
+}

@@ -2,19 +2,47 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProfileComponent } from './profile/profile.component';
 import { Routes, RouterModule } from '@angular/router'
-import { AuthGuard } from './services/auth.guard';
+import { MapComponent } from './map/map.component';
+import { LearnComponent } from './learn/learn.component';
+import { AboutComponent } from './about/about.component';
+import { FolderComponent } from './folder/folder.component';
+// import { AuthGuard } from '../app/services/';
 const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
+  },
+
+  { 
+    path: '', 
+    component: MapComponent
+  },
+
+  {
+    path: 'learn', 
+    component: LearnComponent
+  },
+
+  {
+    path: 'about', 
+    component: AboutComponent
+  },
+
+  {
+    path: 'files', 
+    component: FolderComponent
+  },
+
+  {
+    path: 'profile', 
+    component: ProfileComponent,
   }
 ];
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule
-  ]
+  imports: [RouterModule.forRoot(routes,{ relativeLinkResolution: 'legacy' })],
+  exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -33,12 +33,7 @@ mat-spinner{
 }
 
 
-#container{
-  position: absolute;
-  width: 100vw;
-  height:90%;
-  /* top:100px; */
-}
+
 .mainMenu {
   padding: 6px 8px;
   /* font: Comic, sans-serif; */
@@ -68,11 +63,16 @@ mat-spinner{
 
 
 
-body { 
+html, body { 
   height: 100%; 
-  width: 100%;
-  top:78px; 
+
+  /* top:78px;  */
+  
   /* position: fixed; */
+ }
+ body{
+
+   margin: 0;
  }
 .mat-tab-group>.mat-tab-header .mat-tab-label{
   min-width: 10px;

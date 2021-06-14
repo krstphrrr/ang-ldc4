@@ -1,53 +1,45 @@
-<nav class="navbar navbar-expand-md navbar-light fixed-top">
 
-    <a routerLink="/" class="navbar-brand mr-auto" (click)="onSelect('map')">
-      <img src="/assets/exports/1x/dc-logo-color.png"
-          alt="" 
-          class="img-responsive order-lg-0 order-md-0" 
-          style="min-width:90px;min-height:autopx;display: block; max-width: 330px;max-height: auto;">
-    </a>
-
-  <button class="navbar-toggler order-md-0 ml-auto" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
+<mat-toolbar style="height: 100px;">
+  <!-- hide hamburger button on screens greater than xs -->
+  <div fxHide.gt-xs>
+    <button mat-icon-button (click)="onToggleSidenav()">
+    <mat-icon>menu</mat-icon>
   </button>
+</div>
 
-  <div class="collapse navbar-collapse w-25 order-1" id="navbarTogglerDemo01">
-    <ul class="navbar-nav ml-auto text-center">
-      <li class="nav-item">
-        <!-- <a routerLink="" (click)="onSelect('learn')" class="nav-link">Learn</a></li> -->
-        <li class="nav-item">
-          <!-- <a routerLink="" (click)="onSelect('data')" class="nav-link">Data</a></li> -->
-      
-      
-          <li ngbDropdown class="nav-item d-inline-block">
-            <a ngbDropdownToggle  class="nav-link" id="dropdown1" [matMenuTriggerFor]="menu">About</a>
-            <mat-menu #menu="matMenu">
-              <a mat-menu-item routerLink="/about" (click)="onSelect('about')" class="nav-link">About</a>
-              <a mat-menu-item routerLink="/about" (click)="onSelect('partners')" class="nav-link">Partners</a>
-              <a mat-menu-item routerLink="/about" (click)="onSelect('development')" class="nav-link">Developer Resources</a>
-
-            </mat-menu>
-              <!-- <div class="dropdown-menu" ngbDropdownMenu> -->
-
-              <!-- </div> -->
-          </li>
-      
-        <li class="nav-item">
-            <a routerLink="/" (click)="onSelect('folder')" class="nav-link">
-              <img src="/assets/folder-logo.png" alt="" class="img-responsive" style="max-height:20px">
-            </a>
-      </li>
-      <li class="nav-item d-inline-block">
-          <app-login-component *ngIf="!(auth.isAuthenticated$ | async)"></app-login-component>
-          <app-logout-component *ngIf="(auth.isAuthenticated$ | async)"></app-logout-component>
-
-      </li>
-
-
-      
-
-    </ul>
-
+  <div >
+    <a routerLink="/" (click)="onSelect('map')">
+      <img src="/assets/exports/1x/dc-logo-color.png" 
+      alt=""
+      style="min-width:90px;min-height: auto;display: block; max-width: 330px;max-height: auto;">
+    </a>
   </div>
-  <div class="col w-75 order-12"></div>
-</nav>
+
+  <div fxFlex  fxLayout fxLayoutAlign="flex-end" fxHide.xs>
+    <ul fxLayout fxLayoutGap="10px" class="navigation-items" fxLayoutAlign="center center">
+      <li fxFlexAlign="center">
+        <a [matMenuTriggerFor]="menu">About</a>
+        <mat-menu #menu="matMenu" xPosition="after">
+          <a mat-menu-item routerLink="/about" (click)="onSelect('about')" >About</a>
+          <a mat-menu-item routerLink="/about" (click)="onSelect('partners')">Partners</a>
+          <a mat-menu-item routerLink="/about" (click)="onSelect('development')">Developer Resources</a>
+
+        </mat-menu>
+      </li>
+
+      <li fxFlexAlign="center">
+        <a routerLink="/" (click)="onSelect('folder')" class="nav-link">
+          <img src="/assets/folder-logo.png" alt="" class="img-responsive" style="max-height:20px">
+        </a>
+      </li>
+
+      <li fxFlexAlign="center"> 
+        <app-login-component *ngIf="!(auth.isAuthenticated$ | async)"></app-login-component>
+        <app-logout-component *ngIf="(auth.isAuthenticated$ | async)"></app-logout-component>
+      </li>
+      
+    </ul>
+    
+  </div>
+</mat-toolbar>
+
