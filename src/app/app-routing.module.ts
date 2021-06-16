@@ -6,6 +6,8 @@ import { MapComponent } from './map/map.component';
 import { LearnComponent } from './learn/learn.component';
 import { AboutComponent } from './about/about.component';
 import { FolderComponent } from './folder/folder.component';
+import { PartnersComponent } from './about/partners/partners.component';
+import { DevelopmentComponent } from './about/development/development.component';
 // import { AuthGuard } from '../app/services/';
 const routes: Routes = [
   {
@@ -26,7 +28,17 @@ const routes: Routes = [
 
   {
     path: 'about', 
-    component: AboutComponent
+    component: AboutComponent,
+    children:[
+      {
+        path:"partners",
+        component: PartnersComponent
+      },
+      {
+        path:"development",
+        component: DevelopmentComponent
+      }
+    ]
   },
 
   {

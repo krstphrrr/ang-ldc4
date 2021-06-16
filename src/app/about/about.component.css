@@ -36,20 +36,21 @@ a{
   width:calc(100%-330px);
   margin-top:10%;
   margin-left:10%;
-  
-
+  margin-right:10%;
+  margin-bottom: 10%;
+  padding-bottom: 10%;
 }
 #entry-about{
   display:block;
   height:700px;
   padding:0;
   /* margin-bottom:36px; */
-  overscroll-behavior-y: auto;
-  overflow-y: overlay;
+  /* overscroll-behavior-y: auto;
+  overflow-y: overlay; */
 }
 #entry-partners{
   display:block;
-  overflow:hidden;
+
   padding:0;
   margin-bottom:36px;
 }

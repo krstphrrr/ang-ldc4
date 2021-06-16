@@ -46,6 +46,8 @@ import { ScrollfocusDirective } from './directives/scrollfocus.directive';
 import { DoubleclickDirective } from './directives/doubleclick.directive';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { AppRoutingModule } from './app-routing.module';
+import { DevelopmentComponent } from './about/development/development.component';
+import { PartnersComponent } from './about/partners/partners.component';
 
 
 
@@ -89,6 +91,8 @@ export function tokenGetter() {
     ScrollfocusDirective,
     DoubleclickDirective,
     SidenavComponent,
+    DevelopmentComponent,
+    PartnersComponent,
   ],
   
   imports: [

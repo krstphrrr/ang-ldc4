@@ -21,8 +21,8 @@
         <a [matMenuTriggerFor]="menu">About</a>
         <mat-menu #menu="matMenu" xPosition="after">
           <a mat-menu-item routerLink="/about" (click)="onSelect('about')" >About</a>
-          <a mat-menu-item routerLink="/about" (click)="onSelect('partners')">Partners</a>
-          <a mat-menu-item routerLink="/about" (click)="onSelect('development')">Developer Resources</a>
+          <a mat-menu-item routerLink="/about/partners" (click)="onSelect('partners')">Partners</a>
+          <a mat-menu-item routerLink="/about/development" (click)="onSelect('development')">Developer Resources</a>
 
         </mat-menu>
       </li>

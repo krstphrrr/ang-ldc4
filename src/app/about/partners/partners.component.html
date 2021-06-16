@@ -1,0 +1,11 @@
+<div fxLayout="column wrap" fxLayoutAlign="center" id="container-text" fxLayoutGap="20px">
+
+  <h2 fxLayoutAlign="center" class="entry-title">{{content.about.partners_singlet.heading}}</h2>
+  <strong fxLayoutAlign="center">{{content.about.partners_singlet.subheading}}</strong>
+  <div *ngFor="let partner of partners">
+
+      <strong>{{partner.title}}</strong>
+      <p [innerHtml]="partner.description"></p>
+  </div>
+  <div [innerHtml]="addContent"></div>
+</div>
