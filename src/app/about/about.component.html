@@ -1,13 +1,12 @@
 <router-outlet>
   <div fxLayout="row wrap" 
-  fxLayoutAlign="space-evenly center" 
-  id="container-text"
-  *ngIf="rtr.url == '/about'">
-<p>
- {{content.about.main.description}}
-</p>
-<p [innerHtml]="mainLink">
- 
-</p>
+    fxLayoutAlign="space-evenly center" 
+    id="container-text"
+    *ngIf="rtr.url == '/about'">
+    <p>
+    {{content.about.main.description}}
+    </p>
+    <p fxAlign="start" [innerHtml]="mainLink"></p>
+    <img [attr.src]="getMainImage()" id="img-container"/>
 </div>
 </router-outlet>

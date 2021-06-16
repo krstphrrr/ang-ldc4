@@ -31,16 +31,7 @@ export class SidenavComponent implements OnInit {
       this.layerServ.checkLayer(feature)
 
     }
-    if(feature==="about"){
-      // console.log(feature)
-      this.util.saveOption(feature)
-    }
-    if(feature==="partners"){
-      this.util.saveOption(feature)
-    }
-    if(feature==="development"){
-      this.util.saveOption(feature)
-    }
+    
     this.featureSelected.emit(feature)
     this.onClose()
     // if (feature==='map'){

@@ -9,9 +9,9 @@
     
   </a>
   <mat-menu #menu="matMenu">
-    <a mat-menu-item routerLink="/about" (click)="onSelect('about')" >About</a>
-    <a mat-menu-item routerLink="/about" (click)="onSelect('partners')">Partners</a>
-    <a mat-menu-item routerLink="/about" (click)="onSelect('development')">Developer Resources</a>
+    <a mat-menu-item routerLink="/about" (click)="onClose()" >About</a>
+    <a mat-menu-item routerLink="/about/partners" (click)="onClose()">Partners</a>
+    <a mat-menu-item routerLink="/about/development" (click)="onClose()">Developer Resources</a>
 
   </mat-menu>
   

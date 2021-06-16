@@ -4,7 +4,8 @@ export const content = {
       "main":{
         "title":"",
         "description":"The Landscape Data Commons is an inter-agency monitoring data repository and portal, led by the USDA-ARS at the Jornada Experimental Range, that connects standardized monitoring data to analysis tools to support land management and research. The Landscape Data Commons aggregates core methods data collected across agencies and monitoring programs (e.g., AIM, NRI, the National Wind Erosion Research Network, smaller research and monitoring efforts). With these aggregated data, the Landscape Data Commons supports natural resource management, modeling, and research. The Landscape Data Commons provides consistent indicator calculations and distributions of indicators by classification unit (e.g., ecological site), connects these data to wind and water erosion models (e.g., AERO and RHEM),  remote sensing models (e.g., RAP), and decision support tools (e.g., the Land Treatment Exploration Tool, the Ecological Dynamics Interpretive Tool).",
-        "link":"To get involved, contact Sarah McCord (<a href=\"sarah.mccord@usda.gov\">sarah.mccord@usda.gov</a>) or Nicholas Webb (<a href=\"sarah.mccord@usda.gov\">nwebb@nmsu.edu</a>)."
+        "link":"To get involved, contact Sarah McCord (<a href=\"sarah.mccord@usda.gov\">sarah.mccord@usda.gov</a>) or Nicholas Webb (<a href=\"sarah.mccord@usda.gov\">nwebb@nmsu.edu</a>).",
+        "image":"assets/LDC_diagram_2020-10-30.jpg"
       },
 
       "partners_singlet":{
